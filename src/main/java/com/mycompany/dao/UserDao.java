@@ -1,0 +1,101 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+package com.mycompany.dao;
+
+import com.mycompany.model.User;
+import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+
+/**
+ *
+ * @author VITHANH
+ */
+public class UserDao {
+    public List<User> getAllUsers(){
+        List<User> users = new ArrayList<User>();
+
+        Connection connection = JDBCConnection.getJDBCConnection();
+
+        String sql = "Select * from [User]";
+       
+        try{
+            PreparedStatement preparestaStatement = connection.prepareStatement(sql);
+            
+            ResultSet rs = preparestaStatement.executeQuery();
+            
+            while(rs.next()){
+                User user = new User();
+                
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setPhone(rs.getInt("phone"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setAbout(rs.getString("about"));
+                String roleStr = rs.getString("role");
+                if (roleStr != null && !roleStr.isEmpty()) {
+                    user.setRole(roleStr.charAt(0));
+                }
+                user.setFavorites(rs.getString("favorites"));
+                users.add(user);  
+            }
+            
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return users;
+    }
+    public void addUser(User user){
+        Connection connection = JDBCConnection.getJDBCConnection();
+        
+        String sql = "INSERT into [User](id, name, phone, username, password, about, role, favorites)";
+        
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setInt(2, user.getPhone());
+            preparedStatement.setString(3, user.getUsername());
+            preparedStatement.setString(4, user.getPassword());
+            preparedStatement.setString(5, user.getAbout());
+            preparedStatement.setInt(6, user.getRole());
+            preparedStatement.setString(7, user.getFavorites());
+            
+            int rs = preparedStatement.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public void updateUser(User user){
+        Connection connection = JDBCConnection.getJDBCConnection();
+        
+        String sql = "Update User set name = ?, phone = ?, username = ?, password = ?, about = ?, role = ?, favorites = ? where id = ?";
+        
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setInt(2, user.getPhone());
+            preparedStatement.setString(3, user.getUsername());
+            preparedStatement.setString(4, user.getPassword());
+            preparedStatement.setString(5, user.getAbout());
+            preparedStatement.setInt(6, user.getRole());
+            preparedStatement.setString(7, user.getFavorites());
+            preparedStatement.setInt(8, user.getId());
+            
+            int rs = preparedStatement.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
+}

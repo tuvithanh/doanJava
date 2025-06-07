@@ -10,4 +10,12 @@
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>com.mycompany.doanjava.DoanJava</exec.mainClass>
     </properties>
+    <dependencies>
+    <!-- Thêm phụ thuộc cho Microsoft SQL Server JDBC Driver -->
+    <dependency>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>mssql-jdbc</artifactId>
+        <version>12.10.0.jre11</version>  <!-- Bạn có thể thay đổi phiên bản nếu cần -->
+    </dependency>
+</dependencies>
 </project>
