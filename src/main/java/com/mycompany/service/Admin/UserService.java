@@ -20,4 +20,19 @@ public class UserService {
     public List<User> getAllUser(){
         return userDao.getAllUsers();
     }
-}
+    public void insert(User user){ 
+        userDao.addUser(user);
+    }
+    public void update(User user){
+        userDao.updateUser(user);
+    }
+    public void delete(User user){
+        userDao.deleteUser(user);
+    }
+    public void deleteById(int id){
+        userDao.deleteUserByID(id);
+    }
+    public User getUserByID(int id){
+        return userDao.getUserByID(id);
+    }
+}   

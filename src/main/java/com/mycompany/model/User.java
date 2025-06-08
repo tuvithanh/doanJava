@@ -18,6 +18,9 @@ public class User {
     private char role;
     private String favorites;
 
+    public User(){}
+    public User(int id){ this.id = id; }
+    
     public String getPassword() {
         return password;
     }

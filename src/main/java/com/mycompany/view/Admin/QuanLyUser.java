@@ -8,6 +8,11 @@ import com.mycompany.service.Admin.UserService;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import com.mycompany.model.User;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 /**
  *
  * @author VITHANH
@@ -49,6 +54,65 @@ public class QuanLyUser extends javax.swing.JFrame {
         
         InsertData(userService.getAllUser());
         
+
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem editItem = new JMenuItem("Sửa");
+        JMenuItem deleteItem = new JMenuItem("Xóa");
+
+        popupMenu.add(editItem);
+        popupMenu.add(deleteItem);
+
+        // Gắn popup menu cho JTable
+        Admin_QLUSER_TABLE.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showPopup(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showPopup(e);
+                }
+            }
+
+            private void showPopup(MouseEvent e) {
+                int row = Admin_QLUSER_TABLE.rowAtPoint(e.getPoint());
+                if (row >= 0 && row < Admin_QLUSER_TABLE.getRowCount()) {
+                    Admin_QLUSER_TABLE.setRowSelectionInterval(row, row);
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+        deleteItem.addActionListener(e -> {
+        int selectedRow = Admin_QLUSER_TABLE.getSelectedRow();
+        if (selectedRow >= 0) {
+        int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa người dùng này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            int id = (int) defaultTableModel.getValueAt(selectedRow, 0);
+            userService.deleteById(id); // gọi DAO để xóa DB
+            defaultTableModel.removeRow(selectedRow); // xóa trên giao diện
+        }
+        
+    }
+});
+        editItem.addActionListener(e -> {
+        
+        int selectedRow = Admin_QLUSER_TABLE.getSelectedRow();
+        if (selectedRow >= 0) {
+        
+        
+        int id = (int) defaultTableModel.getValueAt(selectedRow, 0);
+        
+        new EditUser(id).setVisible(true);
+    }
+    
+});
+
+
+
     }
 
     /**
@@ -60,19 +124,19 @@ public class QuanLyUser extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        admin_Add_User_BTN = new javax.swing.JButton();
-        Admin_QLUSER_Label = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         Admin_QLUSER_TABLE = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        Admin_QLUSER_Label = new javax.swing.JLabel();
+        admin_Add_User_BTN = new javax.swing.JButton();
         Admin_QLUSER_Refresh_BTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Quản lý User");
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(600, 600));
         setPreferredSize(new java.awt.Dimension(1920, 1080));
-
-        admin_Add_User_BTN.setText("Thêm user");
-
-        Admin_QLUSER_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        Admin_QLUSER_Label.setText("Quản Lý Users");
 
         Admin_QLUSER_TABLE.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,6 +153,18 @@ public class QuanLyUser extends javax.swing.JFrame {
         Admin_QLUSER_TABLE.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(Admin_QLUSER_TABLE);
 
+        Admin_QLUSER_Label.setBackground(new java.awt.Color(255, 255, 255));
+        Admin_QLUSER_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        Admin_QLUSER_Label.setText("Quản Lý Users");
+        Admin_QLUSER_Label.setAlignmentX(0.5F);
+
+        admin_Add_User_BTN.setText("Thêm user");
+        admin_Add_User_BTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                admin_Add_User_BTNActionPerformed(evt);
+            }
+        });
+
         Admin_QLUSER_Refresh_BTN.setText("Refresh");
         Admin_QLUSER_Refresh_BTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,38 +172,56 @@ public class QuanLyUser extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(admin_Add_User_BTN, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Admin_QLUSER_Refresh_BTN, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(793, 793, 793)
+                .addComponent(Admin_QLUSER_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(Admin_QLUSER_Label)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(admin_Add_User_BTN)
+                    .addComponent(Admin_QLUSER_Refresh_BTN, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(832, 832, 832)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 787, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 313, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1861, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(36, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(admin_Add_User_BTN)
-                        .addGap(609, 609, 609)
-                        .addComponent(Admin_QLUSER_Label)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Admin_QLUSER_Refresh_BTN)
-                        .addGap(63, 63, 63))))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(admin_Add_User_BTN)
-                            .addComponent(Admin_QLUSER_Refresh_BTN)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(Admin_QLUSER_Label)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 974, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 974, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -139,6 +233,12 @@ public class QuanLyUser extends javax.swing.JFrame {
         defaultTableModel.setRowCount(0);
         InsertData(userService.getAllUser());
     }//GEN-LAST:event_Admin_QLUSER_Refresh_BTNActionPerformed
+
+    private void admin_Add_User_BTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_admin_Add_User_BTNActionPerformed
+        // TODO add your handling code here:
+        new AddUser().setVisible(true);
+        
+    }//GEN-LAST:event_admin_Add_User_BTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,6 +270,8 @@ public class QuanLyUser extends javax.swing.JFrame {
     private javax.swing.JButton Admin_QLUSER_Refresh_BTN;
     private javax.swing.JTable Admin_QLUSER_TABLE;
     private javax.swing.JButton admin_Add_User_BTN;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

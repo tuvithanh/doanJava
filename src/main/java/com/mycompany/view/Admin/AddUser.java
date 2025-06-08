@@ -4,6 +4,10 @@
  */
 package com.mycompany.view.Admin;
 
+import com.mycompany.service.Admin.UserService;
+import com.mycompany.model.User;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 /**
  *
  * @author VITHANH
@@ -15,9 +19,15 @@ public class AddUser extends javax.swing.JFrame {
     /**
      * Creates new form AddUser
      */
+    
     public AddUser() {
         initComponents();
     }
+
+//    public User getUser(){
+//        
+//    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,24 +39,31 @@ public class AddUser extends javax.swing.JFrame {
     private void initComponents() {
 
         Amin_Add_User_Role_ButtonGroup = new javax.swing.ButtonGroup();
-        Admin_Add_User_Header_Label = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         Admin_Add_User_Username_Label = new javax.swing.JLabel();
         Admin_Add_User_Username_TextField = new javax.swing.JTextField();
         Admin_Add_User_Password_Label = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         Admin_Add_User_Password_TextField = new javax.swing.JPasswordField();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        Admin_Add_User_Name_Label = new javax.swing.JLabel();
+        Admin_Add_User_Name = new javax.swing.JTextField();
+        Admin_Add_User_Role_Label = new javax.swing.JLabel();
         Amin_Add_User_Role_Admin_RadioBTN = new javax.swing.JRadioButton();
         Amin_Add_User_Role_Customer_RadioBTN = new javax.swing.JRadioButton();
+        Admin_Add_User_Phone_Label = new javax.swing.JLabel();
+        Admin_Add_User_Phone = new javax.swing.JTextField();
+        Admin_Add_User_About_Label = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jLabel3 = new javax.swing.JLabel();
+        Admin_Add_User_About = new javax.swing.JTextArea();
+        Admin_Add_User_Favorites_Label = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        Admin_Add_User_SaveBTN = new javax.swing.JButton();
+        Admin_Add_User_HuyBTN = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        Admin_Add_User_Header_Label = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        Admin_Add_User_Header_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        Admin_Add_User_Header_Label.setText("Thêm user");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Thêm User");
+        setLocation(new java.awt.Point(0, 0));
 
         Admin_Add_User_Username_Label.setText("Username:");
 
@@ -58,17 +75,17 @@ public class AddUser extends javax.swing.JFrame {
 
         Admin_Add_User_Password_Label.setText("Password:");
 
-        jLabel1.setText("Name:");
-
         Admin_Add_User_Password_TextField.setText("123456789");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        Admin_Add_User_Name_Label.setText("Name:");
+
+        Admin_Add_User_Name.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                Admin_Add_User_NameActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Role:");
+        Admin_Add_User_Role_Label.setText("Role:");
 
         Amin_Add_User_Role_ButtonGroup.add(Amin_Add_User_Role_Admin_RadioBTN);
         Amin_Add_User_Role_Admin_RadioBTN.setText("Admin");
@@ -80,12 +97,145 @@ public class AddUser extends javax.swing.JFrame {
 
         Amin_Add_User_Role_ButtonGroup.add(Amin_Add_User_Role_Customer_RadioBTN);
         Amin_Add_User_Role_Customer_RadioBTN.setText("Customer");
+        Amin_Add_User_Role_Customer_RadioBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Amin_Add_User_Role_Customer_RadioBTNActionPerformed(evt);
+            }
+        });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        Admin_Add_User_Phone_Label.setText("Phone:");
 
-        jLabel3.setText("About");
+        Admin_Add_User_Phone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Admin_Add_User_PhoneActionPerformed(evt);
+            }
+        });
+
+        Admin_Add_User_About_Label.setText("About:");
+
+        Admin_Add_User_About.setColumns(20);
+        Admin_Add_User_About.setRows(5);
+        jScrollPane1.setViewportView(Admin_Add_User_About);
+
+        Admin_Add_User_Favorites_Label.setText("Favorites:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Admin_Add_User_Username_Label)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Admin_Add_User_Password_Label, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(Admin_Add_User_Role_Label)
+                                .addComponent(Admin_Add_User_Name_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(Admin_Add_User_Phone_Label)
+                                .addComponent(Admin_Add_User_About_Label)
+                                .addComponent(Admin_Add_User_Favorites_Label)))))
+                .addGap(31, 31, 31)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Admin_Add_User_Password_TextField)
+                    .addComponent(Admin_Add_User_Name)
+                    .addComponent(Admin_Add_User_Username_TextField)
+                    .addComponent(Admin_Add_User_Phone)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Amin_Add_User_Role_Admin_RadioBTN)
+                        .addGap(53, 53, 53)
+                        .addComponent(Amin_Add_User_Role_Customer_RadioBTN)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Admin_Add_User_Username_Label)
+                    .addComponent(Admin_Add_User_Username_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Admin_Add_User_Password_Label)
+                    .addComponent(Admin_Add_User_Password_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Admin_Add_User_Name_Label)
+                    .addComponent(Admin_Add_User_Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Admin_Add_User_Role_Label)
+                    .addComponent(Amin_Add_User_Role_Admin_RadioBTN)
+                    .addComponent(Amin_Add_User_Role_Customer_RadioBTN))
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Admin_Add_User_Phone_Label)
+                    .addComponent(Admin_Add_User_Phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Admin_Add_User_About_Label)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
+                .addComponent(Admin_Add_User_Favorites_Label)
+                .addContainerGap())
+        );
+
+        Admin_Add_User_SaveBTN.setText("Lưu");
+        Admin_Add_User_SaveBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Admin_Add_User_SaveBTNActionPerformed(evt);
+            }
+        });
+
+        Admin_Add_User_HuyBTN.setText("Hủy");
+        Admin_Add_User_HuyBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Admin_Add_User_HuyBTNActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(Admin_Add_User_SaveBTN)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Admin_Add_User_HuyBTN)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 62, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Admin_Add_User_SaveBTN)
+                    .addComponent(Admin_Add_User_HuyBTN)))
+        );
+
+        Admin_Add_User_Header_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        Admin_Add_User_Header_Label.setText("Thêm user");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(295, 295, 295)
+                .addComponent(Admin_Add_User_Header_Label)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Admin_Add_User_Header_Label)
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,67 +243,24 @@ public class AddUser extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(301, 301, 301)
-                        .addComponent(Admin_Add_User_Header_Label))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 229, Short.MAX_VALUE)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(Admin_Add_User_Username_Label)
-                                .addGap(31, 31, 31))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(Admin_Add_User_Password_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jLabel2))
-                                .addGap(34, 34, 34)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(Admin_Add_User_Username_TextField)
-                                .addComponent(Admin_Add_User_Password_TextField)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(Amin_Add_User_Role_Admin_RadioBTN))
-                                .addGap(53, 53, 53)
-                                .addComponent(Amin_Add_User_Role_Customer_RadioBTN)))
-                        .addGap(23, 23, 23)))
-                .addGap(149, 149, 149))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(232, 232, 232))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(Admin_Add_User_Header_Label)
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Admin_Add_User_Username_Label)
-                    .addComponent(Admin_Add_User_Username_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Admin_Add_User_Password_Label)
-                    .addComponent(Admin_Add_User_Password_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(Amin_Add_User_Role_Admin_RadioBTN)
-                    .addComponent(Amin_Add_User_Role_Customer_RadioBTN))
-                .addGap(24, 24, 24)
-                .addComponent(jLabel3)
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -163,13 +270,59 @@ public class AddUser extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_Admin_Add_User_Username_TextFieldActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void Admin_Add_User_NameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Admin_Add_User_NameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_Admin_Add_User_NameActionPerformed
 
     private void Amin_Add_User_Role_Admin_RadioBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Amin_Add_User_Role_Admin_RadioBTNActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Amin_Add_User_Role_Admin_RadioBTNActionPerformed
+
+    private void Admin_Add_User_PhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Admin_Add_User_PhoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Admin_Add_User_PhoneActionPerformed
+
+    private void Admin_Add_User_SaveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Admin_Add_User_SaveBTNActionPerformed
+        // TODO add your handling code here:
+            UserService userService = new UserService();
+            User user = new User();
+
+            String username = Admin_Add_User_Username_TextField.getText();
+            String password = new String(Admin_Add_User_Password_TextField.getPassword());
+            String name = Admin_Add_User_Name.getText();
+            char role = 0;
+            if (Amin_Add_User_Role_Admin_RadioBTN.isSelected()) {
+                role = 'A';
+            } else if (Amin_Add_User_Role_Customer_RadioBTN.isSelected()) {
+                role = 'C';
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn vai trò (Admin hoặc Customer)");
+                return; // thoát không insert
+            }
+
+            int phone = Integer.parseInt(Admin_Add_User_Phone.getText());
+            String about = Admin_Add_User_About_Label.getText();
+
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setName(name);
+            user.setRole(role);
+            user.setPhone(phone);
+            user.setAbout(about);
+
+            userService.insert(user);
+
+            this.dispose();
+    }//GEN-LAST:event_Admin_Add_User_SaveBTNActionPerformed
+
+    private void Admin_Add_User_HuyBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Admin_Add_User_HuyBTNActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_Admin_Add_User_HuyBTNActionPerformed
+
+    private void Amin_Add_User_Role_Customer_RadioBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Amin_Add_User_Role_Customer_RadioBTNActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Amin_Add_User_Role_Customer_RadioBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,19 +350,27 @@ public class AddUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea Admin_Add_User_About;
+    private javax.swing.JLabel Admin_Add_User_About_Label;
+    private javax.swing.JLabel Admin_Add_User_Favorites_Label;
     private javax.swing.JLabel Admin_Add_User_Header_Label;
+    private javax.swing.JButton Admin_Add_User_HuyBTN;
+    private javax.swing.JTextField Admin_Add_User_Name;
+    private javax.swing.JLabel Admin_Add_User_Name_Label;
     private javax.swing.JLabel Admin_Add_User_Password_Label;
     private javax.swing.JPasswordField Admin_Add_User_Password_TextField;
+    private javax.swing.JTextField Admin_Add_User_Phone;
+    private javax.swing.JLabel Admin_Add_User_Phone_Label;
+    private javax.swing.JLabel Admin_Add_User_Role_Label;
+    private javax.swing.JButton Admin_Add_User_SaveBTN;
     private javax.swing.JLabel Admin_Add_User_Username_Label;
     private javax.swing.JTextField Admin_Add_User_Username_TextField;
     private javax.swing.JRadioButton Amin_Add_User_Role_Admin_RadioBTN;
     private javax.swing.ButtonGroup Amin_Add_User_Role_ButtonGroup;
     private javax.swing.JRadioButton Amin_Add_User_Role_Customer_RadioBTN;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

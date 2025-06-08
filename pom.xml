@@ -17,5 +17,10 @@
         <artifactId>mssql-jdbc</artifactId>
         <version>12.10.0.jre11</version>  <!-- Bạn có thể thay đổi phiên bản nếu cần -->
     </dependency>
-</dependencies>
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>RELEASE260</version>
+        </dependency>
+    </dependencies>
 </project>

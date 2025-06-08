@@ -57,8 +57,8 @@ public class UserDao {
     public void addUser(User user){
         Connection connection = JDBCConnection.getJDBCConnection();
         
-        String sql = "INSERT into [User](id, name, phone, username, password, about, role, favorites)";
-        
+        String sql = "INSERT INTO [User](name, phone, username, password, about, role, favorites) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getName());
@@ -66,8 +66,9 @@ public class UserDao {
             preparedStatement.setString(3, user.getUsername());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, user.getAbout());
-            preparedStatement.setInt(6, user.getRole());
-            preparedStatement.setString(7, user.getFavorites());
+            preparedStatement.setString(6, String.valueOf(user.getRole()));
+            preparedStatement.setString(7, user.getFavorites() != null ? user.getFavorites() : "");
+
             
             int rs = preparedStatement.executeUpdate();
         }
@@ -78,7 +79,7 @@ public class UserDao {
     public void updateUser(User user){
         Connection connection = JDBCConnection.getJDBCConnection();
         
-        String sql = "Update User set name = ?, phone = ?, username = ?, password = ?, about = ?, role = ?, favorites = ? where id = ?";
+        String sql = "Update [User] set name = ?, phone = ?, username = ?, password = ?, about = ?, role = ?, favorites = ? where id = ?";
         
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -87,8 +88,8 @@ public class UserDao {
             preparedStatement.setString(3, user.getUsername());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, user.getAbout());
-            preparedStatement.setInt(6, user.getRole());
-            preparedStatement.setString(7, user.getFavorites());
+            preparedStatement.setString(6, String.valueOf(user.getRole()));
+            preparedStatement.setString(7, user.getFavorites() != null ? user.getFavorites() : "");
             preparedStatement.setInt(8, user.getId());
             
             int rs = preparedStatement.executeUpdate();
@@ -97,5 +98,67 @@ public class UserDao {
             e.printStackTrace();
         }
     }
+    public void deleteUser(User user){
+        Connection connection = JDBCConnection.getJDBCConnection();
+        
+        String sql = "DELETE From [User] where id = ?";
+        
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, user.getId());
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public void deleteUserByID(int id){
+        Connection connection = JDBCConnection.getJDBCConnection();
+        
+        String sql = "DELETE From [User] where id = ?";
+        
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public User getUserByID(int id){
+        Connection connection = JDBCConnection.getJDBCConnection();
+        User user = null; // Chỉ khởi tạo nếu có dữ liệu
+
+        String sql = "SELECT * FROM [User] WHERE id = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id); // Gán giá trị cho dấu hỏi
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setPhone(rs.getInt("phone"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setAbout(rs.getString("about"));
+
+                String roleStr = rs.getString("role");
+                if (roleStr != null && !roleStr.isEmpty()) {
+                    user.setRole(roleStr.charAt(0));
+                }
+
+                user.setFavorites(rs.getString("favorites"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
     
 }
