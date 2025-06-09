@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-package com.mycompany.view.Admin.QLUSER.QLCATEGORY;
+package com.mycompany.view.Admin.QLCATEGORY;
 
 import com.mycompany.model.Category;
 import com.mycompany.service.Admin.CategoryService;
