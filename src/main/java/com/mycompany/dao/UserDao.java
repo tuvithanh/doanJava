@@ -39,6 +39,8 @@ public class UserDao {
                 user.setPhone(rs.getInt("phone"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setAddress(rs.getString("address"));
                 user.setAbout(rs.getString("about"));
                 String roleStr = rs.getString("role");
                 if (roleStr != null && !roleStr.isEmpty()) {
@@ -57,7 +59,7 @@ public class UserDao {
     public void addUser(User user){
         Connection connection = JDBCConnection.getJDBCConnection();
         
-        String sql = "INSERT INTO [User](name, phone, username, password, about, role, favorites) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [User](name, phone, username, password, email, address, about, role, favorites) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -65,9 +67,11 @@ public class UserDao {
             preparedStatement.setInt(2, user.getPhone());
             preparedStatement.setString(3, user.getUsername());
             preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getAbout());
-            preparedStatement.setString(6, String.valueOf(user.getRole()));
-            preparedStatement.setString(7, user.getFavorites() != null ? user.getFavorites() : "");
+            preparedStatement.setString(5, user.getEmail());
+            preparedStatement.setString(6, user.getAddress());
+            preparedStatement.setString(7, user.getAbout());
+            preparedStatement.setString(8, String.valueOf(user.getRole()));
+            preparedStatement.setString(9, user.getFavorites() != null ? user.getFavorites() : "");
 
             
             int rs = preparedStatement.executeUpdate();
@@ -79,7 +83,7 @@ public class UserDao {
     public void updateUser(User user){
         Connection connection = JDBCConnection.getJDBCConnection();
         
-        String sql = "Update [User] set name = ?, phone = ?, username = ?, password = ?, about = ?, role = ?, favorites = ? where id = ?";
+        String sql = "Update [User] set name = ?, phone = ?, username = ?, password = ?, email = ?, address = ?, about = ?, role = ?, favorites = ? where id = ?";
         
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -87,10 +91,12 @@ public class UserDao {
             preparedStatement.setInt(2, user.getPhone());
             preparedStatement.setString(3, user.getUsername());
             preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, user.getAbout());
-            preparedStatement.setString(6, String.valueOf(user.getRole()));
-            preparedStatement.setString(7, user.getFavorites() != null ? user.getFavorites() : "");
-            preparedStatement.setInt(8, user.getId());
+            preparedStatement.setString(5, user.getEmail());
+            preparedStatement.setString(6, user.getAddress());
+            preparedStatement.setString(7, user.getAbout());
+            preparedStatement.setString(8, String.valueOf(user.getRole()));
+            preparedStatement.setString(9, user.getFavorites() != null ? user.getFavorites() : "");
+            preparedStatement.setInt(10, user.getId());
             
             int rs = preparedStatement.executeUpdate();
         }
@@ -144,6 +150,8 @@ public class UserDao {
                 user.setPhone(rs.getInt("phone"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setAddress(rs.getString("address"));
                 user.setAbout(rs.getString("about"));
 
                 String roleStr = rs.getString("role");
