@@ -5,6 +5,7 @@
 package com.mycompany.dao;
 
 import com.mycompany.model.Product;
+import com.mycompany.model.Category;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
