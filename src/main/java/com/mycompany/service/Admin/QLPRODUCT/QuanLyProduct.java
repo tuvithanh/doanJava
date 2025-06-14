@@ -8,8 +8,10 @@ import com.mycompany.service.Admin.ProductService;
 import com.mycompany.service.Admin.CategoryService;
 import com.mycompany.model.Product;
 import com.mycompany.model.Category;
+import com.mycompany.view.Admin.QLCATEGORY.EditCategory;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,9 +30,9 @@ public class QuanLyProduct extends javax.swing.JFrame {
     public void insertData(List<Product> productList){
         for(Product pro : productList){
             categoryService = new CategoryService();
-            Category cate = categoryService.getCategoryByID(pro.getId());
+            Category cate = categoryService.getCategoryByID(pro.getCateid());
             String cateName = cate.getName();
-            defaultTableModel.addRow(new Object[]{pro.getId(), cateName,pro.getName(), pro.getDescription(), pro.getPrice(), pro.getImagepath()});
+            defaultTableModel.addRow(new Object[]{pro.getId(), cateName ,pro.getName(), pro.getDescription(), pro.getPrice(), pro.getImagepath()});
         }
     }
     public QuanLyProduct() {
@@ -53,6 +55,8 @@ public class QuanLyProduct extends javax.swing.JFrame {
         
         insertData(productService.getAllProduct());
         
+        Admin_QLPRODUCT_TABLE.setComponentPopupMenu(Admin_QLPRODUCT_popupmenu);
+        
     }
 
     /**
@@ -64,6 +68,9 @@ public class QuanLyProduct extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Admin_QLPRODUCT_popupmenu = new javax.swing.JPopupMenu();
+        Admin_QLPRODUCT_Edit = new javax.swing.JMenuItem();
+        Admin_QLPRODUCT_Remove = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Admin_QLPRODUCT_TABLE = new javax.swing.JTable();
@@ -72,7 +79,23 @@ public class QuanLyProduct extends javax.swing.JFrame {
         Admin_QLPRODUCT_Refresh_ProductBTN = new javax.swing.JButton();
         Admin_QLPRODUCT_Add_ProductBTN = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Admin_QLPRODUCT_Edit.setText("Chỉnh sửa");
+        Admin_QLPRODUCT_Edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Admin_QLPRODUCT_EditActionPerformed(evt);
+            }
+        });
+        Admin_QLPRODUCT_popupmenu.add(Admin_QLPRODUCT_Edit);
+
+        Admin_QLPRODUCT_Remove.setText("Xóa");
+        Admin_QLPRODUCT_Remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Admin_QLPRODUCT_RemoveActionPerformed(evt);
+            }
+        });
+        Admin_QLPRODUCT_popupmenu.add(Admin_QLPRODUCT_Remove);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         Admin_QLPRODUCT_TABLE.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -85,6 +108,7 @@ public class QuanLyProduct extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Admin_QLPRODUCT_TABLE.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(Admin_QLPRODUCT_TABLE);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -107,6 +131,11 @@ public class QuanLyProduct extends javax.swing.JFrame {
         Admin_QLPRODUCT_Header_Label.setText("Quản Lý Product");
 
         Admin_QLPRODUCT_Refresh_ProductBTN.setText("Refresh");
+        Admin_QLPRODUCT_Refresh_ProductBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Admin_QLPRODUCT_Refresh_ProductBTNActionPerformed(evt);
+            }
+        });
 
         Admin_QLPRODUCT_Add_ProductBTN.setText("Thêm");
         Admin_QLPRODUCT_Add_ProductBTN.addActionListener(new java.awt.event.ActionListener() {
@@ -168,6 +197,42 @@ public class QuanLyProduct extends javax.swing.JFrame {
         new AddProduct().setVisible(true);
     }//GEN-LAST:event_Admin_QLPRODUCT_Add_ProductBTNActionPerformed
 
+    private void Admin_QLPRODUCT_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Admin_QLPRODUCT_EditActionPerformed
+        // TODO add your handling code here:
+        int row = Admin_QLPRODUCT_TABLE.getSelectedRow();
+        
+        if(row==-1){
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn product để sửa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            int id = (int) Admin_QLPRODUCT_TABLE.getValueAt(row, 0);
+            new EditProduct(id).setVisible(true);
+        } 
+    }//GEN-LAST:event_Admin_QLPRODUCT_EditActionPerformed
+
+    private void Admin_QLPRODUCT_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Admin_QLPRODUCT_RemoveActionPerformed
+        // TODO add your handling code here:
+        int row = Admin_QLPRODUCT_TABLE.getSelectedRow();
+        
+        if(row==-1){
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn product để xóa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            int comfirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa không ?", "Xóa Product", JOptionPane.YES_NO_OPTION);
+            if(comfirm==JOptionPane.YES_OPTION){
+                int id = (int) Admin_QLPRODUCT_TABLE.getValueAt(row, 0);
+                productService.deleteProductByID(id);
+                defaultTableModel.removeRow(row);
+            } 
+        }
+    }//GEN-LAST:event_Admin_QLPRODUCT_RemoveActionPerformed
+
+    private void Admin_QLPRODUCT_Refresh_ProductBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Admin_QLPRODUCT_Refresh_ProductBTNActionPerformed
+        // TODO add your handling code here:
+        defaultTableModel.setRowCount(0);
+        insertData(productService.getAllProduct());
+    }//GEN-LAST:event_Admin_QLPRODUCT_Refresh_ProductBTNActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -195,9 +260,12 @@ public class QuanLyProduct extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Admin_QLPRODUCT_Add_ProductBTN;
+    private javax.swing.JMenuItem Admin_QLPRODUCT_Edit;
     private javax.swing.JLabel Admin_QLPRODUCT_Header_Label;
     private javax.swing.JButton Admin_QLPRODUCT_Refresh_ProductBTN;
+    private javax.swing.JMenuItem Admin_QLPRODUCT_Remove;
     private javax.swing.JTable Admin_QLPRODUCT_TABLE;
+    private javax.swing.JPopupMenu Admin_QLPRODUCT_popupmenu;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

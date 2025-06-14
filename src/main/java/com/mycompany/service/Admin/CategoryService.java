@@ -32,4 +32,16 @@ public class CategoryService {
     public void updateCategory(Category cate){
         caterogyDao.updateCategory(cate);
     }
+    public int getIdByName(String s){
+        return caterogyDao.getIdByName(s);
+    }
+    public Category getCategoryByName(String name) {
+    for (Category c : getAllCategory()) {
+        if (c.getName().equalsIgnoreCase(name)) {
+            return c;
+        }
+    }
+    return null;
+}
+
 }

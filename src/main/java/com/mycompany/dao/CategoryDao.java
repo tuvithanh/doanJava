@@ -111,4 +111,27 @@ public class CategoryDao {
         
         return cate;
     }
+    public int getIdByName(String s){
+        Category cate = new Category();
+        Connection connection = JDBCConnection.getJDBCConnection();
+        
+        String sql = "Select * from Category where name = ?";
+        
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, s);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            
+            while(rs.next()){
+                cate.setId(rs.getInt("id"));
+                cate.setName(rs.getString("name"));
+            }  
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        
+        return cate.getId();
+    }
 }
