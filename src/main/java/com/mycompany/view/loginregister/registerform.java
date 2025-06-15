@@ -26,7 +26,7 @@ public class registerform extends JFrame {
         txtPhone.setBounds(160, 60, 200, 25);
         add(txtPhone);
 
-        JLabel lblUsername = new JLabel("Username:");
+        JLabel lblUsername = new JLabel("Tên đăng nhập:");
         lblUsername.setBounds(30, 100, 120, 25);
         add(lblUsername);
 
