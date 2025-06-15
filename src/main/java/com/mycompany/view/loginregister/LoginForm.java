@@ -1,4 +1,4 @@
-package com.mycompany;
+package com.mycompany.view.loginregister;
 
 import javax.swing.*;
 import java.awt.*;
