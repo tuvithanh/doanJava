@@ -2,9 +2,9 @@ com\mycompany\doanjava\DoanJava.class
 com\mycompany\service\Admin\QLPRODUCT\AddProduct$1.class
 com\mycompany\service\Admin\QLPRODUCT\EditProduct$1.class
 com\mycompany\view\Admin\QLCATEGORY\QuanLyCategory$3.class
+loginform.class
 com\mycompany\view\Admin\QLCATEGORY\EditCategory$1.class
 com\mycompany\service\Admin\QLPRODUCT\QuanLyProduct$3.class
-com\mycompany\view\loginregister\LoginForm$1.class
 com\mycompany\view\Admin\QLUSER\AddUser$4.class
 com\mycompany\view\Admin\QLUSER\AddUser$8.class
 com\mycompany\view\Admin\QLUSER\EditUser$3.class
@@ -13,6 +13,7 @@ com\mycompany\model\User.class
 com\mycompany\model\Product.class
 com\mycompany\service\Admin\QLPRODUCT\AddProduct.class
 com\mycompany\view\Admin\QLUSER\AddUser$1.class
+loginform$1.class
 com\mycompany\service\Admin\ProductService.class
 com\mycompany\doanjava\doan.class
 com\mycompany\view\Admin\QLUSER\QuanLyUser$2.class
@@ -36,8 +37,8 @@ com\mycompany\dao\CategoryDao.class
 com\mycompany\service\Admin\QLPRODUCT\QuanLyProduct$1.class
 com\mycompany\view\Admin\QLCATEGORY\AddCategory.class
 com\mycompany\view\Admin\QLUSER\QuanLyUser$4.class
+registerform.class
 com\mycompany\view\Admin\QLCATEGORY\AddCategory$2.class
-com\mycompany\view\loginregister\RegisterForm.class
 com\mycompany\view\Admin\QLUSER\EditUser$5.class
 com\mycompany\service\Admin\QLPRODUCT\QuanLyProduct$5.class
 com\mycompany\view\Admin\QLUSER\AddUser$3.class
@@ -55,7 +56,6 @@ com\mycompany\dao\UserDao.class
 com\mycompany\service\Admin\QLPRODUCT\QuanLyProduct$2.class
 com\mycompany\view\Admin\QLUSER\AddUser$7.class
 com\mycompany\view\Admin\QLCATEGORY\AddCategory$1.class
-com\mycompany\view\loginregister\LoginForm.class
 com\mycompany\service\Admin\QLPRODUCT\EditProduct.class
 com\mycompany\view\Admin\QLUSER\EditUser$7.class
 com\mycompany\view\Admin\QLUSER\EditUser$4.class
