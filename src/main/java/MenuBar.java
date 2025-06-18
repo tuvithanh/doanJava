@@ -1,0 +1,274 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.*;
+import java.util.ArrayList;
+import javax.swing.*;
+
+/**
+ * @author Bùi Thiện Tâm
+ */
+public class MenuBar extends javax.swing.JFrame {
+
+    private JPopupMenu userMenu;
+    private JPopupMenu searchPopup;
+    private DefaultListModel<String> modelList = new DefaultListModel<>();
+    private JList<String> searchList = new JList<>(modelList);
+    private ArrayList<String> danhSachSP = new ArrayList<>();
+
+    public MenuBar() {
+        initComponents();
+
+        // Dữ liệu mẫu
+        danhSachSP.add("Trà sữa truyền thống");
+        danhSachSP.add("Trà sữa thái xanh");
+        danhSachSP.add("Trà đào cam sả");
+        danhSachSP.add("Hồng trà vải");
+        danhSachSP.add("Matcha đá xay");
+
+        // Placeholder cho SearchBar
+        SearchBar.setText("Nhập tên sản phẩm...");
+        SearchBar.setForeground(Color.GRAY);
+
+        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (SearchBar.getText().equals("Nhập tên sản phẩm...")) {
+                    SearchBar.setText("");
+                    SearchBar.setForeground(Color.BLACK);
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (SearchBar.getText().isEmpty()) {
+                    SearchBar.setText("Nhập tên sản phẩm...");
+                    SearchBar.setForeground(Color.GRAY);
+                }
+            }
+        });
+
+        // Tạo popup danh sách tìm kiếm
+        searchPopup = new JPopupMenu();
+        searchPopup.add(new JScrollPane(searchList));
+        searchPopup.setFocusable(false);
+
+        SearchBar.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String tuKhoa = SearchBar.getText().toLowerCase();
+                modelList.clear();
+
+                if (tuKhoa.isEmpty()) {
+                    searchPopup.setVisible(false);
+                    return;
+                }
+
+                boolean found = false;
+                for (String sp : danhSachSP) {
+                    if (sp.toLowerCase().contains(tuKhoa)) {
+                        modelList.addElement(sp);
+                        found = true;
+                    }
+                }
+
+                if (!found) {
+                    modelList.addElement("Không tìm thấy kết quả.");
+                }
+
+                searchList.setVisibleRowCount(Math.min(5, modelList.size()));
+                searchPopup.setPreferredSize(new Dimension(SearchBar.getWidth(), searchList.getPreferredScrollableViewportSize().height + 5));
+                searchPopup.show(SearchBar, 0, SearchBar.getHeight());
+            }
+        });
+
+        searchList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String selected = searchList.getSelectedValue();
+                if (!selected.equals("Không tìm thấy kết quả.")) {
+                    SearchBar.setText(selected);
+                }
+                searchPopup.setVisible(false);
+            }
+        });
+
+        // Tạo menu người dùng
+        userMenu = new JPopupMenu();
+        JMenuItem itemTaiKhoan = new JMenuItem("Tài Khoản Của Tôi");
+        JMenuItem itemDonMua = new JMenuItem("Đơn Mua");
+        JMenuItem itemDangXuat = new JMenuItem("Đăng Xuất");
+
+        userMenu.add(itemTaiKhoan);
+        userMenu.add(itemDonMua);
+        userMenu.add(itemDangXuat);
+
+        lblUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblUser.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent evt) {
+                userMenu.show(lblUser, -userMenu.getPreferredSize().width + lblUser.getWidth(), lblUser.getHeight());
+            }
+        });
+
+        itemTaiKhoan.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Mở trang tài khoản...");
+        });
+
+        itemDonMua.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Mở đơn mua...");
+        });
+
+        itemDangXuat.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                this.dispose(); // hoặc mở lại LoginFrame
+            }
+        });
+
+        // Icon giỏ hàng (nếu có)
+        // btnCart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/cart.png")));
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jPanel1 = new javax.swing.JPanel();
+        lblUser = new javax.swing.JLabel();
+        SearchBar = new javax.swing.JTextField();
+        btnCart = new javax.swing.JButton();
+        Logo = new javax.swing.JLabel();
+
+        jMenuItem1.setText("jMenuItem1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lblUser.setText("Tài khoản");
+
+        SearchBar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SearchBarActionPerformed(evt);
+            }
+        });
+
+        btnCart.setText("Giỏ hàng");
+        btnCart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCartActionPerformed(evt);
+            }
+        });
+
+        Logo.setText("Logo");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(SearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCart)
+                        .addGap(0, 142, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCart))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCartActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCartActionPerformed
+
+    private void SearchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchBarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SearchBarActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MenuBar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MenuBar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MenuBar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MenuBar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MenuBar().setVisible(true);
+            }
+        });
+    }
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Logo;
+    private javax.swing.JTextField SearchBar;
+    private javax.swing.JButton btnCart;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblUser;
+    // End of variables declaration//GEN-END:variables
+}
