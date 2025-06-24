@@ -1,3 +1,5 @@
+package com.mycompany.view.Account;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -46,9 +48,9 @@ public class loginform extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new loginform().setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            new loginform().setVisible(true);
+//        });
+//    }
 }

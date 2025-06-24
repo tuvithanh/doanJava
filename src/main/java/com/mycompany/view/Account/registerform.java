@@ -1,9 +1,16 @@
+package com.mycompany.view.Account;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import com.mycompany.service.Admin.UserService;
+import com.mycompany.model.User;
 
 public class registerform extends JFrame {
     public registerform() {
+        UserService userSer = new UserService();
+        User user = new User();
+        
         setTitle("Đăng ký tài khoản");
         setSize(400, 500);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -99,7 +106,10 @@ public class registerform extends JFrame {
             String rePass = new String(txtRePassword.getPassword());
             String email = txtEmail.getText().trim();
             String address = txtAddress.getText().trim();
+            String about = txtMoreInfo.getText().trim();
 
+            
+            
             // Kiểm tra rỗng
             if (fullName.isEmpty() || phone.isEmpty() || username.isEmpty()
                     || pass.isEmpty() || rePass.isEmpty()
@@ -107,6 +117,15 @@ public class registerform extends JFrame {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            
+            User tempUserForCheckUserName = userSer.getUserByUserName(username);
+            if(tempUserForCheckUserName!=null){
+                JOptionPane.showMessageDialog(this, "Tên tài khoản đã tồn tại !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+           
+                
+            
+            
 
             // Kiểm tra mật khẩu khớp
             if (!pass.equals(rePass)) {
@@ -119,22 +138,33 @@ public class registerform extends JFrame {
                 JOptionPane.showMessageDialog(this, "Số điện thoại chỉ được chứa chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            
 
             // Kiểm tra định dạng email
             if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
                 JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            user.setName(fullName);
+            user.setUsername(username);
+            user.setPassword(pass);
+            user.setPhone(Integer.parseInt(phone));
+            user.setEmail(email);
+            user.setAddress(address);
+            user.setAbout(about);
+            user.setRole('C');
             // Nếu mọi thứ hợp lệ
             JOptionPane.showMessageDialog(this, "Đăng ký thành công!");
             // TODO: Lưu vào CSDL nếu cần
+            userSer.insert(user);
         });
     }
+    
+    
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new registerform().setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            new registerform().setVisible(true);
+//        });
+//    }
 }
