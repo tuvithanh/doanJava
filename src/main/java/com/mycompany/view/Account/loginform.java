@@ -3,12 +3,15 @@ package com.mycompany.view.Account;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import com.mycompany.service.Admin.UserService;
+import com.mycompany.model.User;
 
 public class loginform extends JFrame {
+    UserService userSer = new UserService();
     public loginform() {
         setTitle("Đăng nhập");
         setSize(350, 240);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
 
@@ -46,6 +49,43 @@ public class loginform extends JFrame {
                 new registerform().setVisible(true); // Mở form đăng ký
             }
         });
+        btnLogin.addActionListener(e -> {
+    String username = txtUsername.getText().trim();
+    String pass = new String(txtPassword.getPassword());
+
+    if (username.isEmpty() || pass.isEmpty()) {
+        JOptionPane.showMessageDialog(
+            loginform.this, // Thay "this" bằng loginform.this (nếu lớp hiện tại là loginform)
+            "Vui lòng điền đầy đủ thông tin!",
+            "Lỗi",
+            JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    // TODO: Thêm xử lý đăng nhập ở đây, ví dụ:
+    
+        User loginUser = userSer.getUserByUserName(username);
+        if (loginUser == null || !loginUser.getPassword().equals(pass)) {
+            JOptionPane.showMessageDialog(
+                loginform.this,
+                "Sai tên đăng nhập hoặc mật khẩu!",
+                "Lỗi",
+                JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        JOptionPane.showMessageDialog(
+            loginform.this,
+            "Đăng nhập thành công!",
+            "Thông báo",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+
+        // TODO: Chuyển sang giao diện khác nếu cần
+    });
+
     }
 
 //    public static void main(String[] args) {
