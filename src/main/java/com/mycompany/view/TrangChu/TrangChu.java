@@ -9,6 +9,8 @@ import java.awt.Image;
 import com.mycompany.view.TrangChu.TrangChu;
 import com.mycompany.view.Account.loginform;
 import java.net.URL;
+import com.mycompany.view.SanPham.ProductView;
+import javax.swing.JFrame;
 
 /**
  *
@@ -125,6 +127,11 @@ public class TrangChu extends javax.swing.JFrame {
 
         Product_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         Product_menubarlabel.setText("Sản phẩm");
+        Product_menubarlabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Product_menubarlabelMouseClicked(evt);
+            }
+        });
 
         Logout_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         Logout_menubarlabel.setText("Đăng xuất");
@@ -242,6 +249,17 @@ public class TrangChu extends javax.swing.JFrame {
         // TODO add your handling code here:
         new loginform().setVisible(true);
     }//GEN-LAST:event_Account_menubarlabelMouseClicked
+
+    private void Product_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Product_menubarlabelMouseClicked
+        JFrame frame = new JFrame("Danh sách sản phẩm");
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Chỉ đóng cửa sổ con
+    frame.setSize(800, 600); // Tuỳ chỉnh kích thước
+    frame.setLocationRelativeTo(null); // Hiển thị giữa màn hình
+
+    frame.setContentPane(new ProductView());
+    frame.setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Product_menubarlabelMouseClicked
 
     /**
      * @param args the command line arguments

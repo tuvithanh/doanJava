@@ -26,7 +26,8 @@ public class Product {
         this.price = price;
         this.imagepath = imagepath;
     }
-
+    
+    
     public int getId() {
         return id;
     }
@@ -73,6 +74,10 @@ public class Product {
 
     public void setImagepath(String imagepath) {
         this.imagepath = imagepath;
+    }
+
+    public String getImagePath() {
+            return imagepath;
     }
     
     

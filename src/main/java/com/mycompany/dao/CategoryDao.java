@@ -43,22 +43,22 @@ public class CategoryDao {
         
         return categories;
     }
-    public void addCategory(Category cate){
-        Connection connection = JDBCConnection.getJDBCConnection();
-        
-        String sql = "Insert into Category (name) values(?)";
-        
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, cate.getName());
-            
-            
-            preparedStatement.executeUpdate();
+        public void addCategory(Category cate){
+            Connection connection = JDBCConnection.getJDBCConnection();
+
+            String sql = "Insert into Category (name) values(?)";
+
+            try{
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, cate.getName());
+
+
+                preparedStatement.executeUpdate();
+            }
+            catch(SQLException e){
+                e.printStackTrace();
+            }
         }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-    }
     public void updateCategory(Category cate){
         Connection connection = JDBCConnection.getJDBCConnection();
         
