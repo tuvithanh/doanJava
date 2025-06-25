@@ -25,9 +25,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="menuBar" min="-2" pref="0" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="menu_icon" min="-2" pref="50" max="-2" attributes="0"/>
-              <EmptySpace pref="1375" max="32767" attributes="0"/>
+              <EmptySpace pref="1381" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -128,16 +128,13 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="logo">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="ImageIcon originalIcon = new ImageIcon(&quot;D:\\Learning\\HK5\\java\\Java tu hoc\\doan\\doanJava\\src\\main\\java\\images\\mystore.png&quot;);&#xa;&#xa;// Resize image to 100x100&#xa;Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);&#xa;ImageIcon resizedIcon = new ImageIcon(resizedImage);&#xa;&#xa;// Set resized icon to the JLabel&#xa;logo = new javax.swing.JLabel();&#xa;logo.setIcon(resizedIcon);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="ImageIcon originalIcon = new ImageIcon(&quot;src/images/mystore.png&quot;);&#xa;&#xa;// Resize image to 100x100&#xa;Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);&#xa;ImageIcon resizedIcon = new ImageIcon(resizedImage);&#xa;&#xa;// Set resized icon to the JLabel&#xa;logo = new javax.swing.JLabel();&#xa;logo.setIcon(resizedIcon);"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="storeName_menubarlabel">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="18" style="1"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="My Store"/>
           </Properties>
@@ -147,7 +144,7 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="exit_iconMouseClicked"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="originalIcon = new ImageIcon(&quot;D:\\Learning\\HK5\\java\\Java tu hoc\\doan\\doanJava\\src\\main\\java\\images\\exit.png&quot;);&#xa;resizedImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);&#xa;resizedIcon = new ImageIcon(resizedImage);&#xa;&#xa;exit_icon = new javax.swing.JLabel();&#xa;exit_icon.setIcon(resizedIcon);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="originalIcon = new ImageIcon(&quot;src/images/exit.png&quot;);&#xa;resizedImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);&#xa;resizedIcon = new ImageIcon(resizedImage);&#xa;&#xa;exit_icon = new javax.swing.JLabel();&#xa;exit_icon.setIcon(resizedIcon);"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">
@@ -162,9 +159,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="14" style="1"/>
             </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Trang ch&#x1ee7;"/>
           </Properties>
           <Events>
@@ -175,9 +169,6 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="14" style="1"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="T&#xe0;i kho&#x1ea3;n"/>
           </Properties>
@@ -190,9 +181,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="14" style="1"/>
             </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="S&#x1ea3;n ph&#x1ea9;m"/>
           </Properties>
         </Component>
@@ -202,9 +190,6 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="14" style="1"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="&#x110;&#x103;ng xu&#x1ea5;t"/>
           </Properties>
@@ -216,7 +201,7 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="menu_iconMouseClicked"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="originalIcon = new ImageIcon(&quot;D:\\Learning\\HK5\\java\\Java tu hoc\\doan\\doanJava\\src\\main\\java\\images\\menu.png&quot;);&#xa;resizedImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);&#xa;resizedIcon = new ImageIcon(resizedImage);&#xa;&#xa;menu_icon = new javax.swing.JLabel();&#xa;menu_icon.setIcon(resizedIcon);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="originalIcon = new ImageIcon(&quot;src/images/menu.png&quot;);&#xa;resizedImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);&#xa;resizedIcon = new ImageIcon(resizedImage);&#xa;&#xa;menu_icon = new javax.swing.JLabel();&#xa;menu_icon.setIcon(resizedIcon);"/>
       </AuxValues>
     </Component>
   </SubComponents>

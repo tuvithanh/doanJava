@@ -80,7 +80,7 @@ public class TrangChu extends javax.swing.JFrame {
         menuBar.setBackground(new java.awt.Color(255, 255, 255));
         menuBar.setForeground(new java.awt.Color(255, 255, 255));
 
-        ImageIcon originalIcon = new ImageIcon("D:\\Learning\\HK5\\java\\Java tu hoc\\doan\\doanJava\\src\\main\\java\\images\\mystore.png");
+        ImageIcon originalIcon = new ImageIcon("src/images/mystore.png");
 
         // Resize image to 100x100
         Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -91,10 +91,9 @@ public class TrangChu extends javax.swing.JFrame {
         logo.setIcon(resizedIcon);
 
         storeName_menubarlabel.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        storeName_menubarlabel.setForeground(new java.awt.Color(0, 0, 0));
         storeName_menubarlabel.setText("My Store");
 
-        originalIcon = new ImageIcon("D:\\Learning\\HK5\\java\\Java tu hoc\\doan\\doanJava\\src\\main\\java\\images\\exit.png");
+        originalIcon = new ImageIcon("src/images/exit.png");
         resizedImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         resizedIcon = new ImageIcon(resizedImage);
 
@@ -109,7 +108,6 @@ public class TrangChu extends javax.swing.JFrame {
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
 
         Home_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        Home_menubarlabel.setForeground(new java.awt.Color(0, 0, 0));
         Home_menubarlabel.setText("Trang chủ");
         Home_menubarlabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -118,7 +116,6 @@ public class TrangChu extends javax.swing.JFrame {
         });
 
         Account_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        Account_menubarlabel.setForeground(new java.awt.Color(0, 0, 0));
         Account_menubarlabel.setText("Tài khoản");
         Account_menubarlabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -127,11 +124,9 @@ public class TrangChu extends javax.swing.JFrame {
         });
 
         Product_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        Product_menubarlabel.setForeground(new java.awt.Color(0, 0, 0));
         Product_menubarlabel.setText("Sản phẩm");
 
         Logout_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        Logout_menubarlabel.setForeground(new java.awt.Color(0, 0, 0));
         Logout_menubarlabel.setText("Đăng xuất");
 
         javax.swing.GroupLayout menuBarLayout = new javax.swing.GroupLayout(menuBar);
@@ -192,7 +187,7 @@ public class TrangChu extends javax.swing.JFrame {
                 .addGap(22, 22, 22))
         );
 
-        originalIcon = new ImageIcon("D:\\Learning\\HK5\\java\\Java tu hoc\\doan\\doanJava\\src\\main\\java\\images\\menu.png");
+        originalIcon = new ImageIcon("src/images/menu.png");
         resizedImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         resizedIcon = new ImageIcon(resizedImage);
 
@@ -210,9 +205,9 @@ public class TrangChu extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(menuBar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1375, Short.MAX_VALUE))
+                .addContainerGap(1381, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
