@@ -1,0 +1,105 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "MenuBar",
+            "request": "launch",
+            "mainClass": "MenuBar",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "JDBCConnection",
+            "request": "launch",
+            "mainClass": "com.mycompany.dao.JDBCConnection",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "DoanJava",
+            "request": "launch",
+            "mainClass": "com.mycompany.doanjava.DoanJava",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "doan",
+            "request": "launch",
+            "mainClass": "com.mycompany.doanjava.doan",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "AddProduct",
+            "request": "launch",
+            "mainClass": "com.mycompany.service.Admin.QLPRODUCT.AddProduct",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "EditProduct",
+            "request": "launch",
+            "mainClass": "com.mycompany.service.Admin.QLPRODUCT.EditProduct",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "QuanLyProduct",
+            "request": "launch",
+            "mainClass": "com.mycompany.service.Admin.QLPRODUCT.QuanLyProduct",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "AddCategory",
+            "request": "launch",
+            "mainClass": "com.mycompany.view.Admin.QLCATEGORY.AddCategory",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "EditCategory",
+            "request": "launch",
+            "mainClass": "com.mycompany.view.Admin.QLCATEGORY.EditCategory",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "QuanLyCategory",
+            "request": "launch",
+            "mainClass": "com.mycompany.view.Admin.QLCATEGORY.QuanLyCategory",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "AddUser",
+            "request": "launch",
+            "mainClass": "com.mycompany.view.Admin.QLUSER.AddUser",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "EditUser",
+            "request": "launch",
+            "mainClass": "com.mycompany.view.Admin.QLUSER.EditUser",
+            "projectName": "doanJava"
+        },
+        {
+            "type": "java",
+            "name": "QuanLyUser",
+            "request": "launch",
+            "mainClass": "com.mycompany.view.Admin.QLUSER.QuanLyUser",
+            "projectName": "doanJava"
+        }
+    ]
+}

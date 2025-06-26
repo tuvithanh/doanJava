@@ -62,7 +62,7 @@
                   <Component id="SearchBar" min="-2" pref="498" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnCart" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="148" max="32767" attributes="0"/>
+                  <EmptySpace pref="126" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
