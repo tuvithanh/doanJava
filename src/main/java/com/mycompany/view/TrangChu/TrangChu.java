@@ -8,8 +8,10 @@ import javax.swing.ImageIcon;
 import java.awt.Image; 
 import com.mycompany.view.TrangChu.TrangChu;
 import com.mycompany.view.Account.loginform;
+import com.mycompany.CredentialManager.CredentialManager;
 import java.net.URL;
-
+import com.mycompany.sesion.UserSession.UserSession;
+import com.mycompany.view.Thongtintaikhoan.Thongtintaikhoan;
 /**
  *
  * @author VITHANH
@@ -23,36 +25,60 @@ public class TrangChu extends javax.swing.JFrame {
      */
     public TrangChu() {
         initComponents();
+        
+        setLocationRelativeTo(null);
+        setTitle("MyStore");
 //        ImageIcon icon = new ImageIcon(getClass().getResource("/images/mystore.png"));
 //        Image image = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 //        logo.setIcon(new ImageIcon(image));
 //
 //      logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 //        logo.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
-
+        if (UserSession.currentUsername != null) {
+            helloLabel.setText("Xin chào, " + UserSession.currentUsername);
+            jSeparator2.setVisible(true);
+            Logout_menubarlabel.setVisible(true);
+        }
+        else{
+            jSeparator2.setVisible(false);
+            Logout_menubarlabel.setVisible(false);
+        }
+        contentPanel.removeAll();
+        contentPanel.add(new TrangChuContent());
+        contentPanel.revalidate();
+        contentPanel.repaint();
+        
     }
     int width = 170;
-    int height = 600;
-    void openMenuBar(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(int i = 0; i<width; i++){
-                    menuBar.setSize(width, height);
+    
+    void openMenuBar() {
+    new Thread(() -> {
+        int frameHeight = getHeight(); // 👈 lấy chiều cao thật sự
+        for (int i = 0; i <= width; i++) {
+            menuBar.setSize(i, frameHeight);
+            try {
+                Thread.sleep(1); // thêm delay để thấy hiệu ứng
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }).start();
+    }
+
+    void closeMenuBar() {
+        new Thread(() -> {
+            int frameHeight = getHeight(); // 👈 cập nhật chiều cao mới
+            for (int i = width; i >= 0; i--) {
+                menuBar.setSize(i, frameHeight);
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
-    }
-    void closeMenuBar(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(int i = width; i>0; i--){
-                    menuBar.setSize(i, height);
-                }
-            }
-        }).start();
-    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -73,11 +99,14 @@ public class TrangChu extends javax.swing.JFrame {
         Product_menubarlabel = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         Logout_menubarlabel = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        helloLabel = new javax.swing.JLabel();
         menu_icon = new javax.swing.JLabel();
+        contentPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        menuBar.setBackground(new java.awt.Color(255, 255, 255));
+        menuBar.setBackground(new java.awt.Color(226, 218, 214));
         menuBar.setForeground(new java.awt.Color(255, 255, 255));
 
         ImageIcon originalIcon = new ImageIcon("src/images/mystore.png");
@@ -128,6 +157,11 @@ public class TrangChu extends javax.swing.JFrame {
 
         Logout_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         Logout_menubarlabel.setText("Đăng xuất");
+        Logout_menubarlabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Logout_menubarlabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout menuBarLayout = new javax.swing.GroupLayout(menuBar);
         menuBar.setLayout(menuBarLayout);
@@ -149,10 +183,7 @@ public class TrangChu extends javax.swing.JFrame {
                                 .addGroup(menuBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(Home_menubarlabel)
                                     .addComponent(Account_menubarlabel)
-                                    .addComponent(Product_menubarlabel)
-                                    .addGroup(menuBarLayout.createSequentialGroup()
-                                        .addGap(2, 2, 2)
-                                        .addComponent(Logout_menubarlabel)))))
+                                    .addComponent(Product_menubarlabel))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(menuBarLayout.createSequentialGroup()
                         .addContainerGap()
@@ -162,6 +193,10 @@ public class TrangChu extends javax.swing.JFrame {
                                 .addComponent(exit_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jSeparator2))))
                 .addContainerGap())
+            .addGroup(menuBarLayout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(Logout_menubarlabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         menuBarLayout.setVerticalGroup(
             menuBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,15 +215,19 @@ public class TrangChu extends javax.swing.JFrame {
                 .addComponent(Account_menubarlabel)
                 .addGap(32, 32, 32)
                 .addComponent(Product_menubarlabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 146, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(83, 83, 83)
+                .addGap(99, 99, 99)
                 .addComponent(Logout_menubarlabel)
-                .addGap(22, 22, 22))
+                .addContainerGap())
         );
 
+        jPanel1.setBackground(new java.awt.Color(100, 130, 173));
+
+        helloLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+
         originalIcon = new ImageIcon("src/images/menu.png");
-        resizedImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        resizedImage = originalIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         resizedIcon = new ImageIcon(resizedImage);
 
         menu_icon = new javax.swing.JLabel();
@@ -199,6 +238,29 @@ public class TrangChu extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(helloLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(helloLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        contentPanel.setLayout(new java.awt.BorderLayout());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -206,16 +268,20 @@ public class TrangChu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(menuBar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1381, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(menuBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -240,8 +306,26 @@ public class TrangChu extends javax.swing.JFrame {
 
     private void Account_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Account_menubarlabelMouseClicked
         // TODO add your handling code here:
-        new loginform().setVisible(true);
+        if (UserSession.currentUsername == null) {
+            new loginform().setVisible(true);
+            this.dispose();
+            return;
+        }
+        else{
+            contentPanel.removeAll();
+            contentPanel.add(new Thongtintaikhoan());
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        }
     }//GEN-LAST:event_Account_menubarlabelMouseClicked
+
+    private void Logout_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Logout_menubarlabelMouseClicked
+        // TODO add your handling code here:
+        UserSession.delete();
+        CredentialManager.clearLogin();
+        new loginform().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_Logout_menubarlabelMouseClicked
 
     /**
      * @param args the command line arguments
@@ -273,7 +357,10 @@ public class TrangChu extends javax.swing.JFrame {
     private javax.swing.JLabel Home_menubarlabel;
     private javax.swing.JLabel Logout_menubarlabel;
     private javax.swing.JLabel Product_menubarlabel;
+    private javax.swing.JPanel contentPanel;
     private javax.swing.JLabel exit_icon;
+    private javax.swing.JLabel helloLabel;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel logo;

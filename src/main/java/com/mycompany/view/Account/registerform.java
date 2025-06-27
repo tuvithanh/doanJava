@@ -8,6 +8,7 @@ import com.mycompany.model.User;
 
 public class registerform extends JFrame {
     public registerform() {
+        setLocationRelativeTo(null);
         UserService userSer = new UserService();
         User user = new User();
         

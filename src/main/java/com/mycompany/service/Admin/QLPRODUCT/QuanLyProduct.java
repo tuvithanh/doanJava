@@ -37,6 +37,7 @@ public class QuanLyProduct extends javax.swing.JFrame {
     }
     public QuanLyProduct() {
         initComponents();
+        setLocationRelativeTo(null);
         productService = new ProductService();
         defaultTableModel = new DefaultTableModel(){
             @Override
