@@ -154,6 +154,11 @@ public class TrangChu extends javax.swing.JFrame {
 
         Product_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         Product_menubarlabel.setText("Sản phẩm");
+        Product_menubarlabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Product_menubarlabelMouseClicked(evt);
+            }
+        });
 
         Logout_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         Logout_menubarlabel.setText("Đăng xuất");
@@ -215,7 +220,7 @@ public class TrangChu extends javax.swing.JFrame {
                 .addComponent(Account_menubarlabel)
                 .addGap(32, 32, 32)
                 .addComponent(Product_menubarlabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, Short.MAX_VALUE)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(99, 99, 99)
                 .addComponent(Logout_menubarlabel)
@@ -245,7 +250,7 @@ public class TrangChu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1044, Short.MAX_VALUE)
                 .addComponent(helloLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -327,6 +332,9 @@ public class TrangChu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_Logout_menubarlabelMouseClicked
 
+     private void Product_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {                                                 
+        // TODO add your handling code here:
+    }    
     /**
      * @param args the command line arguments
      */

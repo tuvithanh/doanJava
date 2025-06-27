@@ -20,6 +20,7 @@ com\mycompany\doanjava\doan.class
 com\mycompany\view\Admin\QLUSER\QuanLyUser$2.class
 com\mycompany\view\TrangChu\TrangChu$4.class
 com\mycompany\view\Admin\QLUSER\EditUser$2.class
+com\mycompany\view\TrangChu\TrangChu$6.class
 com\mycompany\service\Admin\QLPRODUCT\AddProduct$2.class
 com\mycompany\view\Admin\QLUSER\AddUser$5.class
 com\mycompany\view\Admin\QLCATEGORY\EditCategory$2.class
