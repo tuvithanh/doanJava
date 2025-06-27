@@ -147,5 +147,33 @@ public class ProductDao {
             e.printStackTrace();
         }
     }
+public List<Product> getAllProducts() {
+    List<Product> products = new ArrayList<>();
+    Connection connection = JDBCConnection.getJDBCConnection();
+    
+    String sql = "SELECT * FROM Product";
+    
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        while (resultSet.next()) {
+            Product product = new Product();
+            product.setId(resultSet.getInt("id"));
+            product.setCateid(resultSet.getInt("cateid"));
+            product.setName(resultSet.getString("name"));
+            product.setDescription(resultSet.getString("description"));
+            product.setPrice(resultSet.getDouble("price"));
+            product.setImagepath(resultSet.getString("imagepath"));
+
+            products.add(product);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return products;
+}
+
 
 }
