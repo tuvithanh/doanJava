@@ -12,6 +12,18 @@ import com.mycompany.CredentialManager.CredentialManager;
 import java.net.URL;
 import com.mycompany.sesion.UserSession.UserSession;
 import com.mycompany.view.Thongtintaikhoan.Thongtintaikhoan;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import com.mycompany.service.Admin.UserService;
+import com.mycompany.model.User;
+import com.mycompany.view.Admin.QLUSER.QuanLyUser;
+import com.mycompany.view.Admin.QLCATEGORY.QuanLyCategory;
+import com.mycompany.view.Admin.QLPRODUCT.QuanLyProduct;
 /**
  *
  * @author VITHANH
@@ -25,6 +37,88 @@ public class TrangChu extends javax.swing.JFrame {
      */
     public TrangChu() {
         initComponents();
+        //popupmenu
+        UserService userSer = new UserService();
+        
+
+        // Tạo popup menu
+        JPopupMenu popupMenu = new JPopupMenu();
+
+// Tạo các menu item
+JMenuItem itemThongTin = new JMenuItem("Thông tin tài khoản");
+JMenuItem itemQLUSER = new JMenuItem("Quản lý User");
+JMenuItem itemQLCATE = new JMenuItem("Quản lý Category");
+JMenuItem itemQLPRODUCT = new JMenuItem("Quản lý Product");
+JMenuItem itemDangXuat = new JMenuItem("Đăng xuất");
+
+// Gắn sự kiện click vào helloLabel
+helloLabel.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        popupMenu.removeAll();
+
+        // Nếu chưa đăng nhập → mở login form
+        if (UserSession.currentUsername == null) {
+            new loginform().setVisible(true);
+            return;
+        }
+
+        // Nếu đã đăng nhập → hiển thị menu theo vai trò
+        User user = userSer.getUserByUserName(UserSession.currentUsername);
+
+        popupMenu.add(itemThongTin);
+
+        if (user.getRole() == 'A') {
+            popupMenu.addSeparator();
+            popupMenu.add(itemQLUSER);
+            popupMenu.add(itemQLCATE);
+            popupMenu.add(itemQLPRODUCT);
+        }
+
+        popupMenu.addSeparator();
+        popupMenu.add(itemDangXuat);
+
+        // Hiển thị popup ngay bên dưới helloLabel
+        popupMenu.show(helloLabel, 0, helloLabel.getHeight());
+    }
+});
+
+        // Xử lý chọn menu
+        itemThongTin.addActionListener(evt -> {
+                if (UserSession.currentUsername == null) {
+                    new loginform().setVisible(true);
+                    this.dispose();
+                    return;
+                }
+                else{
+                    User user = userSer.getUserByUserName(UserSession.currentUsername);
+                    contentPanel.removeAll();
+                    contentPanel.add(new Thongtintaikhoan());
+                    contentPanel.revalidate();
+                    contentPanel.repaint();
+                }
+        });
+
+        itemQLUSER.addActionListener(evt -> {
+            new QuanLyUser().setVisible(true);
+        });
+        itemQLCATE.addActionListener(evt -> {
+            new QuanLyCategory().setVisible(true);
+        });
+        itemQLPRODUCT.addActionListener(evt -> {
+            new QuanLyProduct().setVisible(true);
+        });
+        
+        itemDangXuat.addActionListener(evt -> {
+            int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                UserSession.delete();
+                CredentialManager.clearLogin();
+                new loginform().setVisible(true);
+                this.dispose();
+            }
+        });
+
         
         setLocationRelativeTo(null);
         setTitle("MyStore");
@@ -34,6 +128,7 @@ public class TrangChu extends javax.swing.JFrame {
 //
 //      logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 //        logo.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+// contentPane
         if (UserSession.currentUsername != null) {
             helloLabel.setText("Xin chào, " + UserSession.currentUsername);
             jSeparator2.setVisible(true);
@@ -43,10 +138,10 @@ public class TrangChu extends javax.swing.JFrame {
             jSeparator2.setVisible(false);
             Logout_menubarlabel.setVisible(false);
         }
-        contentPanel.removeAll();
-        contentPanel.add(new TrangChuContent());
-        contentPanel.revalidate();
-        contentPanel.repaint();
+//        contentPanel.removeAll();
+//        contentPanel.add(new TrangChuContent());
+//        contentPanel.revalidate();
+//        contentPanel.repaint();
         
     }
     int width = 170;
@@ -99,7 +194,7 @@ public class TrangChu extends javax.swing.JFrame {
         Product_menubarlabel = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         Logout_menubarlabel = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        topNav = new javax.swing.JPanel();
         helloLabel = new javax.swing.JLabel();
         menu_icon = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
@@ -227,9 +322,14 @@ public class TrangChu extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel1.setBackground(new java.awt.Color(100, 130, 173));
+        topNav.setBackground(new java.awt.Color(100, 130, 173));
 
         helloLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        helloLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                helloLabelMouseClicked(evt);
+            }
+        });
 
         originalIcon = new ImageIcon("src/images/menu.png");
         resizedImage = originalIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -243,22 +343,22 @@ public class TrangChu extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout topNavLayout = new javax.swing.GroupLayout(topNav);
+        topNav.setLayout(topNavLayout);
+        topNavLayout.setHorizontalGroup(
+            topNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topNavLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1044, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(helloLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        topNavLayout.setVerticalGroup(
+            topNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topNavLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(topNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(helloLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -274,8 +374,8 @@ public class TrangChu extends javax.swing.JFrame {
                 .addComponent(menuBar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1218, Short.MAX_VALUE)
+                    .addComponent(topNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -283,7 +383,7 @@ public class TrangChu extends javax.swing.JFrame {
             .addComponent(menuBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(topNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -332,6 +432,10 @@ public class TrangChu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_Logout_menubarlabelMouseClicked
 
+    private void helloLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_helloLabelMouseClicked
+        
+    }//GEN-LAST:event_helloLabelMouseClicked
+
      private void Product_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {                                                 
         // TODO add your handling code here:
     }    
@@ -368,12 +472,12 @@ public class TrangChu extends javax.swing.JFrame {
     private javax.swing.JPanel contentPanel;
     private javax.swing.JLabel exit_icon;
     private javax.swing.JLabel helloLabel;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel logo;
     private javax.swing.JPanel menuBar;
     private javax.swing.JLabel menu_icon;
     private javax.swing.JLabel storeName_menubarlabel;
+    private javax.swing.JPanel topNav;
     // End of variables declaration//GEN-END:variables
 }

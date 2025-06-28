@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.service.Admin.QLPRODUCT;
+package com.mycompany.view.Admin.QLPRODUCT;
 
 import com.mycompany.service.Admin.ProductService;
 import com.mycompany.service.Admin.CategoryService;
