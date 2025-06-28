@@ -221,21 +221,28 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="menu_icon" min="-2" pref="30" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="928" max="32767" attributes="0"/>
                   <Component id="helloLabel" min="-2" pref="132" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
+                  <Component id="shoppingCart_icon" min="-2" pref="38" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="helloLabel" min="-2" pref="32" max="-2" attributes="0"/>
-                      <Component id="menu_icon" min="-2" pref="30" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="shoppingCart_icon" alignment="1" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="helloLabel" pref="32" max="32767" attributes="0"/>
+                              <Component id="menu_icon" min="-2" pref="30" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -257,6 +264,14 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="originalIcon = new ImageIcon(&quot;src/images/menu.png&quot;);&#xa;resizedImage = originalIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);&#xa;resizedIcon = new ImageIcon(resizedImage);&#xa;&#xa;menu_icon = new javax.swing.JLabel();&#xa;menu_icon.setIcon(resizedIcon);"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="shoppingCart_icon">
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="shoppingCart_iconMouseClicked"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="originalIcon = new ImageIcon(&quot;src/main/java/images/shoppingcart.png&quot;);&#xa;resizedImage = originalIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);&#xa;resizedIcon = new ImageIcon(resizedImage);&#xa;&#xa;shoppingCart_icon = new javax.swing.JLabel();&#xa;shoppingCart_icon.setIcon(resizedIcon);"/>
           </AuxValues>
         </Component>
       </SubComponents>

@@ -24,6 +24,7 @@ import com.mycompany.model.User;
 import com.mycompany.view.Admin.QLUSER.QuanLyUser;
 import com.mycompany.view.Admin.QLCATEGORY.QuanLyCategory;
 import com.mycompany.view.Admin.QLPRODUCT.QuanLyProduct;
+import com.mycompany.view.Cart.Cart;
 /**
  *
  * @author VITHANH
@@ -45,11 +46,11 @@ public class TrangChu extends javax.swing.JFrame {
         JPopupMenu popupMenu = new JPopupMenu();
 
 // Tạo các menu item
-JMenuItem itemThongTin = new JMenuItem("Thông tin tài khoản");
-JMenuItem itemQLUSER = new JMenuItem("Quản lý User");
-JMenuItem itemQLCATE = new JMenuItem("Quản lý Category");
-JMenuItem itemQLPRODUCT = new JMenuItem("Quản lý Product");
-JMenuItem itemDangXuat = new JMenuItem("Đăng xuất");
+        JMenuItem itemThongTin = new JMenuItem("Thông tin tài khoản");
+        JMenuItem itemQLUSER = new JMenuItem("Quản lý User");
+        JMenuItem itemQLCATE = new JMenuItem("Quản lý Category");
+        JMenuItem itemQLPRODUCT = new JMenuItem("Quản lý Product");
+        JMenuItem itemDangXuat = new JMenuItem("Đăng xuất");
 
 // Gắn sự kiện click vào helloLabel
 helloLabel.addMouseListener(new MouseAdapter() {
@@ -197,6 +198,7 @@ helloLabel.addMouseListener(new MouseAdapter() {
         topNav = new javax.swing.JPanel();
         helloLabel = new javax.swing.JLabel();
         menu_icon = new javax.swing.JLabel();
+        shoppingCart_icon = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -343,6 +345,18 @@ helloLabel.addMouseListener(new MouseAdapter() {
             }
         });
 
+        originalIcon = new ImageIcon("src/main/java/images/shoppingcart.png");
+        resizedImage = originalIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        resizedIcon = new ImageIcon(resizedImage);
+
+        shoppingCart_icon = new javax.swing.JLabel();
+        shoppingCart_icon.setIcon(resizedIcon);
+        shoppingCart_icon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                shoppingCart_iconMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout topNavLayout = new javax.swing.GroupLayout(topNav);
         topNav.setLayout(topNavLayout);
         topNavLayout.setHorizontalGroup(
@@ -350,18 +364,23 @@ helloLabel.addMouseListener(new MouseAdapter() {
             .addGroup(topNavLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 928, Short.MAX_VALUE)
                 .addComponent(helloLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(78, 78, 78)
+                .addComponent(shoppingCart_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         topNavLayout.setVerticalGroup(
             topNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topNavLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(topNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(helloLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGroup(topNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(shoppingCart_icon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, topNavLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(topNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(helloLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                            .addComponent(menu_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         contentPanel.setLayout(new java.awt.BorderLayout());
@@ -436,6 +455,31 @@ helloLabel.addMouseListener(new MouseAdapter() {
         
     }//GEN-LAST:event_helloLabelMouseClicked
 
+    private void shoppingCart_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_shoppingCart_iconMouseClicked
+        // TODO add your handling code here:
+        if (UserSession.currentUsername == null) {
+            int result = JOptionPane.showConfirmDialog(
+                this,
+                "Bạn cần phải đăng nhập.",
+                "Đăng nhập",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
+            if (result == JOptionPane.OK_OPTION) {
+                new loginform().setVisible(true);
+                this.dispose();
+            }
+        }
+        else{
+            UserService userSer = new UserService();
+            User user = userSer.getUserByUserName(UserSession.currentUsername);
+            contentPanel.removeAll();
+            contentPanel.add(new Cart(user.getId()));
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        }
+    }//GEN-LAST:event_shoppingCart_iconMouseClicked
+
      private void Product_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {                                                 
         // TODO add your handling code here:
     }    
@@ -477,6 +521,7 @@ helloLabel.addMouseListener(new MouseAdapter() {
     private javax.swing.JLabel logo;
     private javax.swing.JPanel menuBar;
     private javax.swing.JLabel menu_icon;
+    private javax.swing.JLabel shoppingCart_icon;
     private javax.swing.JLabel storeName_menubarlabel;
     private javax.swing.JPanel topNav;
     // End of variables declaration//GEN-END:variables

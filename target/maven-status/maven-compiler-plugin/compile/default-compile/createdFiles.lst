@@ -13,7 +13,10 @@ com\mycompany\view\Admin\QLPRODUCT\QuanLyProduct.class
 com\mycompany\model\User.class
 com\mycompany\sesion\UserSession\UserSession.class
 com\mycompany\model\Product.class
+com\mycompany\view\Cart\Cart$1.class
+com\mycompany\dao\CartDao.class
 com\mycompany\view\Admin\QLUSER\AddUser$1.class
+com\mycompany\service\Admin\CartService.class
 com\mycompany\service\Admin\ProductService.class
 com\mycompany\doanjava\doan.class
 com\mycompany\view\Admin\QLUSER\QuanLyUser$2.class
@@ -23,6 +26,7 @@ com\mycompany\view\TrangChu\TrangChu$6.class
 com\mycompany\view\Admin\QLUSER\AddUser$5.class
 com\mycompany\view\Admin\QLCATEGORY\EditCategory$2.class
 com\mycompany\view\Admin\QLPRODUCT\EditProduct.class
+com\mycompany\model\CartItem.class
 com\mycompany\view\Admin\QLCATEGORY\QuanLyCategory$2.class
 com\mycompany\view\TrangChu\TrangChuContent.class
 com\mycompany\view\Admin\QLPRODUCT\QuanLyProduct$3.class
@@ -42,6 +46,7 @@ com\mycompany\view\Admin\QLUSER\EditUser$9.class
 com\mycompany\view\Account\registerform.class
 com\mycompany\view\Admin\QLUSER\AddUser$6.class
 com\mycompany\view\Admin\QLUSER\EditUser$8.class
+com\mycompany\model\Cart.class
 com\mycompany\view\Account\loginform$1.class
 com\mycompany\view\Cart\Cart.class
 com\mycompany\dao\CategoryDao.class
@@ -53,6 +58,7 @@ com\mycompany\view\Admin\QLCATEGORY\AddCategory$2.class
 com\mycompany\view\TrangChu\TrangChu$2.class
 com\mycompany\view\Admin\QLUSER\EditUser$5.class
 com\mycompany\view\Admin\QLUSER\AddUser$3.class
+com\mycompany\view\TrangChu\TrangChu$9.class
 com\mycompany\dao\JDBCConnection.class
 com\mycompany\view\Admin\QLPRODUCT\AddProduct$2.class
 com\mycompany\view\Admin\QLCATEGORY\EditCategory$3.class
