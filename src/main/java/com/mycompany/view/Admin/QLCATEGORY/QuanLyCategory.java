@@ -29,6 +29,7 @@ public class QuanLyCategory extends javax.swing.JFrame {
     }
     public QuanLyCategory() {
         initComponents();
+        setLocationRelativeTo(null);
         categoryService = new CategoryService();
         
         defaulTableModelQLCATEGORY = new DefaultTableModel(){
