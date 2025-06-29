@@ -25,6 +25,7 @@ import com.mycompany.view.Admin.QLUSER.QuanLyUser;
 import com.mycompany.view.Admin.QLCATEGORY.QuanLyCategory;
 import com.mycompany.view.Admin.QLPRODUCT.QuanLyProduct;
 import com.mycompany.view.Cart.Cart;
+import com.mycompany.view.SanPham.ProductView;
 /**
  *
  * @author VITHANH
@@ -482,6 +483,10 @@ helloLabel.addMouseListener(new MouseAdapter() {
 
      private void Product_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {                                                 
         // TODO add your handling code here:
+        contentPanel.removeAll();
+        contentPanel.add(new ProductView());
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }    
     /**
      * @param args the command line arguments

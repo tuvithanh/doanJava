@@ -1,19 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.view.Cart;
 
-/**
- *
- * @author VITHANH
- */
 import com.mycompany.model.CartItem;
 import com.mycompany.model.Product;
 import com.mycompany.service.Admin.CartService;
+import com.mycompany.service.Admin.UserService;
+import com.mycompany.sesion.UserSession.UserSession;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.text.NumberFormat;
 import java.util.List;
@@ -22,10 +16,8 @@ import java.util.Locale;
 public class Cart extends JPanel {
     private JTable tblCart;
     private JLabel lblTotal;
-    private JButton btnCheckout;
-    private JButton btnDelete;
-
     private CartService cartService = new CartService();
+    private List<CartItem> items;
 
     public Cart(int userId) {
         initComponents();
@@ -35,54 +27,43 @@ public class Cart extends JPanel {
     private void initComponents() {
         setLayout(new BorderLayout());
 
-        // Tiêu đề
         JLabel lblTitle = new JLabel("GIỎ HÀNG", SwingConstants.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
         add(lblTitle, BorderLayout.NORTH);
 
-        // Bảng giỏ hàng
-        tblCart = new JTable(new DefaultTableModel(
+        tblCart = new JTable();
+        JScrollPane scrollPane = new JScrollPane(tblCart);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        lblTotal = new JLabel("Tổng cộng: ");
+        bottomPanel.add(lblTotal);
+        add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    private void loadCartData(int userId) {
+        DefaultTableModel model = new DefaultTableModel(
             new Object[][] {},
-            new String[] {"Tên sản phẩm", "Số lượng", "Giá tiền", "Thành tiền"}
+            new String[] {"Tên sản phẩm", "Số lượng", "Giá tiền", "Thành tiền", "Xóa"}
         ) {
-            final Class[] types = new Class [] {
-                String.class, Integer.class, Float.class, Float.class
+            final Class<?>[] columnTypes = new Class<?>[] {
+                String.class, Integer.class, Float.class, Float.class, JButton.class
             };
-            final boolean[] canEdit = new boolean [] {
-                false, false, false, false
+            final boolean[] canEdit = new boolean[] {
+                false, true, false, false, true
             };
 
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnTypes[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
-        });
+        };
+        tblCart.setModel(model);
 
-        JScrollPane scrollPane = new JScrollPane(tblCart);
-        add(scrollPane, BorderLayout.CENTER);
-
-        // Panel dưới: tổng tiền + nút
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        lblTotal = new JLabel("Tổng cộng: ");
-        btnDelete = new JButton("Xóa sản phẩm");
-        btnCheckout = new JButton("Thanh toán");
-
-        bottomPanel.add(lblTotal);
-        bottomPanel.add(btnDelete);
-        bottomPanel.add(btnCheckout);
-
-        add(bottomPanel, BorderLayout.SOUTH);
-    }
-
-    private void loadCartData(int userId) {
-        DefaultTableModel model = (DefaultTableModel) tblCart.getModel();
-        model.setRowCount(0);
-
-        List<CartItem> items = cartService.getCartItemsByUserId(userId);
+        items = cartService.getCartItemsByUserId(userId);
         float total = 0;
 
         for (CartItem item : items) {
@@ -93,32 +74,25 @@ public class Cart extends JPanel {
             total += subTotal;
 
             model.addRow(new Object[] {
-                p.getName(),
-                qty,
-                price,
-                subTotal
+                p.getName(), qty, price, subTotal, "Xóa"
             });
         }
+
+        tblCart.getColumnModel().getColumn(1).setCellEditor(new QuantityPanelEditor(items, this::reload, cartService));
+        tblCart.getColumnModel().getColumn(1).setCellRenderer(new QuantityPanelRenderer());
+
+        tblCart.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
+        tblCart.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JCheckBox(), items, this::reload, cartService));
 
         NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         lblTotal.setText("Tổng cộng: " + nf.format(total));
     }
 
-    // Getter
-    public JTable getTblCart() {
-        return tblCart;
-    }
-
-    public JLabel getLblTotal() {
-        return lblTotal;
-    }
-
-    public JButton getBtnCheckout() {
-        return btnCheckout;
-    }
-
-    public JButton getBtnDelete() {
-        return btnDelete;
+    private void reload() {
+        removeAll();
+        initComponents();
+        loadCartData(new UserService().getUserByUserName(UserSession.currentUsername).getId());
+        revalidate();
+        repaint();
     }
 }
-

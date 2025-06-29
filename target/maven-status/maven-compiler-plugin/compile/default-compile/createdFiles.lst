@@ -5,6 +5,7 @@ com\mycompany\view\Admin\QLCATEGORY\EditCategory$1.class
 com\mycompany\view\TrangChu\TrangChu.class
 com\mycompany\view\Thongtintaikhoan\Thongtintaikhoan.class
 com\mycompany\view\Admin\QLPRODUCT\EditProduct$2.class
+com\mycompany\view\Cart\QuantityPanelEditor.class
 com\mycompany\view\Admin\QLUSER\AddUser$4.class
 com\mycompany\view\Admin\QLUSER\AddUser$8.class
 com\mycompany\view\Admin\QLUSER\EditUser$3.class
@@ -48,6 +49,7 @@ com\mycompany\view\Admin\QLUSER\AddUser$6.class
 com\mycompany\view\Admin\QLUSER\EditUser$8.class
 com\mycompany\model\Cart.class
 com\mycompany\view\Account\loginform$1.class
+com\mycompany\view\Cart\ButtonEditor.class
 com\mycompany\view\Cart\Cart.class
 com\mycompany\dao\CategoryDao.class
 com\mycompany\view\TrangChu\TrangChu$5.class
@@ -63,6 +65,7 @@ com\mycompany\dao\JDBCConnection.class
 com\mycompany\view\Admin\QLPRODUCT\AddProduct$2.class
 com\mycompany\view\Admin\QLCATEGORY\EditCategory$3.class
 com\mycompany\service\Admin\UserService.class
+com\mycompany\view\Cart\ButtonRenderer.class
 com\mycompany\view\Admin\QLCATEGORY\QuanLyCategory$1.class
 com\mycompany\view\Admin\QLUSER\AddUser$9.class
 com\mycompany\view\Admin\QLCATEGORY\QuanLyCategory$4.class
@@ -72,6 +75,7 @@ com\mycompany\view\Account\loginform.class
 com\mycompany\view\Admin\QLCATEGORY\QuanLyCategory.class
 com\mycompany\view\Admin\QLPRODUCT\QuanLyProduct$1.class
 com\mycompany\dao\UserDao.class
+com\mycompany\view\Cart\QuantityPanelRenderer.class
 com\mycompany\view\TrangChu\TrangChu$1.class
 com\mycompany\view\Admin\QLUSER\AddUser$7.class
 com\mycompany\view\Admin\QLCATEGORY\AddCategory$1.class
