@@ -9,6 +9,7 @@ import com.mycompany.service.Admin.CategoryService;
 import com.mycompany.model.Product;
 import com.mycompany.model.Category;
 import com.mycompany.view.Admin.QLCATEGORY.EditCategory;
+import com.mycompany.view.SanPham.ProductView;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -34,6 +35,10 @@ public class QuanLyProduct extends javax.swing.JFrame {
             String cateName = cate.getName();
             defaultTableModel.addRow(new Object[]{pro.getId(), cateName ,pro.getName(), pro.getDescription(), pro.getPrice(), pro.getImagepath()});
         }
+        if (ProductView.instance != null) {
+    ProductView.instance.reloadData();
+}
+
     }
     public QuanLyProduct() {
         initComponents();
