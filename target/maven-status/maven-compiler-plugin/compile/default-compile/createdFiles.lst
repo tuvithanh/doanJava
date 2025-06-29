@@ -46,6 +46,7 @@ com\mycompany\service\Admin\QLPRODUCT\QuanLyProduct$1.class
 com\mycompany\view\TrangChu\TrangChu$5.class
 com\mycompany\view\Admin\QLCATEGORY\AddCategory.class
 com\mycompany\view\Admin\QLUSER\QuanLyUser$4.class
+com\mycompany\view\SanPham\ProductView.class
 com\mycompany\view\Admin\QLCATEGORY\AddCategory$2.class
 com\mycompany\view\TrangChu\TrangChu$2.class
 com\mycompany\view\Admin\QLUSER\EditUser$5.class
