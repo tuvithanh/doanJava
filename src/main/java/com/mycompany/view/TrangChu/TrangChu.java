@@ -446,10 +446,13 @@ helloLabel.addMouseListener(new MouseAdapter() {
 
     private void Logout_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Logout_menubarlabelMouseClicked
         // TODO add your handling code here:
-        UserSession.delete();
-        CredentialManager.clearLogin();
-        new loginform().setVisible(true);
-        this.dispose();
+        int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                UserSession.delete();
+                CredentialManager.clearLogin();
+                new loginform().setVisible(true);
+                this.dispose();
+            }
     }//GEN-LAST:event_Logout_menubarlabelMouseClicked
 
     private void helloLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_helloLabelMouseClicked

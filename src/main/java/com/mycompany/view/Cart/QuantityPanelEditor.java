@@ -1,14 +1,18 @@
 package com.mycompany.view.Cart;
 
 
+import com.mycompany.CredentialManager.CredentialManager;
 import com.mycompany.model.CartItem;
 import com.mycompany.service.Admin.CartService;
+import com.mycompany.sesion.UserSession.UserSession;
+import com.mycompany.view.Account.loginform;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
@@ -47,8 +51,14 @@ class QuantityPanelEditor extends AbstractCellEditor implements javax.swing.tabl
                 quantity--;
                 updateQuantity();
             } else {
-                cartService.deleteItem(items.get(currentRow).getId());
-                onUpdate.run();
+                int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xoá không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    cartService.deleteItem(items.get(currentRow).getId());
+                    onUpdate.run();
+                }
+                else{
+                    onUpdate.run();
+                }
             }
         });
 

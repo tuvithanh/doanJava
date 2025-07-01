@@ -2,6 +2,7 @@ package com.mycompany.view.SanPham;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -43,13 +44,18 @@ public class ProductView extends JPanel {
             ));
 
             JLabel imgLabel;
-            try {
-                ImageIcon icon = new ImageIcon(p.getImagePath());
+
+            // ✅ Load ảnh
+            String imagePath = p.getImagepath(); // ví dụ: "images/sp1.jpg"
+            File imgFile = new File(imagePath);
+            if (imgFile.exists()) {
+                ImageIcon icon = new ImageIcon(imgFile.getAbsolutePath());
                 Image img = icon.getImage().getScaledInstance(150, 120, Image.SCALE_SMOOTH);
                 imgLabel = new JLabel(new ImageIcon(img));
-            } catch (Exception e) {
+            } else {
                 imgLabel = new JLabel("Không có ảnh");
                 imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                imgLabel.setPreferredSize(new Dimension(150, 120));
             }
 
             JLabel name = new JLabel(p.getName());
@@ -87,50 +93,48 @@ public class ProductView extends JPanel {
     }
 
     private void addToCart(Product product) {
-    if (UserSession.currentUsername == null || UserSession.currentUsername.trim().isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+        if (UserSession.currentUsername == null || UserSession.currentUsername.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
 
-    // Lấy JFrame chứa JPanel hiện tại
-    Window window = SwingUtilities.getWindowAncestor(this);
-    if (window instanceof JFrame) {
-        ((JFrame) window).dispose(); // đóng JFrame hiện tại
-    }
+            // Đóng cửa sổ hiện tại
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame) {
+                ((JFrame) window).dispose();
+            }
 
-    // Mở form đăng nhập
-    new loginform().setVisible(true);
-    return;
-}
-
-
-    try {
-        int userId = new UserService().getUserByUserName(UserSession.currentUsername).getId();
-        CartService cartService = new CartService();
-        Cart cart = cartService.getOrCreateCart(userId);
-
-        // Kiểm tra sản phẩm đã có trong giỏ chưa
-        List<CartItem> existingItems = cartService.getItems(cart.getId());
-        CartItem matchedItem = existingItems.stream()
-            .filter(i -> i.getProductId() == product.getId())
-            .findFirst()
-            .orElse(null);
-
-        if (matchedItem != null) {
-            cartService.updateItemQuantity(matchedItem.getId(), matchedItem.getQuantity() + 1);
-        } else {
-            CartItem newItem = new CartItem();
-            newItem.setCartId(cart.getId());
-            newItem.setProductId(product.getId());
-            newItem.setQuantity(1);
-            cartService.addItem(newItem);
+            // Mở form đăng nhập
+            new loginform().setVisible(true);
+            return;
         }
 
-        JOptionPane.showMessageDialog(this, "Đã thêm vào giỏ hàng!");
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Lỗi khi thêm vào giỏ hàng!");
-    }
-}
+        try {
+            int userId = new UserService().getUserByUserName(UserSession.currentUsername).getId();
+            CartService cartService = new CartService();
+            Cart cart = cartService.getOrCreateCart(userId);
 
+            // Kiểm tra sản phẩm đã có trong giỏ chưa
+            List<CartItem> existingItems = cartService.getItems(cart.getId());
+            CartItem matchedItem = existingItems.stream()
+                .filter(i -> i.getProductId() == product.getId())
+                .findFirst()
+                .orElse(null);
+
+            if (matchedItem != null) {
+                cartService.updateItemQuantity(matchedItem.getId(), matchedItem.getQuantity() + 1);
+            } else {
+                CartItem newItem = new CartItem();
+                newItem.setCartId(cart.getId());
+                newItem.setProductId(product.getId());
+                newItem.setQuantity(1);
+                cartService.addItem(newItem);
+            }
+
+            JOptionPane.showMessageDialog(this, "Đã thêm vào giỏ hàng!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi thêm vào giỏ hàng!");
+        }
+    }
 
     public void reloadData() {
         initUI();

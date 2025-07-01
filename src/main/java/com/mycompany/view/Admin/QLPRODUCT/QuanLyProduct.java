@@ -9,9 +9,12 @@ import com.mycompany.service.Admin.CategoryService;
 import com.mycompany.model.Product;
 import com.mycompany.model.Category;
 import com.mycompany.view.Admin.QLCATEGORY.EditCategory;
+import java.io.File;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import java.awt.Image;
 
 /**
  *
@@ -27,37 +30,70 @@ public class QuanLyProduct extends javax.swing.JFrame {
     /**
      * Creates new form QuanLyProduct
      */
-    public void insertData(List<Product> productList){
-        for(Product pro : productList){
-            categoryService = new CategoryService();
-            Category cate = categoryService.getCategoryByID(pro.getCateid());
-            String cateName = cate.getName();
-            defaultTableModel.addRow(new Object[]{pro.getId(), cateName ,pro.getName(), pro.getDescription(), pro.getPrice(), pro.getImagepath()});
-        }
-    }
     public QuanLyProduct() {
         initComponents();
         setLocationRelativeTo(null);
         productService = new ProductService();
-        defaultTableModel = new DefaultTableModel(){
+        categoryService = new CategoryService();
+
+        defaultTableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+                return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                // Cột ảnh là ImageIcon
+                if (columnIndex == 5) return ImageIcon.class;
+                return super.getColumnClass(columnIndex);
             }
         };
+
+        // Thêm các cột
         defaultTableModel.addColumn("ID");
         defaultTableModel.addColumn("CATEGORY NAME");
         defaultTableModel.addColumn("NAME");
         defaultTableModel.addColumn("DESCRIPTION");
         defaultTableModel.addColumn("PRICE");
-        defaultTableModel.addColumn("IMAGEPATH");
-        
+        defaultTableModel.addColumn("IMAGE"); // ✅ Cột ảnh
+
         Admin_QLPRODUCT_TABLE.setModel(defaultTableModel);
-        
+        Admin_QLPRODUCT_TABLE.setRowHeight(60); // ✅ Chiều cao dòng đủ để hiển thị ảnh
+
         insertData(productService.getAllProduct());
-        
+
         Admin_QLPRODUCT_TABLE.setComponentPopupMenu(Admin_QLPRODUCT_popupmenu);
-        
+    }
+
+    public void insertData(List<Product> productList) {
+        defaultTableModel.setRowCount(0); // Xóa dữ liệu cũ
+
+        for (Product pro : productList) {
+            Category cate = categoryService.getCategoryByID(pro.getCateid());
+            String cateName = (cate != null) ? cate.getName() : "N/A";
+
+            // Xử lý ảnh
+            String imagePath = pro.getImagepath(); // Ví dụ: "images/sp1.jpg"
+            ImageIcon icon = null;
+            File imageFile = new File(imagePath);
+
+            if (imageFile.exists()) {
+                Image image = new ImageIcon(imageFile.getAbsolutePath())
+                    .getImage()
+                    .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                icon = new ImageIcon(image);
+            }
+
+            defaultTableModel.addRow(new Object[]{
+                pro.getId(),
+                cateName,
+                pro.getName(),
+                pro.getDescription(),
+                pro.getPrice(),
+                icon // ✅ Thêm icon vào dòng
+            });
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ import com.mycompany.sesion.UserSession.UserSession;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -44,13 +45,13 @@ public class Cart extends JPanel {
     private void loadCartData(int userId) {
         DefaultTableModel model = new DefaultTableModel(
             new Object[][] {},
-            new String[] {"Tên sản phẩm", "Số lượng", "Giá tiền", "Thành tiền", "Xóa"}
+            new String[] {"Ảnh", "Tên sản phẩm", "Số lượng", "Giá tiền", "Thành tiền", "Xóa"}
         ) {
             final Class<?>[] columnTypes = new Class<?>[] {
-                String.class, Integer.class, Float.class, Float.class, JButton.class
+                JLabel.class, String.class, Integer.class, Float.class, Float.class, JButton.class
             };
             final boolean[] canEdit = new boolean[] {
-                false, true, false, false, true
+                false, false, true, false, false, true
             };
 
             public Class<?> getColumnClass(int columnIndex) {
@@ -61,7 +62,16 @@ public class Cart extends JPanel {
                 return canEdit[columnIndex];
             }
         };
+
+        tblCart.setRowHeight(80); // Tăng chiều cao để hiển thị ảnh
         tblCart.setModel(model);
+        tblCart.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+                    return (JLabel) value;
+                }
+        });
 
         items = cartService.getCartItemsByUserId(userId);
         float total = 0;
@@ -73,16 +83,35 @@ public class Cart extends JPanel {
             float subTotal = qty * price;
             total += subTotal;
 
+            // ✅ Load ảnh từ imagepath
+            JLabel imgLabel;
+            File imgFile = new File(p.getImagepath());
+            if (imgFile.exists()) {
+                ImageIcon icon = new ImageIcon(imgFile.getAbsolutePath());
+                Image img = icon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+                imgLabel = new JLabel(new ImageIcon(img));
+            } else {
+                imgLabel = new JLabel("Không có ảnh");
+                imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            }
+
             model.addRow(new Object[] {
-                p.getName(), qty, price, subTotal, "Xóa"
+                imgLabel,
+                p.getName(),
+                qty,
+                price,
+                subTotal,
+                "Xóa"
             });
         }
 
-        tblCart.getColumnModel().getColumn(1).setCellEditor(new QuantityPanelEditor(items, this::reload, cartService));
-        tblCart.getColumnModel().getColumn(1).setCellRenderer(new QuantityPanelRenderer());
+        // Số lượng
+        tblCart.getColumnModel().getColumn(2).setCellEditor(new QuantityPanelEditor(items, this::reload, cartService));
+        tblCart.getColumnModel().getColumn(2).setCellRenderer(new QuantityPanelRenderer());
 
-        tblCart.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
-        tblCart.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor(new JCheckBox(), items, this::reload, cartService));
+        // Xóa
+        tblCart.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
+        tblCart.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JCheckBox(), items, this::reload, cartService));
 
         NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         lblTotal.setText("Tổng cộng: " + nf.format(total));

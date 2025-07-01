@@ -8,31 +8,134 @@ import com.mycompany.model.Category;
 import com.mycompany.model.Product;
 import com.mycompany.service.Admin.ProductService;
 import com.mycompany.service.Admin.CategoryService;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
+import java.awt.Image;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 /**
  *
  * @author VITHANH
  */
 public class AddProduct extends javax.swing.JFrame {
-    
+    private javax.swing.JTextField Admin_Add_Product_ImagePath_TextField;
+    private javax.swing.JButton Admin_Add_Product_BrowseBTN;
+    private String lastImageDirectory = "."; // bắt đầu từ thư mục hiện tại
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddProduct.class.getName());
 
     /**
      * Creates new form AddProduct
      */
     public AddProduct() {
-        initComponents();
-        setLocationRelativeTo(null);
-        CategoryService categoryService = new CategoryService();
-        
-        List<Category> cateList = new ArrayList();
-        cateList = categoryService.getAllCategory();
-        for(Category cate : cateList){
-            String s = cate.getName();
-            Admin_Add_Product_Combobox.addItem(s);
+        initComponents(); // Không chỉnh sửa gì trong đây cả
+        Admin_AddProduct_ImagePreview.setPreferredSize(new Dimension(120, 120)); // hoặc size khác bạn muốn
+        Admin_AddProduct_ImagePreview.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK));
+        Admin_AddProduct_ImagePreview.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); // căn giữa ảnh
+        Admin_AddProduct_ImagePreview.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+
+        // ✅ Tạo lại JTextField và JButton để chọn ảnh
+        Admin_Add_Product_ImagePath_TextField = new javax.swing.JTextField(20);
+        Admin_Add_Product_BrowseBTN = new javax.swing.JButton("Chọn ảnh");
+
+        // ✅ Thêm vào layout sau initComponent
+        javax.swing.GroupLayout jPanel2Layout = (javax.swing.GroupLayout) jPanel2.getLayout();
+
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jLabel5)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(Admin_Add_Product_ImagePath_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(Admin_Add_Product_BrowseBTN)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createSequentialGroup()
+                .addGap(220) // thay bằng đúng vị trí dòng label "Image Path" xuất hiện
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(Admin_Add_Product_ImagePath_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Admin_Add_Product_BrowseBTN))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        // ✅ Gán sự kiện chọn file
+        Admin_Add_Product_BrowseBTN.addActionListener(new java.awt.event.ActionListener() {
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        JFileChooser fileChooser = new JFileChooser(lastImageDirectory);
+        fileChooser.setDialogTitle("Chọn ảnh sản phẩm");
+
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            lastImageDirectory = selectedFile.getParent();
+
+            // Lấy tên file
+            String fileName = selectedFile.getName();
+
+            // Thư mục lưu ảnh trong project
+            String destDir = "src/main/java/images";
+            File destFolder = new File(destDir);
+            if (!destFolder.exists()) {
+                destFolder.mkdirs();
+            }
+
+            // Đường dẫn đích
+            File destFile = new File(destFolder, fileName);
+
+            try {
+                // Copy ảnh vào thư mục project
+                java.nio.file.Files.copy(
+                    selectedFile.toPath(),
+                    destFile.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+
+                // Lưu đường dẫn tương đối
+                String relativePath = "images/" + fileName;
+                Admin_Add_Product_ImagePath_TextField.setText(relativePath);
+
+                // Hiển thị preview ảnh
+                ImageIcon icon = new ImageIcon(new ImageIcon(destFile.getAbsolutePath()).getImage().getScaledInstance(
+                    Admin_AddProduct_ImagePreview.getWidth(),
+                    Admin_AddProduct_ImagePreview.getHeight(),
+                    Image.SCALE_SMOOTH
+                ));
+                Admin_AddProduct_ImagePreview.setIcon(icon);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(null, "Lỗi khi copy ảnh!");
+            }
         }
     }
+});
+
+
+
+
+        // ✅ Load danh mục sản phẩm
+        CategoryService categoryService = new CategoryService();
+        List<Category> cateList = categoryService.getAllCategory();
+        for (Category cate : cateList) {
+            Admin_Add_Product_Combobox.addItem(cate.getName());
+        }
+
+        setLocationRelativeTo(null);
+    }
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,6 +159,7 @@ public class AddProduct extends javax.swing.JFrame {
         Admin_Add_Product_Desc_TextArea = new javax.swing.JTextArea();
         Admin_Add_Product_Price_Textfield = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        Admin_AddProduct_ImagePreview = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         Admin_Add_Product_HuyBTN = new javax.swing.JButton();
         Admin_Add_Product_SaveBTN = new javax.swing.JButton();
@@ -103,23 +207,29 @@ public class AddProduct extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Admin_Add_Product_Price_Textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(74, 74, 74)
                         .addComponent(Admin_Add_Product_Name_Textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(66, 66, 66)
-                        .addComponent(jLabel6)
+                        .addComponent(jLabel6))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(46, 46, 46)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Admin_Add_Product_Price_Textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel5))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                        .addComponent(Admin_AddProduct_ImagePreview, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(63, 63, 63))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(Admin_Add_Product_Combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(117, Short.MAX_VALUE))
+                        .addComponent(Admin_Add_Product_Combobox, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,20 +240,25 @@ public class AddProduct extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel6)
                     .addComponent(Admin_Add_Product_Combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel4))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel4))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(Admin_Add_Product_Price_Textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(34, 34, 34)
+                        .addComponent(jLabel5))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(Admin_Add_Product_Price_Textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(34, 34, 34)
-                .addComponent(jLabel5)
-                .addContainerGap(53, Short.MAX_VALUE))
+                        .addGap(35, 35, 35)
+                        .addComponent(Admin_AddProduct_ImagePreview, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         Admin_Add_Product_HuyBTN.setText("Hủy");
@@ -213,6 +328,7 @@ public class AddProduct extends javax.swing.JFrame {
         String cate = (String) Admin_Add_Product_Combobox.getSelectedItem();
         String name = Admin_Add_Product_Name_Textfield.getText();
         String desc = Admin_Add_Product_Desc_TextArea.getText();
+        String imagePath = Admin_Add_Product_ImagePath_TextField.getText();
         double price =  Double.parseDouble(Admin_Add_Product_Price_Textfield.getText());
         
         CategoryService cateSer = new CategoryService();
@@ -223,7 +339,8 @@ public class AddProduct extends javax.swing.JFrame {
         pro.setName(name);
         pro.setDescription(desc);
         pro.setPrice(price);
-        
+        pro.setImagepath(imagePath);
+
         ProductService proService = new ProductService();
         
         proService.addProduct(pro);
@@ -260,6 +377,7 @@ public class AddProduct extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Admin_AddProduct_ImagePreview;
     private javax.swing.JComboBox<String> Admin_Add_Product_Combobox;
     private javax.swing.JTextArea Admin_Add_Product_Desc_TextArea;
     private javax.swing.JButton Admin_Add_Product_HuyBTN;
