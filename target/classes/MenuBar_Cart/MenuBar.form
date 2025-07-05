@@ -33,16 +33,12 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-          </Group>
+          <Component id="jPanel1" alignment="1" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -62,7 +58,7 @@
                   <Component id="SearchBar" min="-2" pref="498" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnCart" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="126" max="32767" attributes="0"/>
+                  <EmptySpace pref="132" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -76,7 +72,7 @@
                       <Component id="SearchBar" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCart" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="37" max="32767" attributes="0"/>
+                  <EmptySpace pref="43" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

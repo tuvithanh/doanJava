@@ -94,47 +94,57 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="Admin_Edit_Product_Name_Label" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="Admin_Edit_Product_Name_Textfield" min="-2" pref="121" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="Admin_Edit_Product_ID_Label" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                          <Component id="Admin_Edit_Product_ID_Textfield" min="-2" pref="121" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="Admin_Edit_Product_Category_Label" min="-2" max="-2" attributes="0"/>
-                      <Component id="Admin_Edit_Product_Price_Label" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="Admin_Edit_Product_Price_Textfield" min="-2" pref="123" max="-2" attributes="0"/>
-                      <Component id="Admin_Edit_Product_Category_Combobox" min="-2" max="-2" attributes="0"/>
-                      <Component id="Admin_Edit_Product_ImagePath_Textfield" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="Admin_Edit_Product_Name_Label" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="Admin_Edit_Product_Name_Textfield" min="-2" pref="121" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="Admin_Edit_Product_ID_Label" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                                  <Component id="Admin_Edit_Product_ID_Textfield" min="-2" pref="121" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="Admin_Edit_Product_Category_Label" min="-2" max="-2" attributes="0"/>
+                              <Component id="Admin_Edit_Product_Price_Label" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="Admin_Edit_Product_Price_Textfield" min="-2" pref="123" max="-2" attributes="0"/>
+                              <Component id="Admin_Edit_Product_Category_Combobox" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                                  <Component id="Admin_Edit_Product_Description_Label" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="175" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                                  <Component id="Admin_Edit_Product_ImagePath_Label" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="Admin_Edit_Product_ImagePath_Textfield" min="-2" pref="235" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="Admin_Edit_Product_BrowseImage_Btn" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="Admin_EditProduct_ImagePreview" min="-2" pref="156" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="Admin_Edit_Product_Description_Label" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="423" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="Admin_Edit_Product_ImagePath_Label" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="230" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -157,21 +167,28 @@
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="Admin_Edit_Product_Description_Label" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="Admin_Edit_Product_Description_Label" min="-2" max="-2" attributes="0"/>
+                              <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="66" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="Admin_Edit_Product_ImagePath_Label" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="Admin_Edit_Product_ImagePath_Textfield" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="Admin_Edit_Product_BrowseImage_Btn" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="Admin_Edit_Product_Price_Textfield" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="Admin_Edit_Product_Price_Label" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="Admin_Edit_Product_ImagePath_Label" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="Admin_Edit_Product_ImagePath_Textfield" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="Admin_EditProduct_ImagePreview" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="130" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -243,6 +260,16 @@
             <Property name="text" type="java.lang.String" value="Description:"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="Admin_EditProduct_ImagePreview">
+        </Component>
+        <Component class="javax.swing.JButton" name="Admin_Edit_Product_BrowseImage_Btn">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Ch&#x1ecd;n &#x1ea3;nh"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Admin_Edit_Product_BrowseImage_BtnActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel3">
@@ -267,7 +294,7 @@
                       <Component id="Admin_Edit_Product_HuyBTN" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="Admin_Edit_Product_SaveBTN" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="36" max="32767" attributes="0"/>
+                  <EmptySpace pref="47" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

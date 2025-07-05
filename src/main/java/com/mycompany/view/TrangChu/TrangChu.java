@@ -26,11 +26,13 @@ import com.mycompany.view.Admin.QLCATEGORY.QuanLyCategory;
 import com.mycompany.view.Admin.QLPRODUCT.QuanLyProduct;
 import com.mycompany.view.Cart.Cart;
 import com.mycompany.view.SanPham.ProductView;
+import javax.swing.JPanel;
 /**
  *
  * @author VITHANH
  */
 public class TrangChu extends javax.swing.JFrame {
+    
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TrangChu.class.getName());
 
@@ -39,51 +41,55 @@ public class TrangChu extends javax.swing.JFrame {
      */
     public TrangChu() {
         initComponents();
+        contentPanel.removeAll();
+        contentPanel.add(new TrangChuContent());
+        contentPanel.revalidate();
+        contentPanel.repaint();
+        
         //popupmenu
         UserService userSer = new UserService();
         
-
         // Tạo popup menu
         JPopupMenu popupMenu = new JPopupMenu();
 
-// Tạo các menu item
+        // Tạo các menu item
         JMenuItem itemThongTin = new JMenuItem("Thông tin tài khoản");
         JMenuItem itemQLUSER = new JMenuItem("Quản lý User");
         JMenuItem itemQLCATE = new JMenuItem("Quản lý Category");
         JMenuItem itemQLPRODUCT = new JMenuItem("Quản lý Product");
         JMenuItem itemDangXuat = new JMenuItem("Đăng xuất");
 
-// Gắn sự kiện click vào helloLabel
-helloLabel.addMouseListener(new MouseAdapter() {
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        popupMenu.removeAll();
+    // Gắn sự kiện click vào helloLabel
+    helloLabel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            popupMenu.removeAll();
 
-        // Nếu chưa đăng nhập → mở login form
-        if (UserSession.currentUsername == null) {
-            new loginform().setVisible(true);
-            return;
-        }
+            // Nếu chưa đăng nhập → mở login form
+            if (UserSession.currentUsername == null) {
+                new loginform().setVisible(true);
+                return;
+            }
 
-        // Nếu đã đăng nhập → hiển thị menu theo vai trò
-        User user = userSer.getUserByUserName(UserSession.currentUsername);
+            // Nếu đã đăng nhập → hiển thị menu theo vai trò
+            User user = userSer.getUserByUserName(UserSession.currentUsername);
 
-        popupMenu.add(itemThongTin);
+            popupMenu.add(itemThongTin);
 
-        if (user.getRole() == 'A') {
+            if (user.getRole() == 'A') {
+                popupMenu.addSeparator();
+                popupMenu.add(itemQLUSER);
+                popupMenu.add(itemQLCATE);
+                popupMenu.add(itemQLPRODUCT);
+            }
+
             popupMenu.addSeparator();
-            popupMenu.add(itemQLUSER);
-            popupMenu.add(itemQLCATE);
-            popupMenu.add(itemQLPRODUCT);
+            popupMenu.add(itemDangXuat);
+
+            // Hiển thị popup ngay bên dưới helloLabel
+            popupMenu.show(helloLabel, 0, helloLabel.getHeight());
         }
-
-        popupMenu.addSeparator();
-        popupMenu.add(itemDangXuat);
-
-        // Hiển thị popup ngay bên dưới helloLabel
-        popupMenu.show(helloLabel, 0, helloLabel.getHeight());
-    }
-});
+    });
 
         // Xử lý chọn menu
         itemThongTin.addActionListener(evt -> {
@@ -140,10 +146,6 @@ helloLabel.addMouseListener(new MouseAdapter() {
             jSeparator2.setVisible(false);
             Logout_menubarlabel.setVisible(false);
         }
-//        contentPanel.removeAll();
-//        contentPanel.add(new TrangChuContent());
-//        contentPanel.revalidate();
-//        contentPanel.repaint();
         
     }
     int width = 170;
@@ -425,8 +427,10 @@ helloLabel.addMouseListener(new MouseAdapter() {
 
     private void Home_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Home_menubarlabelMouseClicked
         // TODO add your handling code here:
-        this.dispose();
-        new TrangChu().setVisible(true);
+        contentPanel.removeAll();
+        contentPanel.add(new TrangChuContent());
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }//GEN-LAST:event_Home_menubarlabelMouseClicked
 
     private void Account_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Account_menubarlabelMouseClicked
