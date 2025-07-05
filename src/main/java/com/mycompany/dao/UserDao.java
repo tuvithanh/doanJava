@@ -143,7 +143,7 @@ public class UserDao {
 
             ResultSet rs = preparedStatement.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 user = new User();
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
@@ -165,6 +165,43 @@ public class UserDao {
             e.printStackTrace();
         }
 
+        return user;
+    }
+    public User getUserByUsername(String username){
+        User user = null;
+        Connection conn = JDBCConnection.getJDBCConnection();
+        String sql = "Select * from [User] where username = ?";
+        
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setPhone(rs.getInt("phone"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setAddress(rs.getString("address"));
+                user.setAbout(rs.getString("about"));
+
+                String roleStr = rs.getString("role");
+                if (roleStr != null && !roleStr.isEmpty()) {
+                    user.setRole(roleStr.charAt(0));
+                }
+
+                user.setFavorites(rs.getString("favorites"));
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        
+        
         return user;
     }
 

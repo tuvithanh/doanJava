@@ -21,6 +21,7 @@ public class EditCategory extends javax.swing.JFrame {
      */
     public EditCategory(int id){
         initComponents();
+        setLocationRelativeTo(null);
         this.SaveID = id;
         CategoryService cateSer = new CategoryService();
         Category cate = cateSer.getCategoryByID(id);

@@ -32,6 +32,7 @@ public class QuanLyUser extends javax.swing.JFrame {
     }
     public QuanLyUser() {
         initComponents();
+        setLocationRelativeTo(null);
         userService = new UserService();
         
         defaultTableModelQLUSER = new DefaultTableModel() {
@@ -134,7 +135,7 @@ public class QuanLyUser extends javax.swing.JFrame {
         admin_Add_User_BTN = new javax.swing.JButton();
         Admin_QLUSER_Refresh_BTN = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Quản lý User");
         setMinimumSize(new java.awt.Dimension(600, 600));
 

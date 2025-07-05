@@ -25,6 +25,7 @@ public class EditUser extends javax.swing.JFrame {
     public EditUser(int id) {
     this.saveID = id;
     initComponents(); // Khởi tạo giao diện
+    setLocationRelativeTo(null);
 
     UserService userService = new UserService();
     User user = userService.getUserByID(this.saveID);

@@ -29,6 +29,7 @@ public class QuanLyCategory extends javax.swing.JFrame {
     }
     public QuanLyCategory() {
         initComponents();
+        setLocationRelativeTo(null);
         categoryService = new CategoryService();
         
         defaulTableModelQLCATEGORY = new DefaultTableModel(){
@@ -83,7 +84,7 @@ public class QuanLyCategory extends javax.swing.JFrame {
         });
         QLCategory_popupmenu.add(QLCategory_deleteMenuItem);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         Admin_QLCATEGORY_Header_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         Admin_QLCATEGORY_Header_Label.setText("Quản Lý Category");

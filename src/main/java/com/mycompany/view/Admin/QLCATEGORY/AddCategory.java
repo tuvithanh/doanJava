@@ -18,6 +18,7 @@ public class AddCategory extends javax.swing.JFrame {
     /** Creates new form AddCategory */
     public AddCategory() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /** This method is called from within the constructor to
