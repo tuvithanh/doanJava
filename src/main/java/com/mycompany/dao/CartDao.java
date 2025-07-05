@@ -125,6 +125,20 @@ public class CartDao {
             e.printStackTrace();
         }
     }
+    public void removeItem(int userId, int productId) {
+        String sql = "DELETE FROM CartItem WHERE cart_id = (SELECT id FROM Cart WHERE user_id = ?) AND product_id = ?";
+
+        try (Connection conn = JDBCConnection.getJDBCConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

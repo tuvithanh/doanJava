@@ -26,6 +26,7 @@ import com.mycompany.view.Admin.QLCATEGORY.QuanLyCategory;
 import com.mycompany.view.Admin.QLPRODUCT.QuanLyProduct;
 import com.mycompany.view.Cart.Cart;
 import com.mycompany.view.SanPham.ProductView;
+import java.awt.Color;
 /**
  *
  * @author VITHANH
@@ -39,80 +40,76 @@ public class TrangChu extends javax.swing.JFrame {
      */
     public TrangChu() {
         initComponents();
-        //popupmenu
+        setLocationRelativeTo(null);
+        setTitle("MyStore");
+
+        // Khởi tạo service
         UserService userSer = new UserService();
-        
 
-        // Tạo popup menu
+        // ===== TẠO MENU POPUP CHO HELLO LABEL =====
         JPopupMenu popupMenu = new JPopupMenu();
-
-// Tạo các menu item
         JMenuItem itemThongTin = new JMenuItem("Thông tin tài khoản");
         JMenuItem itemQLUSER = new JMenuItem("Quản lý User");
         JMenuItem itemQLCATE = new JMenuItem("Quản lý Category");
         JMenuItem itemQLPRODUCT = new JMenuItem("Quản lý Product");
         JMenuItem itemDangXuat = new JMenuItem("Đăng xuất");
 
-// Gắn sự kiện click vào helloLabel
-helloLabel.addMouseListener(new MouseAdapter() {
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        popupMenu.removeAll();
+        helloLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                popupMenu.removeAll();
 
-        // Nếu chưa đăng nhập → mở login form
-        if (UserSession.currentUsername == null) {
-            new loginform().setVisible(true);
-            return;
-        }
-
-        // Nếu đã đăng nhập → hiển thị menu theo vai trò
-        User user = userSer.getUserByUserName(UserSession.currentUsername);
-
-        popupMenu.add(itemThongTin);
-
-        if (user.getRole() == 'A') {
-            popupMenu.addSeparator();
-            popupMenu.add(itemQLUSER);
-            popupMenu.add(itemQLCATE);
-            popupMenu.add(itemQLPRODUCT);
-        }
-
-        popupMenu.addSeparator();
-        popupMenu.add(itemDangXuat);
-
-        // Hiển thị popup ngay bên dưới helloLabel
-        popupMenu.show(helloLabel, 0, helloLabel.getHeight());
-    }
-});
-
-        // Xử lý chọn menu
-        itemThongTin.addActionListener(evt -> {
                 if (UserSession.currentUsername == null) {
                     new loginform().setVisible(true);
-                    this.dispose();
                     return;
                 }
-                else{
-                    User user = userSer.getUserByUserName(UserSession.currentUsername);
-                    contentPanel.removeAll();
-                    contentPanel.add(new Thongtintaikhoan());
-                    contentPanel.revalidate();
-                    contentPanel.repaint();
+
+                User user = userSer.getUserByUserName(UserSession.currentUsername);
+                popupMenu.add(itemThongTin);
+
+                if (user.getRole() == 'A') {
+                    popupMenu.addSeparator();
+                    popupMenu.add(itemQLUSER);
+                    popupMenu.add(itemQLCATE);
+                    popupMenu.add(itemQLPRODUCT);
                 }
+
+                popupMenu.addSeparator();
+                popupMenu.add(itemDangXuat);
+
+                popupMenu.show(helloLabel, 0, helloLabel.getHeight());
+            }
         });
 
-        itemQLUSER.addActionListener(evt -> {
-            new QuanLyUser().setVisible(true);
+        // ===== HIỆU ỨNG HOVER CHO MENU BAR LABELS =====
+        addHoverEffect(Home_menubarlabel);
+        addHoverEffect(Account_menubarlabel);
+        addHoverEffect(Product_menubarlabel);
+
+        // ===== HÀNH ĐỘNG CHO MENU POPUP ITEMS =====
+        itemThongTin.addActionListener(evt -> {
+            if (UserSession.currentUsername == null) {
+                new loginform().setVisible(true);
+                this.dispose();
+            } else {
+                contentPanel.removeAll();
+                contentPanel.add(new Thongtintaikhoan());
+                contentPanel.revalidate();
+                contentPanel.repaint();
+            }
         });
-        itemQLCATE.addActionListener(evt -> {
-            new QuanLyCategory().setVisible(true);
-        });
-        itemQLPRODUCT.addActionListener(evt -> {
-            new QuanLyProduct().setVisible(true);
-        });
-        
+
+        itemQLUSER.addActionListener(evt -> new QuanLyUser().setVisible(true));
+        itemQLCATE.addActionListener(evt -> new QuanLyCategory().setVisible(true));
+        itemQLPRODUCT.addActionListener(evt -> new QuanLyProduct().setVisible(true));
+
         itemDangXuat.addActionListener(evt -> {
-            int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(
+                null,
+                "Bạn có chắc muốn đăng xuất?",
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION
+            );
             if (confirm == JOptionPane.YES_OPTION) {
                 UserSession.delete();
                 CredentialManager.clearLogin();
@@ -121,31 +118,37 @@ helloLabel.addMouseListener(new MouseAdapter() {
             }
         });
 
-        
-        setLocationRelativeTo(null);
-        setTitle("MyStore");
-//        ImageIcon icon = new ImageIcon(getClass().getResource("/images/mystore.png"));
-//        Image image = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-//        logo.setIcon(new ImageIcon(image));
-//
-//      logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//        logo.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
-// contentPane
+        // ===== THIẾT LẬP GIAO DIỆN THEO TRẠNG THÁI USER =====
         if (UserSession.currentUsername != null) {
             helloLabel.setText("Xin chào, " + UserSession.currentUsername);
             jSeparator2.setVisible(true);
             Logout_menubarlabel.setVisible(true);
-        }
-        else{
+        } else {
             jSeparator2.setVisible(false);
             Logout_menubarlabel.setVisible(false);
         }
-//        contentPanel.removeAll();
-//        contentPanel.add(new TrangChuContent());
-//        contentPanel.revalidate();
-//        contentPanel.repaint();
-        
+
+        // Tùy chọn: Load trang chủ mặc định
+        // contentPanel.removeAll();
+        // contentPanel.add(new TrangChuContent());
+        // contentPanel.revalidate();
+        // contentPanel.repaint();
     }
+    private void addHoverEffect(JLabel label) {
+    label.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+            label.setForeground(new java.awt.Color(0, 102, 204)); // Màu xanh khi hover
+        }
+
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {
+            label.setForeground(java.awt.Color.BLACK); // Màu đen bình thường
+        }
+    });
+}
+
+
     int width = 170;
     
     void openMenuBar() {
@@ -478,9 +481,10 @@ helloLabel.addMouseListener(new MouseAdapter() {
             UserService userSer = new UserService();
             User user = userSer.getUserByUserName(UserSession.currentUsername);
             contentPanel.removeAll();
-            contentPanel.add(new Cart(user.getId()));
+            contentPanel.add(new Cart(user.getId(), contentPanel));
             contentPanel.revalidate();
             contentPanel.repaint();
+
         }
     }//GEN-LAST:event_shoppingCart_iconMouseClicked
 

@@ -96,6 +96,17 @@ public class CartService {
 
         return items;
     }
+    public void clearCartByUserId(int userId) {
+        Cart cart = cartDao.getCartByUserId(userId);
+        if (cart != null) {
+            cartDao.clearCart(cart.getId());
+        }
+    }
+    public void removeListItem(List<CartItem> items) {
+        for (CartItem item : items) {
+            deleteItem(item.getId());
+        }
+    }
 }
 
 

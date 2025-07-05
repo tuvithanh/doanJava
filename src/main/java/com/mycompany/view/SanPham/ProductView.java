@@ -22,14 +22,23 @@ public class ProductView extends JPanel {
 
     public ProductView() {
         instance = this;
-        initUI();
-    }
 
-    public void initUI() {
-        removeAll(); // Xóa sản phẩm cũ
+        // Scroll pane chứa sản phẩm
+        JScrollPane scrollPane = new JScrollPane();
+        // Tăng tốc độ scroll
+        scrollPane.getVerticalScrollBar().setUnitIncrement(20);  // Tăng step mỗi lần cuộn chuột
 
-        setLayout(new GridLayout(0, 3, 20, 20));
-        setBorder(new EmptyBorder(20, 20, 20, 20));
+        scrollPane.setBorder(null);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new GridLayout(0, 4, 20, 20));
+        contentPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        contentPanel.setBackground(new Color(245, 245, 245));
+
+        scrollPane.setViewportView(contentPanel);
+        setLayout(new BorderLayout());
+        add(scrollPane, BorderLayout.CENTER);
 
         ProductDao dao = new ProductDao();
         List<Product> list = dao.getAllProducts();
@@ -44,9 +53,7 @@ public class ProductView extends JPanel {
             ));
 
             JLabel imgLabel;
-
-            // ✅ Load ảnh
-            String imagePath = p.getImagepath(); // ví dụ: "images/sp1.jpg"
+            String imagePath = p.getImagepath();
             File imgFile = new File(imagePath);
             if (imgFile.exists()) {
                 ImageIcon icon = new ImageIcon(imgFile.getAbsolutePath());
@@ -57,34 +64,49 @@ public class ProductView extends JPanel {
                 imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 imgLabel.setPreferredSize(new Dimension(150, 120));
             }
+            imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             JLabel name = new JLabel(p.getName());
-            name.setFont(new Font("Arial", Font.BOLD, 16));
+            name.setFont(new Font("Segoe UI", Font.BOLD, 16));
             name.setAlignmentX(Component.CENTER_ALIGNMENT);
+            name.setForeground(new Color(50, 50, 50));
 
             JLabel price = new JLabel("Giá: " + p.getPrice() + " đ");
-            price.setFont(new Font("Arial", Font.PLAIN, 14));
-            price.setForeground(Color.RED);
+            price.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            price.setForeground(new Color(200, 0, 0));
             price.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            JLabel desc = new JLabel("<html><div style='text-align: center;'>" + p.getDescription() + "</div></html>");
-            desc.setFont(new Font("Arial", Font.ITALIC, 12));
+            JTextArea desc = new JTextArea(p.getDescription());
+            desc.setLineWrap(true);
+            desc.setWrapStyleWord(true);
+            desc.setEditable(false);
+            desc.setOpaque(false);
+            desc.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+            desc.setForeground(new Color(90, 90, 90));
             desc.setAlignmentX(Component.CENTER_ALIGNMENT);
+            desc.setMaximumSize(new Dimension(180, 60));
+            desc.setBorder(null);
+            desc.setFocusable(false);
 
             JButton btnAddToCart = new JButton("Thêm vào giỏ hàng");
+            btnAddToCart.setFont(new Font("Segoe UI", Font.PLAIN, 13));
             btnAddToCart.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnAddToCart.setBackground(new Color(0, 123, 255));
+            btnAddToCart.setForeground(Color.WHITE);
+            btnAddToCart.setFocusPainted(false);
             btnAddToCart.addActionListener(e -> addToCart(p));
 
             card.add(imgLabel);
             card.add(Box.createVerticalStrut(10));
             card.add(name);
+            card.add(Box.createVerticalStrut(5));
             card.add(desc);
             card.add(Box.createVerticalStrut(5));
             card.add(price);
             card.add(Box.createVerticalStrut(10));
             card.add(btnAddToCart);
 
-            add(card);
+            contentPanel.add(card);
         }
 
         setBackground(new Color(245, 245, 245));
@@ -102,7 +124,6 @@ public class ProductView extends JPanel {
                 ((JFrame) window).dispose();
             }
 
-            // Mở form đăng nhập
             new loginform().setVisible(true);
             return;
         }
@@ -112,7 +133,6 @@ public class ProductView extends JPanel {
             CartService cartService = new CartService();
             Cart cart = cartService.getOrCreateCart(userId);
 
-            // Kiểm tra sản phẩm đã có trong giỏ chưa
             List<CartItem> existingItems = cartService.getItems(cart.getId());
             CartItem matchedItem = existingItems.stream()
                 .filter(i -> i.getProductId() == product.getId())
@@ -137,6 +157,9 @@ public class ProductView extends JPanel {
     }
 
     public void reloadData() {
-        initUI();
+        removeAll();
+        revalidate();
+        repaint();
+        new ProductView(); // tạo lại UI
     }
 }
