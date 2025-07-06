@@ -27,46 +27,57 @@ import javax.swing.border.LineBorder;
         List<Product> list = dao.getAllProducts();
 
         for (Product p : list) {
-            JPanel card = new JPanel();
-            card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-            card.setBackground(Color.WHITE);
-            card.setBorder(new CompoundBorder(
-                new LineBorder(Color.LIGHT_GRAY, 1, true),
-                new EmptyBorder(10, 10, 10, 10)
-            ));
+    JPanel card = new JPanel();
+    card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+    card.setBackground(Color.WHITE);
+    card.setBorder(new CompoundBorder(
+        new LineBorder(Color.LIGHT_GRAY, 1, true),
+        new EmptyBorder(10, 10, 10, 10)
+    ));
 
-            JLabel imgLabel;
-            try {
-                ImageIcon icon = new ImageIcon(p.getImagePath());
-                Image img = icon.getImage().getScaledInstance(150, 120, Image.SCALE_SMOOTH);
-                imgLabel = new JLabel(new ImageIcon(img));
-            } catch (Exception e) {
-                imgLabel = new JLabel("Không có ảnh");
-                imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            }
+    JLabel imgLabel;
+    try {
+        ImageIcon icon = new ImageIcon(p.getImagePath());
+        Image img = icon.getImage().getScaledInstance(150, 120, Image.SCALE_SMOOTH);
+        imgLabel = new JLabel(new ImageIcon(img));
+    } catch (Exception e) {
+        imgLabel = new JLabel("Không có ảnh");
+        imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    }
 
-            JLabel name = new JLabel(p.getName());
-            name.setFont(new Font("Arial", Font.BOLD, 16));
-            name.setAlignmentX(Component.CENTER_ALIGNMENT);
+    JLabel name = new JLabel(p.getName());
+    name.setFont(new Font("Arial", Font.BOLD, 16));
+    name.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            JLabel price = new JLabel("Giá: " + p.getPrice() + " đ");
-            price.setFont(new Font("Arial", Font.PLAIN, 14));
-            price.setForeground(Color.RED);
-            price.setAlignmentX(Component.CENTER_ALIGNMENT);
+    JLabel price = new JLabel("Giá: " + p.getPrice() + " đ");
+    price.setFont(new Font("Arial", Font.PLAIN, 14));
+    price.setForeground(Color.RED);
+    price.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            JLabel desc = new JLabel("<html><div style='text-align: center;'>" + p.getDescription() + "</div></html>");
-            desc.setFont(new Font("Arial", Font.ITALIC, 12));
-            desc.setAlignmentX(Component.CENTER_ALIGNMENT);
+    JLabel desc = new JLabel("<html><div style='text-align: center;'>" + p.getDescription() + "</div></html>");
+    desc.setFont(new Font("Arial", Font.ITALIC, 12));
+    desc.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            card.add(imgLabel);
-            card.add(Box.createVerticalStrut(10));
-            card.add(name);
-            card.add(desc);
-            card.add(Box.createVerticalStrut(5));
-            card.add(price);
+    card.add(imgLabel);
+    card.add(Box.createVerticalStrut(10));
+    card.add(name);
+    card.add(desc);
+    card.add(Box.createVerticalStrut(5));
+    card.add(price);
 
-            add(card);
+    // 👇 Bổ sung sự kiện click để hiển thị DetailProduct
+    card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    card.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ProductView.this);
+            com.mycompany.view.DetailProduct.DetailProduct detail = new com.mycompany.view.DetailProduct.DetailProduct(parentFrame, p);
+            detail.setVisible(true);
         }
+    });
+
+    add(card);
+}
+
 
         setBackground(new Color(245, 245, 245));
         revalidate();
