@@ -1,4 +1,4 @@
-package com.mycompany.view.DetailProduct;
+package com.mycompany.view.ChiTietSanPham;
 
 import javax.swing.*;
 import java.awt.*;

@@ -70,7 +70,7 @@ import javax.swing.border.LineBorder;
     card.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ProductView.this);
-            com.mycompany.view.DetailProduct.DetailProduct detail = new com.mycompany.view.DetailProduct.DetailProduct(parentFrame, p);
+            com.mycompany.view.ChiTietSanPham.DetailProduct detail = new com.mycompany.view.ChiTietSanPham.DetailProduct(parentFrame, p);
             detail.setVisible(true);
         }
     });
