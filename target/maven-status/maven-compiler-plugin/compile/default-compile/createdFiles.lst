@@ -42,7 +42,7 @@ com\mycompany\view\Admin\QLUSER\EditUser.class
 com\mycompany\view\Account\loginform.class
 com\mycompany\view\Admin\QLCATEGORY\QuanLyCategory.class
 com\mycompany\view\Admin\QLPRODUCT\QuanLyProduct$1.class
-com\myconpany\view\Thanhtoan\Thanhtoan.class
+com\mycompany\view\SanPham\ProductView$1.class
 com\mycompany\service\Admin\OrderDetailService.class
 com\mycompany\model\OrderDetail.class
 com\mycompany\model\Payment.class
@@ -77,6 +77,7 @@ com\mycompany\view\Admin\QLUSER\AddUser.class
 com\mycompany\view\Admin\QLPRODUCT\AddProduct.class
 com\mycompany\view\Admin\QLUSER\QuanLyUser$3.class
 com\mycompany\view\Account\registerform.class
+com\mycompany\view\Thanhtoan\Thanhtoan.class
 com\mycompany\view\Admin\QLUSER\AddUser$6.class
 com\mycompany\model\Order.class
 com\mycompany\view\Account\loginform$1.class
@@ -100,6 +101,7 @@ com\mycompany\view\Cart\QuantityPanelRenderer.class
 com\mycompany\view\TrangChu\TrangChu$1.class
 com\mycompany\view\Admin\QLUSER\AddUser$7.class
 com\mycompany\view\Account\loginform$RoundedBorder.class
+com\mycompany\view\ChiTietSanPham\DetailProduct.class
 com\mycompany\view\Admin\QLPRODUCT\QuanLyProduct$5.class
 com\mycompany\view\Admin\QLUSER\EditUser$4.class
 com\mycompany\view\TrangChu\TrangChu$8.class

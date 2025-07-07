@@ -17,6 +17,7 @@ import com.mycompany.service.Admin.UserService;
 import com.mycompany.sesion.UserSession.UserSession;
 import com.mycompany.view.Account.loginform;
 
+
 public class ProductView extends JPanel {
     public static ProductView instance;
 
@@ -105,7 +106,14 @@ public class ProductView extends JPanel {
             card.add(price);
             card.add(Box.createVerticalStrut(10));
             card.add(btnAddToCart);
-
+            card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            card.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ProductView.this);
+                com.mycompany.view.ChiTietSanPham.DetailProduct detail = new com.mycompany.view.ChiTietSanPham.DetailProduct(parentFrame, p);
+                detail.setVisible(true);
+                }
+            });
             contentPanel.add(card);
         }
 

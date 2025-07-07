@@ -5,7 +5,7 @@ import com.mycompany.model.Product;
 import com.mycompany.service.Admin.CartService;
 import com.mycompany.service.Admin.UserService;
 import com.mycompany.sesion.UserSession.UserSession;
-import com.myconpany.view.Thanhtoan.Thanhtoan;
+import com.mycompany.view.Thanhtoan.Thanhtoan;
 
 import javax.swing.*;
 import javax.swing.table.*;
