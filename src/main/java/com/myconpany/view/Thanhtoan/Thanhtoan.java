@@ -1,4 +1,4 @@
-package com.mycompany.view.Thanhtoan;
+package com.myconpany.view.Thanhtoan;
 
 import com.mycompany.model.CartItem;
 import com.mycompany.service.Admin.OrderService;
