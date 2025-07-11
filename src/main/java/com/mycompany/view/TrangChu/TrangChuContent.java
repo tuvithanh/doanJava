@@ -1,106 +1,287 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.mycompany.view.TrangChu;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.*;
+import com.mycompany.dao.CategoryDao;
+import com.mycompany.dao.ProductDao;
+import com.mycompany.model.Category;
+import com.mycompany.model.Product;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-/**
- *
- * @author VITHANH
- */
-public class TrangChuContent extends javax.swing.JPanel {
+import javax.swing.border.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.util.List;
+
+public class TrangChuContent extends JPanel {
     private JPanel danhMucPanel;
     private JPanel sanphamPanel;
-    /**
-     * Creates new form TrangChuContent
-     */
+    private JScrollPane mainScrollPane;
+    private JPanel contentPanel;
+    private JPanel panelSanPham;
+    private JLabel jLabel1;
+    private JPanel bannerPanel;
+    private JLabel banner;
+
+    private Color primaryColor = new Color(0, 102, 204);
+    private Color hoverColor = new Color(0, 122, 255);
+    private Color backgroundColor = new Color(245, 245, 245);
+
     public TrangChuContent() {
         initComponents();
-        jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        setupUI();
+    }
 
-        danhMucPanel = new JPanel();
-        danhMucPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        jPanel1.setLayout(new BorderLayout());
-        jPanel1.add(danhMucPanel, BorderLayout.CENTER);
+    private void initComponents() {
+        // Main scroll pane for the entire content
+        mainScrollPane = new JScrollPane();
+        mainScrollPane.setBorder(null);
+        mainScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        mainScrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+        mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
+        // Main content panel that will hold all components
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(backgroundColor);
         
-        sanphamPanel = new JPanel();
-        sanphamPanel.setLayout(new BorderLayout());
-        panelSanPham.add(sanphamPanel, BorderLayout.CENTER);
+        // Banner panel
+        bannerPanel = new JPanel(new BorderLayout());
+        bannerPanel.setBackground(backgroundColor);
+        banner = new JLabel();
+        banner.setHorizontalAlignment(SwingConstants.CENTER);
+        bannerPanel.add(banner, BorderLayout.CENTER);
         
-        banner.addComponentListener(new java.awt.event.ComponentAdapter() {
+        // Set banner panel with maximum width and proportional height
+        bannerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 400)); // Max height 400px
+        bannerPanel.setPreferredSize(new Dimension(1200, 400)); // Default size
+        
+        // Product title panel
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 15));
+        titlePanel.setBackground(backgroundColor);
+        titlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        jLabel1 = new JLabel("SẢN PHẨM NỔI BẬT");
+        jLabel1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        jLabel1.setForeground(primaryColor);
+        titlePanel.add(jLabel1);
+        
+        // Category panel
+        danhMucPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        danhMucPanel.setBackground(backgroundColor);
+        danhMucPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        
+        // Products panel
+        panelSanPham = new JPanel();
+        panelSanPham.setLayout(new BoxLayout(panelSanPham, BoxLayout.Y_AXIS));
+        panelSanPham.setBackground(backgroundColor);
+        
+        sanphamPanel = new JPanel(new BorderLayout());
+        sanphamPanel.setBackground(backgroundColor);
+        panelSanPham.add(sanphamPanel);
+        
+        // Add all components to content panel
+        contentPanel.add(bannerPanel);
+        contentPanel.add(titlePanel);
+        contentPanel.add(danhMucPanel);
+        contentPanel.add(panelSanPham);
+        
+        // Add some vertical spacing
+        contentPanel.add(Box.createVerticalGlue());
+        
+        // Set the content panel as viewport view
+        mainScrollPane.setViewportView(contentPanel);
+        
+        // Set layout for main panel
+        setLayout(new BorderLayout());
+        add(mainScrollPane, BorderLayout.CENTER);
+        
+        // Add component listener for banner resizing
+        banner.addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentResized(java.awt.event.ComponentEvent e) {
-                loadBanner();
+            public void componentResized(ComponentEvent e) {
+                SwingUtilities.invokeLater(() -> loadBanner());
             }
         });
-        
+    }
+
+    private void setupUI() {
         loadBanner();
         loadDanhMuc();
-        loadSanPham();
+        loadSanPham(0);
     }
-    
+
     private void loadBanner() {
         try {
+            int width = bannerPanel.getWidth();
+            if (width <= 0) return;
+
             ImageIcon originalIcon = new ImageIcon("src/main/java/images/banner.jpg");
-            Image img = originalIcon.getImage();
+            Image originalImage = originalIcon.getImage();
+            
+            // Calculate proportional height (max 400px)
+            int height = Math.min(400, (width * originalIcon.getIconHeight()) / originalIcon.getIconWidth());
+            
+            // Resize image
+            Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
-            int bannerWidth = banner.getWidth();
-            if (bannerWidth <= 0) return; // Chưa hiển thị → không làm gì
-
-            // Tính chiều cao theo tỉ lệ ảnh gốc
-            int scaledHeight = (bannerWidth * originalIcon.getIconHeight()) / originalIcon.getIconWidth();
-            Image resized = img.getScaledInstance(bannerWidth, scaledHeight, Image.SCALE_SMOOTH);
-
-            banner.setIcon(new ImageIcon(resized));
-            banner.setText(""); // Xóa thông báo cũ (nếu có)
+            // Create rounded image
+            ImageIcon roundedIcon = new ImageIcon(createRoundedImage(scaledImage, 15));
+            banner.setIcon(roundedIcon);
+            banner.setText("");
+            
+            // Update banner panel size
+            bannerPanel.setPreferredSize(new Dimension(width, height));
+            bannerPanel.revalidate();
         } catch (Exception ex) {
-            banner.setText("Không thể load ảnh banner.");
+            banner.setText("Không thể load ảnh banner");
+            banner.setFont(new Font("Segoe UI", Font.BOLD, 16));
+            banner.setForeground(Color.RED);
+            ex.printStackTrace();
         }
     }
-    
+
+    private Image createRoundedImage(Image image, int cornerRadius) {
+        int width = image.getWidth(null);
+        int height = image.getHeight(null);
+
+        if (width <= 0 || height <= 0) {
+            return image;
+        }
+
+        BufferedImage output = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = output.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(Color.WHITE);
+        g2.fillRoundRect(0, 0, width, height, cornerRadius, cornerRadius);
+        g2.setComposite(AlphaComposite.SrcIn);
+        g2.drawImage(image, 0, 0, width, height, null);
+        g2.dispose();
+        return output;
+    }
+
     private void loadDanhMuc() {
-        String[] danhMuc = {"Tất cả", "Trà sữa", "Cà phê", "Sinh tố", "Khác"};
-        for (String ten : danhMuc) {
-            JButton btn = new JButton(ten);
-            btn.setBackground(new Color(220, 220, 220));
-            btn.setFocusPainted(false);
-            btn.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
-            danhMucPanel.add(btn);
+        JButton btnDanhMuc = new JButton("DANH MỤC SẢN PHẨM ▾");
+        btnDanhMuc.setFocusPainted(false);
+        btnDanhMuc.setBackground(primaryColor);
+        btnDanhMuc.setForeground(Color.WHITE);
+        btnDanhMuc.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnDanhMuc.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        btnDanhMuc.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        btnDanhMuc.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                btnDanhMuc.setBackground(hoverColor);
+            }
+
+            public void mouseExited(MouseEvent e) {
+                btnDanhMuc.setBackground(primaryColor);
+            }
+        });
+
+        JPopupMenu popup = new JPopupMenu();
+        popup.setPreferredSize(new Dimension(250, 300));
+        popup.setLayout(new BorderLayout());
+        popup.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(primaryColor);
+        header.setPreferredSize(new Dimension(250, 40));
+        JLabel title = new JLabel("CHỌN DANH MỤC", SwingConstants.CENTER);
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        header.add(title, BorderLayout.CENTER);
+        popup.add(header, BorderLayout.NORTH);
+
+        JPanel danhMucList = new JPanel();
+        danhMucList.setLayout(new BoxLayout(danhMucList, BoxLayout.Y_AXIS));
+        danhMucList.setBackground(Color.WHITE);
+
+        JScrollPane scroll = new JScrollPane(danhMucList);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll.setBorder(null);
+        scroll.getVerticalScrollBar().setUI(new CustomScrollBarUI());
+
+        CategoryDao categoryDao = new CategoryDao();
+        List<Category> categories = categoryDao.getAllCategory();
+
+        JButton tatCa = createCategoryButton("TẤT CẢ SẢN PHẨM");
+        tatCa.addActionListener(e -> {
+            popup.setVisible(false);
+            loadSanPham(0);
+        });
+        danhMucList.add(tatCa);
+        danhMucList.add(Box.createRigidArea(new Dimension(0, 5)));
+        danhMucList.add(new JSeparator());
+        danhMucList.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        for (Category cate : categories) {
+            JButton btn = createCategoryButton(cate.getName().toUpperCase());
+            btn.addActionListener(e -> {
+                popup.setVisible(false);
+                loadSanPham(cate.getId());
+            });
+            danhMucList.add(btn);
+            danhMucList.add(Box.createRigidArea(new Dimension(0, 5)));
         }
+
+        popup.add(scroll, BorderLayout.CENTER);
+        btnDanhMuc.addActionListener(e -> popup.show(btnDanhMuc, 0, btnDanhMuc.getHeight()));
+
+        danhMucPanel.removeAll();
+        danhMucPanel.add(btnDanhMuc);
     }
-    
-    private void loadSanPham() {
+
+    private JButton createCategoryButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setFocusPainted(false);
+        btn.setHorizontalAlignment(SwingConstants.LEFT);
+        btn.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        btn.setBackground(Color.WHITE);
+        btn.setForeground(Color.BLACK);
+        btn.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                btn.setBackground(new Color(240, 240, 240));
+            }
+
+            public void mouseExited(MouseEvent e) {
+                btn.setBackground(Color.WHITE);
+            }
+        });
+
+        return btn;
+    }
+
+    private void loadSanPham(int cateId) {
+        ProductDao productDao = new ProductDao();
+        List<Product> products = cateId == 0 ? productDao.getAllProducts() : productDao.getProductsByCategory(cateId);
+
         JPanel horizontalPanel = new JPanel();
         horizontalPanel.setLayout(new BoxLayout(horizontalPanel, BoxLayout.X_AXIS));
-        horizontalPanel.setBackground(Color.WHITE);
-        horizontalPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        horizontalPanel.setBackground(backgroundColor);
+        horizontalPanel.setBorder(new EmptyBorder(20, 20, 40, 20)); // Added bottom padding
 
-        for (int i = 1; i <= 8; i++) {
-            String tenSP = "Sản phẩm " + i;
-            String gia = (750000 + i * 10000) + "đ";
-            String moTa = "Loại sản phẩm";
-            String pathAnh = "src/main/java/images/null.png"; // Đặt ảnh tại đây
-
-            JPanel sp = createSanPhamPanel(tenSP, gia, moTa, pathAnh);
-            horizontalPanel.add(sp);
-            horizontalPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        if (products.isEmpty()) {
+            JLabel emptyLabel = new JLabel("Không có sản phẩm nào trong danh mục này", SwingConstants.CENTER);
+            emptyLabel.setFont(new Font("Segoe UI", Font.ITALIC, 16));
+            emptyLabel.setForeground(Color.GRAY);
+            horizontalPanel.add(emptyLabel);
+        } else {
+            for (Product p : products) {
+                JPanel sp = createSanPhamPanel(p);
+                horizontalPanel.add(sp);
+                horizontalPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+            }
         }
 
         JScrollPane scrollPane = new JScrollPane(horizontalPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(null);
-        scrollPane.getHorizontalScrollBar().setUnitIncrement(20);
+        scrollPane.setBackground(backgroundColor);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(40);
+        scrollPane.getHorizontalScrollBar().setUI(new CustomScrollBarUI());
 
         sanphamPanel.removeAll();
         sanphamPanel.setLayout(new BorderLayout());
@@ -109,128 +290,122 @@ public class TrangChuContent extends javax.swing.JPanel {
         sanphamPanel.repaint();
     }
 
-    private JPanel createSanPhamPanel(String tenSP, String gia, String moTa, String pathAnh) {
+    private JPanel createSanPhamPanel(Product p) {
         JPanel spPanel = new JPanel();
         spPanel.setLayout(new BoxLayout(spPanel, BoxLayout.Y_AXIS));
-        spPanel.setPreferredSize(new Dimension(200, 200));
+        spPanel.setPreferredSize(new Dimension(220, 320));
+        spPanel.setMaximumSize(new Dimension(220, 320));
         spPanel.setBackground(Color.WHITE);
-        spPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
-        // Ảnh
-        ImageIcon icon = new ImageIcon(pathAnh); // ảnh từ file
-        Image img = icon.getImage().getScaledInstance(160, 120, Image.SCALE_SMOOTH);
-        JLabel imgLabel = new JLabel(new ImageIcon(img));
-        imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        Border border = BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(230, 230, 230)),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Giá
-        JLabel lblGia = new JLabel(gia);
-        lblGia.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lblGia.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lblGia.setForeground(Color.BLACK);
-        lblGia.setBorder(new EmptyBorder(5, 0, 0, 0));
+        spPanel.setBorder(border);
 
-        // Tên SP
-        JLabel lblTen = new JLabel(tenSP);
-        lblTen.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        lblTen.setAlignmentX(Component.CENTER_ALIGNMENT);
+        spPanel.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                spPanel.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(primaryColor),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            }
 
-        // Mô tả
-        JLabel lblMoTa = new JLabel(moTa);
-        lblMoTa.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-        lblMoTa.setForeground(Color.GRAY);
-        lblMoTa.setAlignmentX(Component.CENTER_ALIGNMENT);
+            public void mouseExited(MouseEvent e) {
+                spPanel.setBorder(border);
+            }
+        });
 
-        spPanel.add(Box.createVerticalStrut(10));
-        spPanel.add(imgLabel);
-        spPanel.add(lblGia);
-        spPanel.add(lblTen);
-        spPanel.add(lblMoTa);
+        try {
+            ImageIcon icon = new ImageIcon(p.getImagePath());
+            Image img = icon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
+            Image roundedImg = createRoundedImage(img, 10);
+
+            JLabel imgLabel = new JLabel(new ImageIcon(roundedImg));
+            imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            imgLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            JLabel lblGia = new JLabel("₫" + String.format("%,.0f", p.getPrice()));
+            lblGia.setFont(new Font("Segoe UI", Font.BOLD, 16));
+            lblGia.setAlignmentX(Component.CENTER_ALIGNMENT);
+            lblGia.setForeground(primaryColor);
+
+            JLabel lblTen = new JLabel("<html><center>" + p.getName() + "</center></html>");
+            lblTen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            lblTen.setAlignmentX(Component.CENTER_ALIGNMENT);
+            lblTen.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+            JLabel lblMoTa = new JLabel("<html><center>" + p.getDescription() + "</center></html>");
+            lblMoTa.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+            lblMoTa.setForeground(Color.GRAY);
+            lblMoTa.setAlignmentX(Component.CENTER_ALIGNMENT);
+            lblMoTa.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+
+            spPanel.add(imgLabel);
+            spPanel.add(Box.createVerticalStrut(5));
+            spPanel.add(lblGia);
+            spPanel.add(Box.createVerticalStrut(5));
+            spPanel.add(lblTen);
+            spPanel.add(Box.createVerticalStrut(5));
+            spPanel.add(lblMoTa);
+        } catch (Exception ex) {
+            JLabel errorLabel = new JLabel("Lỗi tải sản phẩm", SwingConstants.CENTER);
+            errorLabel.setForeground(Color.RED);
+            spPanel.add(errorLabel);
+        }
 
         return spPanel;
     }
+}
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+class CustomScrollBarUI extends BasicScrollBarUI {
+    private final Color THUMB_COLOR = new Color(150, 150, 150);
+    private final Color THUMB_HOVER_COLOR = new Color(100, 100, 100);
+    private final int THUMB_SIZE = 8;
 
-        jPanel3 = new javax.swing.JPanel();
-        banner = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        panelSanPham = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+    @Override
+    protected JButton createDecreaseButton(int orientation) {
+        return createInvisibleButton();
+    }
 
-        jPanel3.setPreferredSize(new java.awt.Dimension(1230, 619));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    @Override
+    protected JButton createIncreaseButton(int orientation) {
+        return createInvisibleButton();
+    }
 
-        banner.setText("banner");
-        banner.setToolTipText("");
-        banner.setPreferredSize(new java.awt.Dimension(1230, 619));
-        jPanel3.add(banner, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1510, 250));
+    private JButton createInvisibleButton() {
+        JButton button = new JButton();
+        button.setPreferredSize(new Dimension(0, 0));
+        button.setMinimumSize(new Dimension(0, 0));
+        button.setMaximumSize(new Dimension(0, 0));
+        return button;
+    }
 
-        panelSanPham.setAutoscrolls(true);
-        panelSanPham.setLayout(new javax.swing.BoxLayout(panelSanPham, javax.swing.BoxLayout.LINE_AXIS));
-        jScrollPane1.setViewportView(panelSanPham);
+    @Override
+    protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(new Color(240, 240, 240));
+        g2.fillRoundRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height, 10, 10);
+    }
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel1.setText("DANH MỤC");
-
-        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel1.setOpaque(false);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 480, Short.MAX_VALUE)
+    @Override
+    protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(isDragging || isThumbRollover() ? THUMB_HOVER_COLOR : THUMB_COLOR);
+        g2.fillRoundRect(
+                thumbBounds.x + (thumbBounds.width - THUMB_SIZE) / 2,
+                thumbBounds.y,
+                THUMB_SIZE,
+                thumbBounds.height,
+                THUMB_SIZE,
+                THUMB_SIZE
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
+    }
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1510, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(71, Short.MAX_VALUE))
-        );
-    }// </editor-fold>//GEN-END:initComponents
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel banner;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel panelSanPham;
-    // End of variables declaration//GEN-END:variables
+    @Override
+    protected void setThumbBounds(int x, int y, int width, int height) {
+        super.setThumbBounds(x, y, width, height);
+        scrollbar.repaint();
+    }
 }

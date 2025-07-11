@@ -1,80 +1,209 @@
 package com.mycompany.view.SanPham;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.List;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-
+import javax.swing.border.*;
 import com.mycompany.dao.ProductDao;
-import com.mycompany.model.Product;
-import com.mycompany.model.Cart;
-import com.mycompany.model.CartItem;
-import com.mycompany.service.Admin.CartService;
-import com.mycompany.service.Admin.UserService;
+import com.mycompany.model.*;
+import com.mycompany.service.Admin.*;
 import com.mycompany.sesion.UserSession.UserSession;
 import com.mycompany.view.Account.loginform;
-
+import com.mycompany.view.ChiTietSanPham.DetailProduct;
+import com.mycompany.view.TrangChu.TrangChu;
+import java.awt.event.*;
+import com.mycompany.dao.CategoryDao;
+import com.mycompany.service.Admin.FavoriteService;
 
 public class ProductView extends JPanel {
     public static ProductView instance;
+    private JPanel contentPanel;
+    private Color primaryColor = new Color(0, 123, 255);
+    private Color secondaryColor = new Color(245, 245, 245);
+    private Color textColor = new Color(60, 60, 60);
 
     public ProductView() {
         instance = this;
+        setLayout(new BorderLayout());
+        setBackground(secondaryColor);
 
-        // Scroll pane chứa sản phẩm
+        // === DANH MỤC ===
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        topPanel.setBorder(new EmptyBorder(15, 20, 15, 20));
+        topPanel.setBackground(Color.WHITE);
+
+        JLabel titleLabel = new JLabel("SẢN PHẨM");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        titleLabel.setForeground(primaryColor);
+        topPanel.add(titleLabel);
+
+        topPanel.add(Box.createHorizontalStrut(20));
+
+        JButton btnChonDanhMuc = new JButton("LỌC THEO DANH MỤC ⏷");
+        btnChonDanhMuc.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        btnChonDanhMuc.setBackground(Color.WHITE);
+        btnChonDanhMuc.setForeground(textColor);
+        btnChonDanhMuc.setFocusPainted(false);
+        btnChonDanhMuc.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(new Color(200, 200, 200), 1),
+            new EmptyBorder(5, 15, 5, 15)
+        ));
+        btnChonDanhMuc.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        topPanel.add(btnChonDanhMuc);
+        add(topPanel, BorderLayout.NORTH);
+
+        JPopupMenu popupDanhMuc = new JPopupMenu();
+        popupDanhMuc.setBorder(new LineBorder(new Color(230, 230, 230)));
+        CategoryDao categoryDao = new CategoryDao();
+        List<Category> categoryList = categoryDao.getAllCategory();
+
+        JMenuItem allItem = new JMenuItem("TẤT CẢ SẢN PHẨM");
+        allItem.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        allItem.addActionListener(e -> loadProductList(contentPanel, -1));
+        popupDanhMuc.add(allItem);
+        popupDanhMuc.addSeparator();
+
+        for (Category cat : categoryList) {
+            JMenuItem item = new JMenuItem(cat.getName());
+            item.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+            item.addActionListener(e -> loadProductList(contentPanel, cat.getId()));
+            popupDanhMuc.add(item);
+        }
+
+        btnChonDanhMuc.addActionListener(e ->
+                popupDanhMuc.show(btnChonDanhMuc, 0, btnChonDanhMuc.getHeight()));
+
         JScrollPane scrollPane = new JScrollPane();
-        // Tăng tốc độ scroll
-        scrollPane.getVerticalScrollBar().setUnitIncrement(20);  // Tăng step mỗi lần cuộn chuột
-
+        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
         scrollPane.setBorder(null);
+        scrollPane.setBackground(secondaryColor);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new GridLayout(0, 4, 20, 20));
-        contentPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        contentPanel.setBackground(new Color(245, 245, 245));
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new GridLayout(0, 4, 25, 25));
+        contentPanel.setBorder(new EmptyBorder(25, 25, 25, 25));
+        contentPanel.setBackground(secondaryColor);
 
         scrollPane.setViewportView(contentPanel);
-        setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
+
+        loadProductList(contentPanel, -1);
+    }
+
+    private void loadProductList(JPanel contentPanel, int cateId) {
+        contentPanel.removeAll();
 
         ProductDao dao = new ProductDao();
         List<Product> list = dao.getAllProducts();
+
+        if (cateId != -1) {
+            list.removeIf(p -> p.getCateid() != cateId);
+        }
 
         for (Product p : list) {
             JPanel card = new JPanel();
             card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
             card.setBackground(Color.WHITE);
             card.setBorder(new CompoundBorder(
-                new LineBorder(Color.LIGHT_GRAY, 1, true),
-                new EmptyBorder(10, 10, 10, 10)
+                    new LineBorder(new Color(230, 230, 230), 1),
+                    new EmptyBorder(15, 15, 15, 15)
             ));
+            card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+            // === ẢNH SẢN PHẨM ===
             JLabel imgLabel;
             String imagePath = p.getImagepath();
             File imgFile = new File(imagePath);
             if (imgFile.exists()) {
                 ImageIcon icon = new ImageIcon(imgFile.getAbsolutePath());
-                Image img = icon.getImage().getScaledInstance(150, 120, Image.SCALE_SMOOTH);
-                imgLabel = new JLabel(new ImageIcon(img));
+                Image img = icon.getImage();
+                int width = img.getWidth(null);
+                int height = img.getHeight(null);
+                if (width > 0 && height > 0) {
+                    img = img.getScaledInstance(180, 150, Image.SCALE_SMOOTH);
+                    imgLabel = new JLabel(new ImageIcon(img));
+                } else {
+                    imgLabel = new JLabel("Ảnh lỗi", SwingConstants.CENTER);
+                }
             } else {
-                imgLabel = new JLabel("Không có ảnh");
-                imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                imgLabel.setPreferredSize(new Dimension(150, 120));
+                imgLabel = new JLabel("Không có ảnh", SwingConstants.CENTER);
+                imgLabel.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+                imgLabel.setForeground(new Color(150, 150, 150));
             }
+
+            imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imgLabel.setVerticalAlignment(SwingConstants.CENTER);
             imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            JLabel name = new JLabel(p.getName());
-            name.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            name.setAlignmentX(Component.CENTER_ALIGNMENT);
-            name.setForeground(new Color(50, 50, 50));
+            // === TRÁI TIM ===
+            ImageIcon heartEmpty = new ImageIcon("src/main/java/images/heart_empty.png");
+            ImageIcon heartFilled = new ImageIcon("src/main/java/images/heart_filled.png");
+            JLabel heartLabel = new JLabel(heartEmpty);
+            heartLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-            JLabel price = new JLabel("Giá: " + p.getPrice() + " đ");
-            price.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-            price.setForeground(new Color(200, 0, 0));
+            if (UserSession.currentUsername != null && !UserSession.currentUsername.isEmpty()) {
+                try {
+                    int userId = new UserService().getUserByUserName(UserSession.currentUsername).getId();
+                    boolean isFavorited = new FavoriteService().isFavorite(userId, p.getId());
+                    heartLabel.setIcon(isFavorited ? heartFilled : heartEmpty);
+
+                    heartLabel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            try {
+                                boolean nowFavorite = new FavoriteService().toggleFavorite(userId, p.getId());
+                                heartLabel.setIcon(nowFavorite ? heartFilled : heartEmpty);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                JOptionPane.showMessageDialog(ProductView.this,
+                                    "Lỗi khi xử lý yêu thích: " + ex.getMessage(),
+                                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            }
+                            e.consume();
+                        }
+                    });
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                heartLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        int option = JOptionPane.showConfirmDialog(ProductView.this,
+                            "Bạn cần đăng nhập để sử dụng chức năng yêu thích.\nBạn có muốn đăng nhập ngay bây giờ?",
+                            "Yêu cầu đăng nhập", JOptionPane.YES_NO_OPTION);
+                        if (option == JOptionPane.YES_OPTION) {
+                            Window window = SwingUtilities.getWindowAncestor(ProductView.this);
+                            if (window instanceof JFrame) {
+                                ((JFrame) window).dispose();
+                            }
+                            new loginform().setVisible(true);
+                        }
+                    }
+                });
+            }
+
+
+            JPanel imageContainer = new JPanel(new BorderLayout());
+            imageContainer.setBackground(Color.WHITE);
+            imageContainer.add(imgLabel, BorderLayout.CENTER);
+            JPanel heartPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            heartPanel.setBackground(new Color(255, 255, 255, 150));
+            heartPanel.add(heartLabel);
+            imageContainer.add(heartPanel, BorderLayout.NORTH);
+
+            JLabel name = new JLabel(p.getName());
+            name.setFont(new Font("Segoe UI", Font.BOLD, 15));
+            name.setAlignmentX(Component.CENTER_ALIGNMENT);
+            name.setForeground(textColor);
+            name.setMaximumSize(new Dimension(180, 40));
+
+            // ✅ CHỈNH LẠI ĐỊNH DẠNG GIÁ
+            JLabel price = new JLabel(String.format("%,.0f đ", p.getPrice()));
+            price.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            price.setForeground(new Color(220, 0, 0));
             price.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             JTextArea desc = new JTextArea(p.getDescription());
@@ -82,57 +211,80 @@ public class ProductView extends JPanel {
             desc.setWrapStyleWord(true);
             desc.setEditable(false);
             desc.setOpaque(false);
-            desc.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-            desc.setForeground(new Color(90, 90, 90));
+            desc.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+            desc.setForeground(new Color(120, 120, 120));
             desc.setAlignmentX(Component.CENTER_ALIGNMENT);
-            desc.setMaximumSize(new Dimension(180, 60));
-            desc.setBorder(null);
-            desc.setFocusable(false);
+            desc.setMaximumSize(new Dimension(180, 40));
+            desc.setBorder(new EmptyBorder(5, 0, 5, 0));
 
-            JButton btnAddToCart = new JButton("Thêm vào giỏ hàng");
-            btnAddToCart.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+            JButton btnAddToCart = new JButton("THÊM VÀO GIỎ");
+            btnAddToCart.setFont(new Font("Segoe UI", Font.BOLD, 12));
             btnAddToCart.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnAddToCart.setBackground(new Color(0, 123, 255));
+            btnAddToCart.setBackground(primaryColor);
             btnAddToCart.setForeground(Color.WHITE);
             btnAddToCart.setFocusPainted(false);
+            btnAddToCart.setBorder(new EmptyBorder(8, 0, 8, 0));
+            btnAddToCart.setMaximumSize(new Dimension(180, 30));
+            btnAddToCart.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            btnAddToCart.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent e) {
+                    btnAddToCart.setBackground(new Color(0, 105, 217));
+                }
+                public void mouseExited(MouseEvent e) {
+                    btnAddToCart.setBackground(primaryColor);
+                }
+            });
             btnAddToCart.addActionListener(e -> addToCart(p));
 
-            card.add(imgLabel);
+            card.add(imageContainer);
             card.add(Box.createVerticalStrut(10));
             card.add(name);
             card.add(Box.createVerticalStrut(5));
-            card.add(desc);
-            card.add(Box.createVerticalStrut(5));
             card.add(price);
+            card.add(Box.createVerticalStrut(5));
+            card.add(desc);
             card.add(Box.createVerticalStrut(10));
             card.add(btnAddToCart);
-            card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            card.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ProductView.this);
-                com.mycompany.view.ChiTietSanPham.DetailProduct detail = new com.mycompany.view.ChiTietSanPham.DetailProduct(parentFrame, p);
-                detail.setVisible(true);
+
+            card.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent evt) {
+                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ProductView.this);
+                    if (parentFrame instanceof TrangChu trangChu) {
+                        JPanel mainContent = trangChu.getContentPanel();
+                        mainContent.removeAll();
+                        mainContent.add(new DetailProduct(trangChu, p));
+                        mainContent.revalidate();
+                        mainContent.repaint();
+                    }
                 }
             });
+
             contentPanel.add(card);
         }
 
-        setBackground(new Color(245, 245, 245));
-        revalidate();
-        repaint();
+        if (list.isEmpty()) {
+            JLabel emptyLabel = new JLabel("Không có sản phẩm nào trong danh mục này", SwingConstants.CENTER);
+            emptyLabel.setFont(new Font("Segoe UI", Font.ITALIC, 16));
+            emptyLabel.setForeground(new Color(150, 150, 150));
+            contentPanel.add(emptyLabel);
+        }
+
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 
     private void addToCart(Product product) {
         if (UserSession.currentUsername == null || UserSession.currentUsername.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-
-            // Đóng cửa sổ hiện tại
-            Window window = SwingUtilities.getWindowAncestor(this);
-            if (window instanceof JFrame) {
-                ((JFrame) window).dispose();
+            int option = JOptionPane.showConfirmDialog(this,
+                "Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.\nBạn có muốn đăng nhập ngay bây giờ?",
+                "Yêu cầu đăng nhập", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                Window window = SwingUtilities.getWindowAncestor(this);
+                if (window instanceof JFrame) {
+                    ((JFrame) window).dispose();
+                }
+                new loginform().setVisible(true);
             }
-
-            new loginform().setVisible(true);
             return;
         }
 
@@ -144,8 +296,7 @@ public class ProductView extends JPanel {
             List<CartItem> existingItems = cartService.getItems(cart.getId());
             CartItem matchedItem = existingItems.stream()
                 .filter(i -> i.getProductId() == product.getId())
-                .findFirst()
-                .orElse(null);
+                .findFirst().orElse(null);
 
             if (matchedItem != null) {
                 cartService.updateItemQuantity(matchedItem.getId(), matchedItem.getQuantity() + 1);
@@ -157,17 +308,18 @@ public class ProductView extends JPanel {
                 cartService.addItem(newItem);
             }
 
-            JOptionPane.showMessageDialog(this, "Đã thêm vào giỏ hàng!");
+            JOptionPane.showMessageDialog(this,
+                "Đã thêm '" + product.getName() + "' vào giỏ hàng!",
+                "Thành công", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi thêm vào giỏ hàng!");
+            JOptionPane.showMessageDialog(this,
+                "Lỗi khi thêm vào giỏ hàng: " + e.getMessage(),
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public void reloadData() {
-        removeAll();
-        revalidate();
-        repaint();
-        new ProductView(); // tạo lại UI
+        loadProductList(contentPanel, -1);
     }
 }

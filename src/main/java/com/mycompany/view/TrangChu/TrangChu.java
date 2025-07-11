@@ -26,6 +26,12 @@ import com.mycompany.view.Admin.QLCATEGORY.QuanLyCategory;
 import com.mycompany.view.Admin.QLPRODUCT.QuanLyProduct;
 import com.mycompany.view.Cart.Cart;
 import com.mycompany.view.SanPham.ProductView;
+import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseMotionAdapter;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 /**
  *
@@ -39,136 +45,140 @@ public class TrangChu extends javax.swing.JFrame {
     /**
      * Creates new form TrangChu
      */
-    public TrangChu() {
+    int width = 170;
+    private boolean isMenuOpen = false;
+
+     public TrangChu() {
         initComponents();
-        contentPanel.removeAll();
-        contentPanel.add(new TrangChuContent());
-        contentPanel.revalidate();
-        contentPanel.repaint();
-        
-        //popupmenu
+
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setTitle("MyStore");
+        setLocationRelativeTo(null);
+
+        // Đặt menuBar nằm ở trên contentPanel
+        getLayeredPane().add(menuBar, JLayeredPane.POPUP_LAYER);
+        menuBar.setBounds(0, 0, 0, getHeight());
+
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(new TrangChuContent(), BorderLayout.CENTER);
+
+        if (UserSession.currentUsername != null) {
+            helloLabel.setText("Xin chào, " + UserSession.currentUsername);
+            jSeparator2.setVisible(true);
+            Logout_menubarlabel.setVisible(true);
+        } else {
+            jSeparator2.setVisible(false);
+            Logout_menubarlabel.setVisible(false);
+        }
+
+        // Popup menu cho helloLabel
         UserService userSer = new UserService();
-        
-        // Tạo popup menu
         JPopupMenu popupMenu = new JPopupMenu();
 
-        // Tạo các menu item
         JMenuItem itemThongTin = new JMenuItem("Thông tin tài khoản");
         JMenuItem itemQLUSER = new JMenuItem("Quản lý User");
         JMenuItem itemQLCATE = new JMenuItem("Quản lý Category");
         JMenuItem itemQLPRODUCT = new JMenuItem("Quản lý Product");
         JMenuItem itemDangXuat = new JMenuItem("Đăng xuất");
 
-    // Gắn sự kiện click vào helloLabel
-    helloLabel.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            popupMenu.removeAll();
+        helloLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                popupMenu.removeAll();
 
-            // Nếu chưa đăng nhập → mở login form
-            if (UserSession.currentUsername == null) {
-                new loginform().setVisible(true);
-                return;
-            }
-
-            // Nếu đã đăng nhập → hiển thị menu theo vai trò
-            User user = userSer.getUserByUserName(UserSession.currentUsername);
-
-            popupMenu.add(itemThongTin);
-
-            if (user.getRole() == 'A') {
-                popupMenu.addSeparator();
-                popupMenu.add(itemQLUSER);
-                popupMenu.add(itemQLCATE);
-                popupMenu.add(itemQLPRODUCT);
-            }
-
-            popupMenu.addSeparator();
-            popupMenu.add(itemDangXuat);
-
-            // Hiển thị popup ngay bên dưới helloLabel
-            popupMenu.show(helloLabel, 0, helloLabel.getHeight());
-        }
-    });
-
-        // Xử lý chọn menu
-        itemThongTin.addActionListener(evt -> {
                 if (UserSession.currentUsername == null) {
                     new loginform().setVisible(true);
-                    this.dispose();
+                    dispose();
                     return;
                 }
-                else{
-                    User user = userSer.getUserByUserName(UserSession.currentUsername);
-                    contentPanel.removeAll();
-                    contentPanel.add(new Thongtintaikhoan());
-                    contentPanel.revalidate();
-                    contentPanel.repaint();
+
+                User user = userSer.getUserByUserName(UserSession.currentUsername);
+
+                popupMenu.add(itemThongTin);
+                if (user.getRole() == 'A') {
+                    popupMenu.addSeparator();
+                    popupMenu.add(itemQLUSER);
+                    popupMenu.add(itemQLCATE);
+                    popupMenu.add(itemQLPRODUCT);
                 }
+
+                popupMenu.addSeparator();
+                popupMenu.add(itemDangXuat);
+                popupMenu.show(helloLabel, 0, helloLabel.getHeight());
+            }
         });
 
-        itemQLUSER.addActionListener(evt -> {
-            new QuanLyUser().setVisible(true);
+        itemThongTin.addActionListener(evt -> {
+            if (UserSession.currentUsername == null) {
+                new loginform().setVisible(true);
+                dispose();
+            } else {
+                contentPanel.removeAll();
+                contentPanel.add(new Thongtintaikhoan(), BorderLayout.CENTER);
+                contentPanel.revalidate();
+                contentPanel.repaint();
+            }
         });
-        itemQLCATE.addActionListener(evt -> {
-            new QuanLyCategory().setVisible(true);
-        });
-        itemQLPRODUCT.addActionListener(evt -> {
-            new QuanLyProduct().setVisible(true);
-        });
-        
+
+        itemQLUSER.addActionListener(evt -> new QuanLyUser().setVisible(true));
+        itemQLCATE.addActionListener(evt -> new QuanLyCategory().setVisible(true));
+        itemQLPRODUCT.addActionListener(evt -> new QuanLyProduct().setVisible(true));
+
         itemDangXuat.addActionListener(evt -> {
-            int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(
+                    null,
+                    "Bạn có chắc muốn đăng xuất?",
+                    "Xác nhận",
+                    JOptionPane.YES_NO_OPTION
+            );
             if (confirm == JOptionPane.YES_OPTION) {
                 UserSession.delete();
                 CredentialManager.clearLogin();
                 new loginform().setVisible(true);
-                this.dispose();
+                dispose();
             }
         });
 
-        
-        setLocationRelativeTo(null);
-        setTitle("MyStore");
-//        ImageIcon icon = new ImageIcon(getClass().getResource("/images/mystore.png"));
-//        Image image = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-//        logo.setIcon(new ImageIcon(image));
-//
-//      logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//        logo.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
-// contentPane
-        if (UserSession.currentUsername != null) {
-            helloLabel.setText("Xin chào, " + UserSession.currentUsername);
-            jSeparator2.setVisible(true);
-            Logout_menubarlabel.setVisible(true);
-        }
-        else{
-            jSeparator2.setVisible(false);
-            Logout_menubarlabel.setVisible(false);
-        }
-        
-    }
-    int width = 170;
-    
-    void openMenuBar() {
-    new Thread(() -> {
-        int frameHeight = getHeight(); // 👈 lấy chiều cao thật sự
-        for (int i = 0; i <= width; i++) {
-            menuBar.setSize(i, frameHeight);
-            try {
-                Thread.sleep(1); // thêm delay để thấy hiệu ứng
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        // Resize cập nhật lại menu
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                menuBar.setBounds(0, 0, menuBar.getWidth(), getHeight());
+            }
+        });
+
+        // Bắt sự kiện icon menu
+        menu_icon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openMenuBar();
+            }
+        });
+
+        exit_icon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                closeMenuBar();
+            }
+        });
+        contentPanel.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // Nếu đang mở menu mà click ra ngoài menu → thì đóng lại
+            if (isMenuOpen && e.getX() > menuBar.getWidth()) {
+                closeMenuBar();
             }
         }
-    }).start();
+    });
+
     }
 
-    void closeMenuBar() {
+    void openMenuBar() {
+        isMenuOpen = true;
         new Thread(() -> {
-            int frameHeight = getHeight(); // 👈 cập nhật chiều cao mới
-            for (int i = width; i >= 0; i--) {
-                menuBar.setSize(i, frameHeight);
+            int frameHeight = getHeight();
+            for (int i = 0; i <= width; i++) {
+                menuBar.setBounds(0, 0, i, frameHeight);
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
@@ -176,7 +186,24 @@ public class TrangChu extends javax.swing.JFrame {
                 }
             }
         }).start();
-}
+    }
+
+    void closeMenuBar() {
+        isMenuOpen = false;
+        new Thread(() -> {
+            int frameHeight = getHeight();
+            for (int i = width; i >= 0; i--) {
+                menuBar.setBounds(0, 0, i, frameHeight);
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
 
 
     /**
@@ -198,6 +225,7 @@ public class TrangChu extends javax.swing.JFrame {
         Product_menubarlabel = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         Logout_menubarlabel = new javax.swing.JLabel();
+        Favorite_menubarlabel = new javax.swing.JLabel();
         topNav = new javax.swing.JPanel();
         helloLabel = new javax.swing.JLabel();
         menu_icon = new javax.swing.JLabel();
@@ -268,6 +296,14 @@ public class TrangChu extends javax.swing.JFrame {
             }
         });
 
+        Favorite_menubarlabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        Favorite_menubarlabel.setText("Yêu thích");
+        Favorite_menubarlabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Favorite_menubarlabelMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuBarLayout = new javax.swing.GroupLayout(menuBar);
         menuBar.setLayout(menuBarLayout);
         menuBarLayout.setHorizontalGroup(
@@ -288,7 +324,8 @@ public class TrangChu extends javax.swing.JFrame {
                                 .addGroup(menuBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(Home_menubarlabel)
                                     .addComponent(Account_menubarlabel)
-                                    .addComponent(Product_menubarlabel))))
+                                    .addComponent(Product_menubarlabel)
+                                    .addComponent(Favorite_menubarlabel))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(menuBarLayout.createSequentialGroup()
                         .addContainerGap()
@@ -320,12 +357,16 @@ public class TrangChu extends javax.swing.JFrame {
                 .addComponent(Account_menubarlabel)
                 .addGap(32, 32, 32)
                 .addComponent(Product_menubarlabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, Short.MAX_VALUE)
+                .addGap(38, 38, 38)
+                .addComponent(Favorite_menubarlabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(99, 99, 99)
                 .addComponent(Logout_menubarlabel)
                 .addContainerGap())
         );
+
+        Favorite_menubarlabel.getAccessibleContext().setAccessibleName("Yêu Thích");
 
         topNav.setBackground(new java.awt.Color(100, 130, 173));
 
@@ -489,12 +530,22 @@ public class TrangChu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_shoppingCart_iconMouseClicked
 
+    private void Favorite_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Favorite_menubarlabelMouseClicked
+        // TODO add your handling code here:
+        contentPanel.removeAll();
+        contentPanel.add(new com.mycompany.view.Favorite.FavoriteView());
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }//GEN-LAST:event_Favorite_menubarlabelMouseClicked
+
      private void Product_menubarlabelMouseClicked(java.awt.event.MouseEvent evt) {                                                 
         // TODO add your handling code here:
         contentPanel.removeAll();
         contentPanel.add(new ProductView());
         contentPanel.revalidate();
         contentPanel.repaint();
+        
+        
     }    
     /**
      * @param args the command line arguments
@@ -520,9 +571,14 @@ public class TrangChu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new TrangChu().setVisible(true));
     }
+    public JPanel getContentPanel() {
+        return contentPanel;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Account_menubarlabel;
+    private javax.swing.JLabel Favorite_menubarlabel;
     private javax.swing.JLabel Home_menubarlabel;
     private javax.swing.JLabel Logout_menubarlabel;
     private javax.swing.JLabel Product_menubarlabel;

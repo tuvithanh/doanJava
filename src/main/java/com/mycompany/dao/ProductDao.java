@@ -1,179 +1,162 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.dao;
 
 import com.mycompany.model.Product;
-import com.mycompany.model.Category;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author VITHANH
- */
+
 public class ProductDao {
-    public List<Product> getAllProcduct(){
-        List<Product> listPro = new ArrayList<>();
-        Connection connecttion = JDBCConnection.getJDBCConnection();
-        
-        String sql = "Select * from Product";
-        try{
-            PreparedStatement preparedStatement = connecttion.prepareStatement(sql);
-            ResultSet rs = preparedStatement.executeQuery();
-            
-            while(rs.next()){
-                Product pro = new Product();
-                
-                pro.setCateid(rs.getInt("cateid"));
-                pro.setDescription(rs.getString("description"));
-                pro.setName(rs.getString("name"));
-                pro.setId(rs.getInt("id"));
-                pro.setPrice(rs.getDouble("price"));
-                pro.setImagepath(rs.getString("imagepath"));
-                
-                listPro.add(pro);
-                
-            }
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-        return listPro;
-    }
-    public void addProduct(Product pro){
+
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
         Connection connection = JDBCConnection.getJDBCConnection();
-        
-        String sql = "Insert into Product (cateid, name, description, price, imagepath) values(? ,? ,? ,?, ?)";
+
+        String sql = "SELECT * FROM Product";
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, pro.getCateid());
-            preparedStatement.setString(2, pro.getName());
-            preparedStatement.setString(3, pro.getDescription());
-            preparedStatement.setDouble(4, pro.getPrice());
-            preparedStatement.setString(5, pro.getImagepath());
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            preparedStatement.executeUpdate();
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setId(resultSet.getInt("id"));
+                product.setCateid(resultSet.getInt("cateid"));
+                product.setName(resultSet.getString("name"));
+                product.setDescription(resultSet.getString("description"));
+                product.setPrice(resultSet.getDouble("price"));
+                product.setImagepath(resultSet.getString("imagepath"));
+                product.setRating(resultSet.getFloat("rating"));
+                product.setSoldCount(resultSet.getInt("sold_count"));
+                product.setLiked(resultSet.getBoolean("is_liked"));
+
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
+    public void addProduct(Product pro) {
+        Connection connection = JDBCConnection.getJDBCConnection();
+
+        String sql = "INSERT INTO Product (cateid, name, description, price, imagepath, rating, sold_count, is_liked) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, pro.getCateid());
+            ps.setString(2, pro.getName());
+            ps.setString(3, pro.getDescription());
+            ps.setDouble(4, pro.getPrice());
+            ps.setString(5, pro.getImagepath());
+            ps.setFloat(6, pro.getRating());
+            ps.setInt(7, pro.getSoldCount());
+            ps.setBoolean(8, pro.isLiked());
+
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-//    public int getCateIDByName(String s){
-//        Product pro = new Product();
-//        Connection con = JDBCConnection.getJDBCConnection();
-//        
-//        String sql = "Select * from Product where name = ?";
-//        
-//        try {
-//            PreparedStatement preparedStatement = con.prepareStatement(sql);
-//            ResultSet rs = preparedStatement.executeQuery();
-//            preparedStatement.setString(1, s);
-//            
-//            while(rs.next()){
-//                pro.setId(rs.getInt("id"));
-//                pro.setCateid(rs.getInt("cateid"));
-//                pro.setName(rs.getString("name"));
-//                pro.setDescription(rs.getString("description"));
-//                pro.setPrice(rs.getDouble("price"));
-//                pro.setImagepath(rs.getString("imagepath"));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return rs;
-//    }
-    public void deleteProductByID(int id){
+
+    public Product getProductByID(int id) {
+        Product product = null;
         Connection connection = JDBCConnection.getJDBCConnection();
-        
-        String sql = "Delete from Product where id = ?";
-        
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+
+        String sql = "SELECT * FROM Product WHERE id = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setCateid(rs.getInt("cateid"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setImagepath(rs.getString("imagepath"));
+                product.setRating(rs.getFloat("rating"));
+                product.setSoldCount(rs.getInt("sold_count"));
+                product.setLiked(rs.getBoolean("is_liked"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        catch(SQLException e){
+
+        return product;
+    }
+
+    public void updateProduct(Product pro) {
+        Connection connection = JDBCConnection.getJDBCConnection();
+
+        String sql = "UPDATE Product SET name = ?, description = ?, price = ?, imagepath = ?, cateid = ?, rating = ?, sold_count = ?, is_liked = ? WHERE id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, pro.getName());
+            ps.setString(2, pro.getDescription());
+            ps.setDouble(3, pro.getPrice());
+            ps.setString(4, pro.getImagepath());
+            ps.setInt(5, pro.getCateid());
+            ps.setFloat(6, pro.getRating());
+            ps.setInt(7, pro.getSoldCount());
+            ps.setBoolean(8, pro.isLiked());
+            ps.setInt(9, pro.getId());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public Product getProductByID(int id){
-        Product pro = new Product();
-        Connection connection = JDBCConnection.getJDBCConnection();
-        
-        String sql = "Select * from Product where id = ?";
-        
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
-            
-            
-            while(rs.next()){
-                pro.setId(rs.getInt("id"));
-                pro.setName(rs.getString("name"));
-                pro.setDescription(rs.getString("description"));
-                pro.setCateid(rs.getInt("cateid"));
-                pro.setImagepath(rs.getString("imagepath"));
-                pro.setPrice(rs.getDouble("price"));
-            }  
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-        
-        return pro;
-    }
-    public void updateProduct(Product pro){
+
+    public void deleteProductByID(int id) {
         Connection connection = JDBCConnection.getJDBCConnection();
 
-        String sql = "UPDATE Product SET name = ?, description = ?, price = ?, imagepath = ?, cateid = ? WHERE id = ?";
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql = "DELETE FROM Product WHERE id = ?";
 
-            preparedStatement.setString(1, pro.getName());
-            preparedStatement.setString(2, pro.getDescription());
-            preparedStatement.setDouble(3, pro.getPrice());
-            preparedStatement.setString(4, pro.getImagepath());
-            preparedStatement.setInt(5, pro.getCateid());
-            preparedStatement.setInt(6, pro.getId());
-
-            preparedStatement.executeUpdate();
-        }
-        catch(SQLException e){
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-public List<Product> getAllProducts() {
-    List<Product> products = new ArrayList<>();
-    Connection connection = JDBCConnection.getJDBCConnection();
-    
-    String sql = "SELECT * FROM Product";
-    
-    try {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        
-        while (resultSet.next()) {
-            Product product = new Product();
-            product.setId(resultSet.getInt("id"));
-            product.setCateid(resultSet.getInt("cateid"));
-            product.setName(resultSet.getString("name"));
-            product.setDescription(resultSet.getString("description"));
-            product.setPrice(resultSet.getDouble("price"));
-            product.setImagepath(resultSet.getString("imagepath"));
+    public List<Product> getProductsByCategory(int cateId) {
+        List<Product> products = new ArrayList<>();
+        Connection connection = JDBCConnection.getJDBCConnection();
 
-            products.add(product);
+        String sql = "SELECT * FROM Product WHERE cateid = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, cateId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setCateid(rs.getInt("cateid"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setImagepath(rs.getString("imagepath"));
+                product.setRating(rs.getFloat("rating"));
+                product.setSoldCount(rs.getInt("sold_count"));
+                product.setLiked(rs.getBoolean("is_liked"));
+
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    
-    return products;
-}
 
+        return products;
+    }
 
 }

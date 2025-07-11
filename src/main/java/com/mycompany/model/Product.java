@@ -15,6 +15,9 @@ public class Product {
     private String description;
     private double price;
     private String imagepath;
+    private float rating;
+    private int soldCount;
+    private boolean isLiked;
 
     public Product() {
     }
@@ -26,8 +29,8 @@ public class Product {
         this.price = price;
         this.imagepath = imagepath;
     }
-    
-    
+
+    // --- Getter & Setter ---
     public int getId() {
         return id;
     }
@@ -77,8 +80,30 @@ public class Product {
     }
 
     public String getImagePath() {
-            return imagepath;
+        return imagepath;
     }
-    
-    
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public int getSoldCount() {
+        return soldCount;
+    }
+
+    public void setSoldCount(int soldCount) {
+        this.soldCount = soldCount;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean isLiked) {
+        this.isLiked = isLiked;
+    }
 }

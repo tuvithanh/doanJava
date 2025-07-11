@@ -14,22 +14,27 @@ import java.util.List;
  */
 public class ProductService {
     private ProductDao productDao;
-    
-    public ProductService(){
+
+    public ProductService() {
         productDao = new ProductDao();
     }
-    public List<Product> getAllProduct(){
-        return productDao.getAllProcduct();
+
+    public List<Product> getAllProduct() {
+        return productDao.getAllProducts();  // sửa chính tả chỗ này
     }
-    public void addProduct(Product pro){
+
+    public void addProduct(Product pro) {
         productDao.addProduct(pro);
     }
-    public void deleteProductByID(int id){
+
+    public void deleteProductByID(int id) {
         productDao.deleteProductByID(id);
     }
-    public Product getProductById(int id){
+
+    public Product getProductById(int id) {
         return productDao.getProductByID(id);
     }
+
     public void updateProduct(Product product) {
         productDao.updateProduct(product);
     }

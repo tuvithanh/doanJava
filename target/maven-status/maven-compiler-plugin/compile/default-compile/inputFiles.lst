@@ -1,6 +1,7 @@
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\CredentialManager\CredentialManager.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\CartDao.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\CategoryDao.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\FavoriteDao.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\JDBCConnection.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\OrderDao.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\OrderDetailDao.java
@@ -12,6 +13,7 @@ D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\doanj
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model\Cart.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model\CartItem.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model\Category.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model\Favorite.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model\Order.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model\OrderDetail.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model\Payment.java
@@ -19,6 +21,7 @@ D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\model\User.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\service\Admin\CartService.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\service\Admin\CategoryService.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\service\Admin\FavoriteService.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\service\Admin\OrderDetailService.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\service\Admin\OrderService.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\service\Admin\PaymentService.java
@@ -42,6 +45,7 @@ D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Cart\QuantityPanelEditor.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Cart\QuantityPanelRenderer.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\ChiTietSanPham\DetailProduct.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Favorite\FavoriteView.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\SanPham\ProductView.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Thongtintaikhoan\Thongtintaikhoan.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\TrangChu\TrangChu.java
