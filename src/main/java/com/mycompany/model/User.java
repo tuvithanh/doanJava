@@ -11,7 +11,7 @@ package com.mycompany.model;
 public class User {
     private int id;
     private String name;
-    private int phone;
+    private String phone;
     private String username;
     private String password;
     private String email;
@@ -65,11 +65,11 @@ public class User {
         this.name = name;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

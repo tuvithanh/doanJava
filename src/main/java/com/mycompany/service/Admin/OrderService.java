@@ -28,41 +28,44 @@ public class OrderService {
     private final CartDao cartDao = new CartDao();
 
     public boolean checkout(int userId, List<CartItem> cartItems, String paymentMethod) {
-        if (cartItems == null || cartItems.isEmpty()) return false;
+    if (cartItems == null || cartItems.isEmpty()) return false;
 
-        try {
-            double total = 0;
-            for (CartItem item : cartItems) {
-                total += item.getProduct().getPrice() * item.getQuantity();
-            }
-
-            // B1: Tạo Order
-            Order order = new Order(userId, "Chờ xử lý", total);
-            int orderId = orderDao.createOrder(order);
-            if (orderId <= 0) return false;
-
-            // B2: Tạo danh sách OrderDetail
-            for (CartItem item : cartItems) {
-                OrderDetail detail = new OrderDetail(orderId, item.getProductId(), item.getQuantity(), item.getProduct().getPrice());
-                orderDetailDao.insertOrderDetail(detail);
-            }
-
-            // B3: Tạo Payment
-            Payment payment = new Payment(orderId, paymentMethod, total, "Đã thanh toán");
-            paymentDao.insertPayment(payment);
-
-            // B4: Xoá khỏi giỏ hàng sau khi thanh toán thành công
-            for (CartItem item : cartItems) {
-                cartDao.removeItem(userId, item.getProductId());
-            }
-
-            return true;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
+    try {
+        double total = 0;
+        for (CartItem item : cartItems) {
+            total += item.getProduct().getPrice() * item.getQuantity();
         }
+
+        // B1: Tạo Order
+        Order order = new Order(userId, "Chờ xử lý", total);
+        int orderId = orderDao.createOrder(order);
+        if (orderId <= 0) return false;
+
+        // B2: Tạo danh sách OrderDetail
+        for (CartItem item : cartItems) {
+            OrderDetail detail = new OrderDetail(orderId, item.getProductId(), item.getQuantity(), item.getProduct().getPrice());
+            orderDetailDao.insertOrderDetail(detail);
+        }
+
+        // B3: Tạo Payment
+        Payment payment = new Payment(orderId, paymentMethod, total, "Đã thanh toán");
+        paymentDao.insertPayment(payment);
+
+        // ✅ B3.5: Cập nhật trạng thái đơn hàng
+        orderDao.updateOrderStatus(orderId, "Đã thanh toán");
+
+        // B4: Xoá khỏi giỏ hàng
+        for (CartItem item : cartItems) {
+            cartDao.removeItem(userId, item.getProductId());
+        }
+
+        return true;
+
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        return false;
     }
+}
 }
 
 

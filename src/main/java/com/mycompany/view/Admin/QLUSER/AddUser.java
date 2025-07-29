@@ -317,7 +317,7 @@ public class AddUser extends javax.swing.JFrame {
                 return; // thoát không insert
             }
 
-            int phone = Integer.parseInt(Admin_Add_User_Phone.getText());
+            String phone = Admin_Add_User_Phone.getText();
             String about = Admin_Add_User_About.getText();
 
             user.setUsername(username);

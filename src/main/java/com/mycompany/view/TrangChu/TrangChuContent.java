@@ -4,6 +4,7 @@ import com.mycompany.dao.CategoryDao;
 import com.mycompany.dao.ProductDao;
 import com.mycompany.model.Category;
 import com.mycompany.model.Product;
+import com.mycompany.view.ChiTietSanPham.DetailProduct;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -101,6 +102,10 @@ public class TrangChuContent extends JPanel {
                 SwingUtilities.invokeLater(() -> loadBanner());
             }
         });
+        SwingUtilities.invokeLater(() -> {
+            loadBanner();
+        });
+
     }
 
     private void setupUI() {
@@ -116,21 +121,18 @@ public class TrangChuContent extends JPanel {
 
             ImageIcon originalIcon = new ImageIcon("src/main/java/images/banner.jpg");
             Image originalImage = originalIcon.getImage();
-            
-            // Calculate proportional height (max 400px)
-            int height = Math.min(400, (width * originalIcon.getIconHeight()) / originalIcon.getIconWidth());
-            
-            // Resize image
-            Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
-            // Create rounded image
+            int height = Math.min(400, (width * originalIcon.getIconHeight()) / originalIcon.getIconWidth());
+            Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_FAST); // đổi từ SCALE_SMOOTH
+
             ImageIcon roundedIcon = new ImageIcon(createRoundedImage(scaledImage, 15));
             banner.setIcon(roundedIcon);
             banner.setText("");
-            
-            // Update banner panel size
+
             bannerPanel.setPreferredSize(new Dimension(width, height));
-            bannerPanel.revalidate();
+            // Có thể bỏ dòng này nếu không thay layout
+            // bannerPanel.revalidate();
+
         } catch (Exception ex) {
             banner.setText("Không thể load ảnh banner");
             banner.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -138,6 +140,7 @@ public class TrangChuContent extends JPanel {
             ex.printStackTrace();
         }
     }
+
 
     private Image createRoundedImage(Image image, int cornerRadius) {
         int width = image.getWidth(null);
@@ -159,7 +162,7 @@ public class TrangChuContent extends JPanel {
     }
 
     private void loadDanhMuc() {
-        JButton btnDanhMuc = new JButton("DANH MỤC SẢN PHẨM ▾");
+        JButton btnDanhMuc = new JButton("DANH MỤC SẢN PHẨM");
         btnDanhMuc.setFocusPainted(false);
         btnDanhMuc.setBackground(primaryColor);
         btnDanhMuc.setForeground(Color.WHITE);
@@ -291,70 +294,86 @@ public class TrangChuContent extends JPanel {
     }
 
     private JPanel createSanPhamPanel(Product p) {
-        JPanel spPanel = new JPanel();
-        spPanel.setLayout(new BoxLayout(spPanel, BoxLayout.Y_AXIS));
-        spPanel.setPreferredSize(new Dimension(220, 320));
-        spPanel.setMaximumSize(new Dimension(220, 320));
-        spPanel.setBackground(Color.WHITE);
+    JPanel spPanel = new JPanel();
+    spPanel.setLayout(new BoxLayout(spPanel, BoxLayout.Y_AXIS));
+    spPanel.setPreferredSize(new Dimension(220, 320));
+    spPanel.setMaximumSize(new Dimension(220, 320));
+    spPanel.setBackground(Color.WHITE);
 
-        Border border = BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(230, 230, 230)),
-            BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    Border border = BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(230, 230, 230)),
+        BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        spPanel.setBorder(border);
+    spPanel.setBorder(border);
 
-        spPanel.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                spPanel.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(primaryColor),
-                        BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-            }
-
-            public void mouseExited(MouseEvent e) {
-                spPanel.setBorder(border);
-            }
-        });
-
-        try {
-            ImageIcon icon = new ImageIcon(p.getImagePath());
-            Image img = icon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
-            Image roundedImg = createRoundedImage(img, 10);
-
-            JLabel imgLabel = new JLabel(new ImageIcon(roundedImg));
-            imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            imgLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-            JLabel lblGia = new JLabel("₫" + String.format("%,.0f", p.getPrice()));
-            lblGia.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            lblGia.setAlignmentX(Component.CENTER_ALIGNMENT);
-            lblGia.setForeground(primaryColor);
-
-            JLabel lblTen = new JLabel("<html><center>" + p.getName() + "</center></html>");
-            lblTen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-            lblTen.setAlignmentX(Component.CENTER_ALIGNMENT);
-            lblTen.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-
-            JLabel lblMoTa = new JLabel("<html><center>" + p.getDescription() + "</center></html>");
-            lblMoTa.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-            lblMoTa.setForeground(Color.GRAY);
-            lblMoTa.setAlignmentX(Component.CENTER_ALIGNMENT);
-            lblMoTa.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-
-            spPanel.add(imgLabel);
-            spPanel.add(Box.createVerticalStrut(5));
-            spPanel.add(lblGia);
-            spPanel.add(Box.createVerticalStrut(5));
-            spPanel.add(lblTen);
-            spPanel.add(Box.createVerticalStrut(5));
-            spPanel.add(lblMoTa);
-        } catch (Exception ex) {
-            JLabel errorLabel = new JLabel("Lỗi tải sản phẩm", SwingConstants.CENTER);
-            errorLabel.setForeground(Color.RED);
-            spPanel.add(errorLabel);
+    // Thêm MouseListener cho toàn bộ panel sản phẩm
+    spPanel.addMouseListener(new MouseAdapter() {
+        public void mouseEntered(MouseEvent e) {
+            spPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(primaryColor),
+                    BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         }
 
-        return spPanel;
+        public void mouseExited(MouseEvent e) {
+            spPanel.setBorder(border);
+        }
+
+        public void mouseClicked(MouseEvent e) {
+            // Lấy frame cha (TrangChu)
+            Window parentWindow = SwingUtilities.getWindowAncestor(spPanel);
+            if (parentWindow instanceof TrangChu) {
+                TrangChu parentFrame = (TrangChu) parentWindow;
+                
+                // Chuyển sang trang chi tiết sản phẩm
+                JPanel contentPanel = parentFrame.getContentPanel();
+                contentPanel.removeAll();
+                contentPanel.add(new DetailProduct(parentFrame, p));
+                contentPanel.revalidate();
+                contentPanel.repaint();
+            }
+        }
+    });
+
+    try {
+        ImageIcon icon = new ImageIcon(p.getImagePath());
+        Image img = icon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
+        Image roundedImg = createRoundedImage(img, 10);
+
+        JLabel imgLabel = new JLabel(new ImageIcon(roundedImg));
+        imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        imgLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel lblGia = new JLabel("₫" + String.format("%,.0f", p.getPrice()));
+        lblGia.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lblGia.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblGia.setForeground(primaryColor);
+
+        JLabel lblTen = new JLabel("<html><center>" + p.getName() + "</center></html>");
+        lblTen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblTen.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblTen.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        JLabel lblMoTa = new JLabel("<html><center>" + p.getDescription() + "</center></html>");
+        lblMoTa.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+        lblMoTa.setForeground(Color.GRAY);
+        lblMoTa.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblMoTa.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+
+        spPanel.add(imgLabel);
+        spPanel.add(Box.createVerticalStrut(5));
+        spPanel.add(lblGia);
+        spPanel.add(Box.createVerticalStrut(5));
+        spPanel.add(lblTen);
+        spPanel.add(Box.createVerticalStrut(5));
+        spPanel.add(lblMoTa);
+    } catch (Exception ex) {
+        JLabel errorLabel = new JLabel("Lỗi tải sản phẩm", SwingConstants.CENTER);
+        errorLabel.setForeground(Color.RED);
+        spPanel.add(errorLabel);
     }
+
+    return spPanel;
+}
 }
 
 class CustomScrollBarUI extends BasicScrollBarUI {

@@ -1,6 +1,5 @@
 package com.mycompany.view.SanPham;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -23,25 +22,61 @@ public class ProductView extends JPanel {
     private Color primaryColor = new Color(0, 123, 255);
     private Color secondaryColor = new Color(245, 245, 245);
     private Color textColor = new Color(60, 60, 60);
-
+    private JTextField searchField;
+    
     public ProductView() {
         instance = this;
         setLayout(new BorderLayout());
         setBackground(secondaryColor);
 
-        // === DANH MỤC ===
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        // === TOP PANEL ===
+        JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBorder(new EmptyBorder(15, 20, 15, 20));
         topPanel.setBackground(Color.WHITE);
+
+        // === TITLE PANEL ===
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
+        titlePanel.setOpaque(false);
 
         JLabel titleLabel = new JLabel("SẢN PHẨM");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         titleLabel.setForeground(primaryColor);
-        topPanel.add(titleLabel);
+        titlePanel.add(titleLabel);
 
-        topPanel.add(Box.createHorizontalStrut(20));
+        // === SEARCH PANEL ===
+        JPanel searchPanel = new JPanel(new BorderLayout());
+        searchPanel.setOpaque(false);
+        searchPanel.setBorder(new EmptyBorder(0, 0, 0, 20));
 
-        JButton btnChonDanhMuc = new JButton("LỌC THEO DANH MỤC ⏷");
+        searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(250, 30));
+        searchField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(new Color(200, 200, 200), 1), // viền ngoài
+            new EmptyBorder(5, 10, 5, 10)                // khoảng cách bên trong
+        ));
+
+
+        JButton searchButton = new JButton("Tìm kiếm");
+        searchButton.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        searchButton.setBackground(primaryColor);
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setFocusPainted(false);
+        searchButton.setBorder(new EmptyBorder(5, 15, 5, 15));
+        searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        searchButton.addActionListener(e -> searchProducts());
+
+        // Thêm sự kiện khi nhấn Enter trong searchField
+        searchField.addActionListener(e -> searchProducts());
+
+        searchPanel.add(searchField, BorderLayout.CENTER);
+        searchPanel.add(searchButton, BorderLayout.EAST);
+
+        // === FILTER PANEL ===
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        filterPanel.setOpaque(false);
+
+        JButton btnChonDanhMuc = new JButton("LỌC THEO DANH MỤC");
         btnChonDanhMuc.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         btnChonDanhMuc.setBackground(Color.WHITE);
         btnChonDanhMuc.setForeground(textColor);
@@ -51,9 +86,9 @@ public class ProductView extends JPanel {
             new EmptyBorder(5, 15, 5, 15)
         ));
         btnChonDanhMuc.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        topPanel.add(btnChonDanhMuc);
-        add(topPanel, BorderLayout.NORTH);
+        filterPanel.add(btnChonDanhMuc);
 
+        // === POPUP MENU DANH MỤC ===
         JPopupMenu popupDanhMuc = new JPopupMenu();
         popupDanhMuc.setBorder(new LineBorder(new Color(230, 230, 230)));
         CategoryDao categoryDao = new CategoryDao();
@@ -61,20 +96,32 @@ public class ProductView extends JPanel {
 
         JMenuItem allItem = new JMenuItem("TẤT CẢ SẢN PHẨM");
         allItem.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        allItem.addActionListener(e -> loadProductList(contentPanel, -1));
+        allItem.addActionListener(e -> loadProductList(contentPanel, -1, ""));
         popupDanhMuc.add(allItem);
         popupDanhMuc.addSeparator();
 
         for (Category cat : categoryList) {
             JMenuItem item = new JMenuItem(cat.getName());
             item.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-            item.addActionListener(e -> loadProductList(contentPanel, cat.getId()));
+            item.addActionListener(e -> loadProductList(contentPanel, cat.getId(), ""));
             popupDanhMuc.add(item);
         }
 
         btnChonDanhMuc.addActionListener(e ->
                 popupDanhMuc.show(btnChonDanhMuc, 0, btnChonDanhMuc.getHeight()));
 
+        // === ADD COMPONENTS TO TOP PANEL ===
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.setOpaque(false);
+        leftPanel.add(titlePanel, BorderLayout.WEST);
+        leftPanel.add(filterPanel, BorderLayout.CENTER);
+
+        topPanel.add(leftPanel, BorderLayout.WEST);
+        topPanel.add(searchPanel, BorderLayout.EAST);
+
+        add(topPanel, BorderLayout.NORTH);
+
+        // === CONTENT PANEL ===
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
         scrollPane.setBorder(null);
@@ -89,17 +136,36 @@ public class ProductView extends JPanel {
         scrollPane.setViewportView(contentPanel);
         add(scrollPane, BorderLayout.CENTER);
 
-        loadProductList(contentPanel, -1);
+        loadProductList(contentPanel, -1, "");
     }
 
-    private void loadProductList(JPanel contentPanel, int cateId) {
+    private void searchProducts() {
+        String keyword = searchField.getText().trim();
+        loadProductList(contentPanel, -1, keyword);
+    }
+    public void searchProducts(String keyword) {
+        searchField.setText(keyword); // cập nhật ô nhập để đồng bộ giao diện
+        loadProductList(contentPanel, -1, keyword);
+    }
+
+
+
+    private void loadProductList(JPanel contentPanel, int cateId, String keyword) {
         contentPanel.removeAll();
 
         ProductDao dao = new ProductDao();
         List<Product> list = dao.getAllProducts();
 
+        // Lọc theo danh mục
         if (cateId != -1) {
             list.removeIf(p -> p.getCateid() != cateId);
+        }
+
+        // Lọc theo từ khóa tìm kiếm
+        if (!keyword.isEmpty()) {
+            String searchLower = keyword.toLowerCase();
+            list.removeIf(p -> !p.getName().toLowerCase().contains(searchLower) && 
+                             !p.getDescription().toLowerCase().contains(searchLower));
         }
 
         for (Product p : list) {
@@ -185,7 +251,6 @@ public class ProductView extends JPanel {
                 });
             }
 
-
             JPanel imageContainer = new JPanel(new BorderLayout());
             imageContainer.setBackground(Color.WHITE);
             imageContainer.add(imgLabel, BorderLayout.CENTER);
@@ -200,7 +265,6 @@ public class ProductView extends JPanel {
             name.setForeground(textColor);
             name.setMaximumSize(new Dimension(180, 40));
 
-            // ✅ CHỈNH LẠI ĐỊNH DẠNG GIÁ
             JLabel price = new JLabel(String.format("%,.0f đ", p.getPrice()));
             price.setFont(new Font("Segoe UI", Font.BOLD, 14));
             price.setForeground(new Color(220, 0, 0));
@@ -263,7 +327,7 @@ public class ProductView extends JPanel {
         }
 
         if (list.isEmpty()) {
-            JLabel emptyLabel = new JLabel("Không có sản phẩm nào trong danh mục này", SwingConstants.CENTER);
+            JLabel emptyLabel = new JLabel("Không tìm thấy sản phẩm nào phù hợp", SwingConstants.CENTER);
             emptyLabel.setFont(new Font("Segoe UI", Font.ITALIC, 16));
             emptyLabel.setForeground(new Color(150, 150, 150));
             contentPanel.add(emptyLabel);
@@ -320,6 +384,6 @@ public class ProductView extends JPanel {
     }
 
     public void reloadData() {
-        loadProductList(contentPanel, -1);
+        loadProductList(contentPanel, -1, "");
     }
 }

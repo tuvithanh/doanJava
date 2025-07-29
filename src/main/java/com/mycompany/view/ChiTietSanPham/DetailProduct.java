@@ -20,32 +20,41 @@ public class DetailProduct extends JPanel {
 
     public DetailProduct(TrangChu parentFrame, Product product) {
         setLayout(new BorderLayout());
-        setBackground(secondaryColor);
-        setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        // Tạo contentPanel chứa toàn bộ nội dung
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.setBackground(secondaryColor);
+        contentPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
         // ====== TOP BAR ======
         JPanel topBar = createTopBar(parentFrame);
-        add(topBar, BorderLayout.NORTH);
+        contentPanel.add(topBar, BorderLayout.NORTH);
 
         // ====== MAIN CONTENT ======
         JPanel mainPanel = new JPanel(new BorderLayout(30, 0));
         mainPanel.setBackground(secondaryColor);
         mainPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
-        // LEFT PANEL - Product Images
         JPanel leftPanel = createImagePanel(product);
-        mainPanel.add(leftPanel, BorderLayout.WEST);
-
-        // RIGHT PANEL - Product Info
         JPanel rightPanel = createProductInfoPanel(product, parentFrame);
+        mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(rightPanel, BorderLayout.CENTER);
 
-        add(mainPanel, BorderLayout.CENTER);
+        contentPanel.add(mainPanel, BorderLayout.CENTER);
 
-        // ====== BOTTOM PANEL - Product Description ======
+        // ====== BOTTOM PANEL ======
         JPanel bottomPanel = createDescriptionPanel(product);
-        add(bottomPanel, BorderLayout.SOUTH);
+        contentPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+        // Bọc contentPanel bằng JScrollPane
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // mượt hơn
+
+        add(scrollPane, BorderLayout.CENTER);
     }
+
 
     private JPanel createTopBar(TrangChu parentFrame) {
         JPanel topBar = new JPanel(new FlowLayout(FlowLayout.LEFT));

@@ -124,7 +124,7 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="Admin_Edit_Product_Description_Label" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
@@ -141,7 +141,9 @@
                               </Group>
                           </Group>
                           <Component id="Admin_EditProduct_ImagePreview" min="-2" pref="156" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="lblAnh" min="-2" pref="139" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
@@ -172,7 +174,7 @@
                               <Component id="Admin_Edit_Product_Description_Label" min="-2" max="-2" attributes="0"/>
                               <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="66" max="32767" attributes="0"/>
+                          <EmptySpace pref="101" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="Admin_Edit_Product_ImagePath_Label" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="Admin_Edit_Product_ImagePath_Textfield" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -185,8 +187,17 @@
                               <Component id="Admin_Edit_Product_Price_Textfield" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="Admin_Edit_Product_Price_Label" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="Admin_EditProduct_ImagePreview" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="Admin_EditProduct_ImagePreview" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="lblAnh" min="-2" pref="138" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -270,6 +281,8 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Admin_Edit_Product_BrowseImage_BtnActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JLabel" name="lblAnh">
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel3">
@@ -294,7 +307,7 @@
                       <Component id="Admin_Edit_Product_HuyBTN" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="Admin_Edit_Product_SaveBTN" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="47" max="32767" attributes="0"/>
+                  <EmptySpace pref="12" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

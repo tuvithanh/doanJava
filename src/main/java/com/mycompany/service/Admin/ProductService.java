@@ -38,4 +38,7 @@ public class ProductService {
     public void updateProduct(Product product) {
         productDao.updateProduct(product);
     }
+    public List<Product> searchProducts(String kw){
+        return productDao.searchProducts(kw);
+    }
 }

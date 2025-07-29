@@ -38,4 +38,73 @@ public class UserService {
     public User getUserByUserName(String username){
         return userDao.getUserByUsername(username);
     }
+    public String changeUserPassword(String username, String oldPassword, String newPassword, String confirmPassword) {
+        User user = getUserByUserName(username);
+        if (user == null) {
+            return "Tài khoản không tồn tại.";
+        }
+
+        // Kiểm tra mật khẩu cũ
+        if (!user.getPassword().equals(oldPassword)) {
+            return "Mật khẩu hiện tại không đúng.";
+        }
+
+        // Kiểm tra mật khẩu mới và xác nhận
+        if (!newPassword.equals(confirmPassword)) {
+            return "Xác nhận mật khẩu mới không khớp.";
+        }
+
+        boolean updated = userDao.changePassword(user.getId(), newPassword);
+        if (updated) {
+            return null; // Thành công
+        } else {
+            return "Có lỗi xảy ra khi cập nhật mật khẩu.";
+        }
+    }
+
+    public boolean checkPassword(String username, String password) {
+        User user = getUserByUserName(username);
+        return user != null && user.getPassword().equals(password);
+    }
+
+    public void updatePassword(String username, String newPassword) {
+        User user = getUserByUserName(username);
+        if (user != null) {
+            user.setPassword(newPassword);
+            updateUserInfo(user);
+        }
+    }
+
+    public String updateUserInfo(User user) {
+        try {
+            // Kiểm tra user có tồn tại không
+            if (user == null) {
+                return "Thông tin người dùng không hợp lệ";
+            }
+
+            // Kiểm tra user có trong database không
+            User existingUser = userDao.getUserByID(user.getId());
+            if (existingUser == null) {
+                return "Người dùng không tồn tại trong hệ thống";
+            }
+
+            // Thực hiện cập nhật
+            userDao.updateUser(user);
+
+            // Kiểm tra lại xem cập nhật có thành công không
+            User updatedUser = userDao.getUserByID(user.getId());
+            if (updatedUser == null || 
+                !updatedUser.getName().equals(user.getName()) || 
+                !updatedUser.getPhone().equals(user.getPhone())) {
+                return "Cập nhật thông tin không thành công";
+            }
+
+            return null; // null nghĩa là thành công
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Lỗi hệ thống khi cập nhật thông tin: " + e.getMessage();
+        }
+    }
+
+
 }   

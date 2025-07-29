@@ -9,12 +9,17 @@ import com.mycompany.service.Admin.CategoryService;
 import com.mycompany.model.Product;
 import com.mycompany.model.Category;
 import com.mycompany.view.Admin.QLCATEGORY.EditCategory;
+import com.mycompany.view.Admin.QLPRODUCT.AddProduct;
+import com.mycompany.view.Admin.QLPRODUCT.EditProduct;
 import java.io.File;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import java.awt.Image;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 
 /**
  *
@@ -65,7 +70,11 @@ public class QuanLyProduct extends javax.swing.JFrame {
 
         Admin_QLPRODUCT_TABLE.setComponentPopupMenu(Admin_QLPRODUCT_popupmenu);
     }
-
+    private String formatCurrency(double amount) {
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(localeVN);
+        return currencyFormatter.format(amount);
+    }
     public void insertData(List<Product> productList) {
         defaultTableModel.setRowCount(0); // Xóa dữ liệu cũ
 
@@ -90,7 +99,7 @@ public class QuanLyProduct extends javax.swing.JFrame {
                 cateName,
                 pro.getName(),
                 pro.getDescription(),
-                pro.getPrice(),
+                formatCurrency(pro.getPrice()),
                 icon // ✅ Thêm icon vào dòng
             });
         }

@@ -7,6 +7,8 @@ import com.mycompany.view.Cart.Cart;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -17,6 +19,8 @@ public class Thanhtoan extends JPanel {
     private final JPanel contentPanel;
     private final OrderService orderService = new OrderService();
     private JLabel totalLabel;
+    private JComboBox<String> paymentMethodBox;
+    private float total;
 
     public Thanhtoan(int userId, List<CartItem> itemsChecked, JPanel contentPanel) {
         this.userId = userId;
@@ -39,7 +43,7 @@ public class Thanhtoan extends JPanel {
         String[] columnNames = {"Tên sản phẩm", "Số lượng", "Giá", "Thành tiền"};
         Object[][] data = new Object[itemsChecked.size()][4];
 
-        float total = 0;
+        total = 0;
         for (int i = 0; i < itemsChecked.size(); i++) {
             CartItem item = itemsChecked.get(i);
             float subTotal = (float) (item.getQuantity() * item.getProduct().getPrice());
@@ -63,44 +67,78 @@ public class Thanhtoan extends JPanel {
         centerPanel.add(totalLabel, BorderLayout.SOUTH);
         add(centerPanel, BorderLayout.CENTER);
 
-        // BOTTOM panel gồm totalLabel + 2 nút
+        // BOTTOM panel gồm dropdown + nút
         JPanel bottomPanel = new JPanel(new BorderLayout());
 
-        // Panel chứa nút hủy (bên trái)
-        JPanel leftButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        JButton btnCancel = new JButton("Hủy");
-        btnCancel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        btnCancel.setBackground(Color.LIGHT_GRAY);
-        btnCancel.addActionListener(e -> {
-            contentPanel.removeAll();
-            contentPanel.add(new Cart(userId, contentPanel));
-            contentPanel.revalidate();
-            contentPanel.repaint();
-        });
-        leftButtonPanel.add(btnCancel);
+        // Chọn phương thức thanh toán
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        paymentMethodBox = new JComboBox<>(new String[]{"Tiền mặt", "VietQR"});
+        leftPanel.add(new JLabel("Phương thức: "));
+        leftPanel.add(paymentMethodBox);
 
-        // Panel chứa nút thanh toán (bên phải)
-        JPanel rightButtonPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+        // Nút thanh toán
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
         JButton btnPay = new JButton("Thanh toán");
         btnPay.setBackground(new Color(0, 153, 0));
         btnPay.setForeground(Color.WHITE);
         btnPay.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnPay.addActionListener(e -> handleCheckout());
-        rightButtonPanel.add(btnPay);
+        rightPanel.add(btnPay);
 
-        bottomPanel.add(leftButtonPanel, BorderLayout.WEST);
-        bottomPanel.add(rightButtonPanel, BorderLayout.EAST);
+        bottomPanel.add(leftPanel, BorderLayout.WEST);
+        bottomPanel.add(rightPanel, BorderLayout.EAST);
 
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void handleCheckout() {
+        String method = (String) paymentMethodBox.getSelectedItem();
+
+        if ("VietQR".equals(method)) {
+            showQRAndConfirm();
+        } else {
+            processOrder("Tiền mặt");
+        }
+    }
+
+    private void showQRAndConfirm() {
         try {
-            boolean success = orderService.checkout(userId, itemsChecked, "Tiền mặt");
+            String bankCode = "BIDV";
+            String accountNumber = "7010787658";
+            String description = itemsChecked.get(0).getProduct().getName(); // hoặc gộp các sản phẩm lại
+
+            String qrUrl = String.format(
+                    "https://img.vietqr.io/image/%s-%s-compact2.png?amount=%.0f&addInfo=%s",
+                    bankCode, accountNumber, total, java.net.URLEncoder.encode(description, "UTF-8")
+            );
+
+            ImageIcon icon = new ImageIcon(new URL(qrUrl));
+            JLabel qrLabel = new JLabel(icon);
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    qrLabel,
+                    "Quét mã VietQR để thanh toán",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (confirm == JOptionPane.OK_OPTION) {
+                processOrder("VietQR");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Không thể tạo mã QR", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void processOrder(String method) {
+        try {
+            boolean success = orderService.checkout(userId, itemsChecked, method);
 
             if (success) {
                 JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
-
                 contentPanel.removeAll();
                 contentPanel.add(new Cart(userId, contentPanel));
                 contentPanel.revalidate();

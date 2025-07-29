@@ -117,16 +117,47 @@ public class ProductDao {
     public void deleteProductByID(int id) {
         Connection connection = JDBCConnection.getJDBCConnection();
 
-        String sql = "DELETE FROM Product WHERE id = ?";
+        String sqlDeleteCartItem = "DELETE FROM CartItem WHERE product_id = ?";
+        String sqlDeleteFavorite = "DELETE FROM Favorite WHERE product_id = ?";
+        String sqlDeleteProduct = "DELETE FROM Product WHERE id = ?";
 
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            connection.setAutoCommit(false); // Bắt đầu transaction
+
+            // 1. Xóa trong bảng CartItem
+            PreparedStatement psCart = connection.prepareStatement(sqlDeleteCartItem);
+            psCart.setInt(1, id);
+            psCart.executeUpdate();
+
+            // 2. Xóa trong bảng Favorite
+            PreparedStatement psFav = connection.prepareStatement(sqlDeleteFavorite);
+            psFav.setInt(1, id);
+            psFav.executeUpdate();
+
+            // 3. Xóa sản phẩm chính
+            PreparedStatement psProd = connection.prepareStatement(sqlDeleteProduct);
+            psProd.setInt(1, id);
+            psProd.executeUpdate();
+
+            connection.commit(); // Thành công thì commit
+
         } catch (SQLException e) {
+            try {
+                connection.rollback(); // Rollback nếu có lỗi
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
+        } finally {
+            try {
+                connection.setAutoCommit(true); // Khôi phục tự động commit
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+
     public List<Product> getProductsByCategory(int cateId) {
         List<Product> products = new ArrayList<>();
         Connection connection = JDBCConnection.getJDBCConnection();
@@ -157,6 +188,35 @@ public class ProductDao {
         }
 
         return products;
+    }
+    public List<Product> searchProducts(String keyword) {
+        List<Product> results = new ArrayList<>();
+        Connection connection = JDBCConnection.getJDBCConnection();
+        try {
+            String sql = "SELECT * FROM Product WHERE name LIKE ? OR description LIKE ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, "%" + keyword + "%");
+            stmt.setString(2, "%" + keyword + "%");
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setCateid(rs.getInt("cateid"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setImagepath(rs.getString("imagepath"));
+                product.setRating(rs.getFloat("rating"));
+                product.setSoldCount(rs.getInt("sold_count"));
+                product.setLiked(rs.getBoolean("is_liked"));
+
+                results.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return results;
     }
 
 }

@@ -1,171 +1,160 @@
 package com.mycompany.view.Account;
 
+import com.mycompany.model.User;
+import com.mycompany.service.Admin.UserService;
+import com.mycompany.util.EmailSender;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import com.mycompany.service.Admin.UserService;
-import com.mycompany.model.User;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class registerform extends JFrame {
+    private JTextField txtUsername, txtEmail;
+    private JPasswordField txtPassword, txtRePassword;
+    private JButton btnRegister, btnCancel;
+    private UserService userSer = new UserService();
+
     public registerform() {
-        setLocationRelativeTo(null);
-        UserService userSer = new UserService();
-        User user = new User();
-        
         setTitle("Đăng ký tài khoản");
-        setSize(400, 500);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 400);
         setLocationRelativeTo(null);
-        setLayout(null);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel lblFullName = new JLabel("Tên người dùng:");
-        lblFullName.setBounds(30, 20, 120, 25);
-        add(lblFullName);
+        Font labelFont = new Font("Arial", Font.BOLD, 14);
+        Font inputFont = new Font("Arial", Font.PLAIN, 14);
 
-        JTextField txtFullName = new JTextField();
-        txtFullName.setBounds(160, 20, 200, 25);
-        add(txtFullName);
+        // Username
+        gbc.insets = new Insets(10, 10, 0, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Tên đăng nhập:"), gbc);
 
-        JLabel lblPhone = new JLabel("Số điện thoại:");
-        lblPhone.setBounds(30, 60, 120, 25);
-        add(lblPhone);
+        txtUsername = new JTextField(20);
+        txtUsername.setFont(inputFont);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(txtUsername, gbc);
 
-        JTextField txtPhone = new JTextField();
-        txtPhone.setBounds(160, 60, 200, 25);
-        add(txtPhone);
+        // Password
+        gbc.gridy = 2;
+        add(new JLabel("Mật khẩu:"), gbc);
 
-        JLabel lblUsername = new JLabel("Tên đăng nhập:");
-        lblUsername.setBounds(30, 100, 120, 25);
-        add(lblUsername);
+        txtPassword = new JPasswordField(20);
+        txtPassword.setFont(inputFont);
+        gbc.gridy = 3;
+        add(txtPassword, gbc);
 
-        JTextField txtUsername = new JTextField();
-        txtUsername.setBounds(160, 100, 200, 25);
-        add(txtUsername);
+        // Re-password
+        gbc.gridy = 4;
+        add(new JLabel("Xác nhận mật khẩu:"), gbc);
 
-        JLabel lblPassword = new JLabel("Mật khẩu:");
-        lblPassword.setBounds(30, 140, 120, 25);
-        add(lblPassword);
+        txtRePassword = new JPasswordField(20);
+        txtRePassword.setFont(inputFont);
+        gbc.gridy = 5;
+        add(txtRePassword, gbc);
 
-        JPasswordField txtPassword = new JPasswordField();
-        txtPassword.setBounds(160, 140, 200, 25);
-        add(txtPassword);
+        // Email
+        gbc.gridy = 6;
+        add(new JLabel("Email:"), gbc);
 
-        JLabel lblRePassword = new JLabel("Nhập lại mật khẩu:");
-        lblRePassword.setBounds(30, 180, 120, 25);
-        add(lblRePassword);
+        txtEmail = new JTextField(20);
+        txtEmail.setFont(inputFont);
+        gbc.gridy = 7;
+        add(txtEmail, gbc);
 
-        JPasswordField txtRePassword = new JPasswordField();
-        txtRePassword.setBounds(160, 180, 200, 25);
-        add(txtRePassword);
+        // Buttons
+        JPanel panelButtons = new JPanel();
+        btnRegister = new JButton("Đăng ký");
+        btnCancel = new JButton("Hủy");
+        panelButtons.add(btnRegister);
+        panelButtons.add(btnCancel);
 
-        JLabel lblEmail = new JLabel("Email:");
-        lblEmail.setBounds(30, 220, 120, 25);
-        add(lblEmail);
+        gbc.gridy = 8;
+        add(panelButtons, gbc);
 
-        JTextField txtEmail = new JTextField();
-        txtEmail.setBounds(160, 220, 200, 25);
-        add(txtEmail);
-
-        JLabel lblAddress = new JLabel("Địa chỉ:");
-        lblAddress.setBounds(30, 260, 120, 25);
-        add(lblAddress);
-
-        JTextField txtAddress = new JTextField();
-        txtAddress.setBounds(160, 260, 200, 25);
-        add(txtAddress);
-
-        JLabel lblMoreInfo = new JLabel("Thông tin thêm:");
-        lblMoreInfo.setBounds(30, 300, 120, 25);
-        add(lblMoreInfo);
-
-        JTextArea txtMoreInfo = new JTextArea();
-        txtMoreInfo.setLineWrap(true);
-        txtMoreInfo.setWrapStyleWord(true);
-        JScrollPane scrollPane = new JScrollPane(txtMoreInfo);
-        scrollPane.setBounds(160, 300, 200, 60);
-        add(scrollPane);
-
-        JButton btnRegister = new JButton("Đăng ký");
-        btnRegister.setBounds(150, 380, 100, 30);
-        add(btnRegister);
-
-        JButton btnBack = new JButton("Quay lại");
-        btnBack.setBounds(260, 380, 100, 30);
-        add(btnBack);
-
-        btnBack.addActionListener(e -> {
-            dispose(); // Đóng form đăng ký
-            new loginform().setVisible(true); // Quay lại LoginForm
+        btnRegister.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleRegister();
+            }
         });
 
-        // ==== XỬ LÝ ĐĂNG KÝ ====
-        btnRegister.addActionListener(e -> {
-            String fullName = txtFullName.getText().trim();
-            String phone = txtPhone.getText().trim();
-            String username = txtUsername.getText().trim();
-            String pass = new String(txtPassword.getPassword());
-            String rePass = new String(txtRePassword.getPassword());
-            String email = txtEmail.getText().trim();
-            String address = txtAddress.getText().trim();
-            String about = txtMoreInfo.getText().trim();
-
-            
-            
-            // Kiểm tra rỗng
-            if (fullName.isEmpty() || phone.isEmpty() || username.isEmpty()
-                    || pass.isEmpty() || rePass.isEmpty()
-                    || email.isEmpty() || address.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            User tempUserForCheckUserName = userSer.getUserByUserName(username);
-            if(tempUserForCheckUserName!=null){
-                JOptionPane.showMessageDialog(this, "Tên tài khoản đã tồn tại !", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-           
-                
-            
-            
-
-            // Kiểm tra mật khẩu khớp
-            if (!pass.equals(rePass)) {
-                JOptionPane.showMessageDialog(this, "Mật khẩu không khớp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Kiểm tra số điện thoại chỉ chứa số
-            if (!phone.matches("\\d+")) {
-                JOptionPane.showMessageDialog(this, "Số điện thoại chỉ được chứa chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-
-            // Kiểm tra định dạng email
-            if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
-                JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            user.setName(fullName);
-            user.setUsername(username);
-            user.setPassword(pass);
-            user.setPhone(Integer.parseInt(phone));
-            user.setEmail(email);
-            user.setAddress(address);
-            user.setAbout(about);
-            user.setRole('C');
-            // Nếu mọi thứ hợp lệ
-            JOptionPane.showMessageDialog(this, "Đăng ký thành công!");
-            // TODO: Lưu vào CSDL nếu cần
-            userSer.insert(user);
+        btnCancel.addActionListener(e -> {
+            dispose();
+            new loginform().setVisible(true);
         });
     }
-    
-    
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            new registerform().setVisible(true);
-//        });
-//    }
+    private void handleRegister() {
+        String username = txtUsername.getText().trim();
+        String pass = new String(txtPassword.getPassword());
+        String rePass = new String(txtRePassword.getPassword());
+        String email = txtEmail.getText().trim();
+
+        if (username.isEmpty() || pass.isEmpty() || rePass.isEmpty() || email.isEmpty()) {
+            showErrorDialog("Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        if (!pass.equals(rePass)) {
+            showErrorDialog("Mật khẩu không khớp!");
+            return;
+        }
+
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
+            showErrorDialog("Email không hợp lệ!");
+            return;
+        }
+
+        if (userSer.getUserByUserName(username) != null) {
+            showErrorDialog("Tên tài khoản đã tồn tại!");
+            return;
+        }
+
+        String code = generateVerificationCode();
+        boolean sent = EmailSender.sendVerificationCode(email, code);
+        if (!sent) {
+            showErrorDialog("Không thể gửi mã xác nhận đến email.");
+            return;
+        }
+
+        String inputCode = JOptionPane.showInputDialog(this, "Nhập mã xác nhận đã gửi đến email:");
+        if (inputCode == null || !inputCode.equals(code)) {
+            showErrorDialog("Mã xác nhận không đúng!");
+            return;
+        }
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(pass);
+        user.setEmail(email);
+        user.setRole('C');
+
+        try {
+            userSer.insert(user);
+            showSuccessDialog("Đăng ký thành công!");
+            dispose();
+            new loginform().setVisible(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showErrorDialog("Đăng ký thất bại!");
+        }
+    }
+
+    private void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(this, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showSuccessDialog(String message) {
+        JOptionPane.showMessageDialog(this, message, "Thành công", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private String generateVerificationCode() {
+        int code = (int)(Math.random() * 900000) + 100000;
+        return String.valueOf(code);
+    }
 }

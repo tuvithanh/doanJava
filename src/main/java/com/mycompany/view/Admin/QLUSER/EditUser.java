@@ -37,7 +37,7 @@ public class EditUser extends javax.swing.JFrame {
         Admin_Edit_User_Email.setText(user.getEmail());
         Admin_Edit_User_Address.setText(user.getAddress());
         Admin_Edit_User_Name.setText(user.getName());
-        Admin_Edit_User_Phone.setText(String.valueOf(user.getPhone()));
+        Admin_Edit_User_Phone.setText(user.getPhone());
         Admin_Edit_User_About.setText(user.getAbout());
 
         // Set Radio button theo role
@@ -399,7 +399,7 @@ public class EditUser extends javax.swing.JFrame {
             return; // thoát không insert
         }
 
-        int phone = Integer.parseInt(Admin_Edit_User_Phone.getText());
+        String phone = Admin_Edit_User_Phone.getText();
         String about = Admin_Edit_User_About_Label.getText();
 
         user.setUsername(username);

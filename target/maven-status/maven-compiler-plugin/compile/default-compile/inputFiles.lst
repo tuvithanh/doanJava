@@ -7,6 +7,7 @@ D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\O
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\OrderDetailDao.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\PaymentDao.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\ProductDao.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\ThongKeDao.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\dao\UserDao.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\doanjava\doan.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\doanjava\DoanJava.java
@@ -28,6 +29,7 @@ D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\servi
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\service\Admin\ProductService.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\service\Admin\UserService.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\sesion\UserSession\UserSession.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\util\EmailSender.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Account\loginform.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Account\registerform.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Admin\QLCATEGORY\AddCategory.java
@@ -47,7 +49,11 @@ D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\ChiTietSanPham\DetailProduct.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Favorite\FavoriteView.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\SanPham\ProductView.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\ThongKe\DoanhThuPanel.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Thongtintaikhoan\ChangePasswordPanel.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Thongtintaikhoan\EditUserInfoDialog.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\Thongtintaikhoan\Thongtintaikhoan.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\TrangChu\TrangChu.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\mycompany\view\TrangChu\TrangChuContent.java
 D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\com\myconpany\view\Thanhtoan\Thanhtoan.java
+D:\Learning\HK5\java\Java tu hoc\doan\doanJava\src\main\java\images\EditProduct.java

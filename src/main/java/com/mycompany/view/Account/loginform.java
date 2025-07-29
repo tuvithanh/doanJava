@@ -27,7 +27,7 @@ public class loginform extends JFrame {
 
     private void initComponents() {
         setTitle("ĐĂNG NHẬP HỆ THỐNG");
-        setSize(450, 500);
+        setSize(450, 550);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -45,7 +45,7 @@ public class loginform extends JFrame {
             }
         };
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBorder(new EmptyBorder(40, 40, 40, 40));
+        mainPanel.setBorder(new EmptyBorder(30, 40, 30, 40));
         add(mainPanel);
 
         // Header panel
@@ -63,7 +63,7 @@ public class loginform extends JFrame {
         lblSubLogo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblSubLogo.setForeground(new Color(100, 100, 100));
         lblSubLogo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lblSubLogo.setBorder(new EmptyBorder(5, 0, 30, 0));
+        lblSubLogo.setBorder(new EmptyBorder(5, 0, 20, 0));
 
         headerPanel.add(lblLogo);
         headerPanel.add(lblSubLogo);
@@ -73,7 +73,7 @@ public class loginform extends JFrame {
         JPanel formPanel = new JPanel();
         formPanel.setOpaque(false);
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBorder(new EmptyBorder(20, 0, 20, 0));
+        formPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 
         Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
         Font inputFont = new Font("Segoe UI", Font.PLAIN, 14);
@@ -90,7 +90,7 @@ public class loginform extends JFrame {
         JLabel lblPassword = new JLabel("Mật khẩu");
         lblPassword.setFont(labelFont);
         lblPassword.setAlignmentX(Component.LEFT_ALIGNMENT);
-        lblPassword.setBorder(new EmptyBorder(15, 5, 5, 5));
+        lblPassword.setBorder(new EmptyBorder(10, 5, 5, 5));
 
         txtPassword = createStyledPasswordField();
         txtPassword.setFont(inputFont);
@@ -100,16 +100,16 @@ public class loginform extends JFrame {
         chkRemember.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         chkRemember.setOpaque(false);
         chkRemember.setAlignmentX(Component.LEFT_ALIGNMENT);
-        chkRemember.setBorder(new EmptyBorder(10, 5, 20, 5));
+        chkRemember.setBorder(new EmptyBorder(10, 5, 15, 5));
 
         JButton btnLogin = new JButton("ĐĂNG NHẬP");
         btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btnLogin.setBackground(accentColor);
         btnLogin.setForeground(Color.WHITE);
         btnLogin.setFocusPainted(false);
-        btnLogin.setBorder(new EmptyBorder(12, 0, 12, 0));
+        btnLogin.setBorder(new EmptyBorder(10, 0, 10, 0));
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
 
         btnLogin.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
@@ -121,25 +121,58 @@ public class loginform extends JFrame {
             }
         });
 
+        // Register panel - FIXED VERSION
         JPanel registerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
         registerPanel.setOpaque(false);
+        registerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        registerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        registerPanel.setBorder(new EmptyBorder(15, 0, 0, 0));
+
         JLabel lblRegister1 = new JLabel("Chưa có tài khoản?");
         lblRegister1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        lblRegister1.setPreferredSize(new Dimension(lblRegister1.getPreferredSize().width, 20));
+
         JLabel lblRegister2 = new JLabel("Đăng ký ngay");
         lblRegister2.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblRegister2.setForeground(primaryColor);
         lblRegister2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lblRegister2.setPreferredSize(new Dimension(lblRegister2.getPreferredSize().width, 20));
 
-        registerPanel.add(lblRegister1);
-        registerPanel.add(lblRegister2);
-        registerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        registerPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+        JPanel registerTextContainer = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+        registerTextContainer.setOpaque(false);
+        registerTextContainer.add(lblRegister1);
+        registerTextContainer.add(lblRegister2);
+
+        registerPanel.add(registerTextContainer);
+
+        lblRegister2.addMouseListener(new MouseAdapter() {
+            private Color originalColor = primaryColor;
+            
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lblRegister2.setForeground(accentColor);
+                lblRegister2.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, accentColor));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lblRegister2.setForeground(originalColor);
+                lblRegister2.setBorder(null);
+            }
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+                new registerform().setVisible(true);
+            }
+        });
 
         formPanel.add(lblUsername);
         formPanel.add(txtUsername);
         formPanel.add(lblPassword);
         formPanel.add(txtPassword);
         formPanel.add(chkRemember);
+        formPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         formPanel.add(btnLogin);
         formPanel.add(registerPanel);
 
@@ -148,20 +181,12 @@ public class loginform extends JFrame {
         // Footer panel
         JPanel footerPanel = new JPanel();
         footerPanel.setOpaque(false);
-        footerPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+        footerPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
         JLabel lblFooter = new JLabel("© 2025 Hệ thống quản lý. Bản quyền thuộc nhóm 6.");
         lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         lblFooter.setForeground(new Color(120, 120, 120));
         footerPanel.add(lblFooter);
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
-
-        // Register click
-        lblRegister2.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                dispose();
-                new registerform().setVisible(true);
-            }
-        });
 
         // Login button click
         btnLogin.addActionListener(e -> {
